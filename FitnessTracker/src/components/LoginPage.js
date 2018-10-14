@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Text, AsyncStorage } from "react-native";
+import { Text, AsyncStorage } from "react-native";
 import { Button, Card, CardSection, Input, Spinner, Header } from "./common";
 
 class LoginPage extends Component {

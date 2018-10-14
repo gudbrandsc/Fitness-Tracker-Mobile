@@ -1,22 +1,40 @@
 import React, { Component } from "react";
-import { AsyncStorage } from "react-native";
+import { AsyncStorage, ImageBackground } from "react-native";
 import { Button, Spinner } from "./components/common";
 import AuthPage from "./components/AuthPage";
 
 class App extends Component {
-  state = { loggedIn: null };
+  state = { loggedIn: null, startApp: null };
 
-  componentWillMount() {
+  componentDidMount() {
+    setTimeout(() => {
+      this.startApplication();
+    }, 3000);
     this.retrieveData();
   }
 
-  /* check if stored in mobile's storage */
+  /**
+   * A function that updates startApp variable
+   */
+  startApplication() {
+    console.log("updating startApp");
+    const startApp = true;
+    this.setState({ startApp });
+  }
+
+  /**
+   * A function that gets all 3 variables stored in the isolated storage. If all of them exist, then
+   * it changes the loggedIn variable to true otherwise to false.
+   */
   retrieveData = async () => {
     try {
-      const value = await AsyncStorage.getItem("login");
+      const login = await AsyncStorage.getItem("login");
+      const userToken = await AsyncStorage.getItem("Usertoken");
+      const pw = await AsyncStorage.getItem("pass");
       var loggedIn = false;
-      //if (value !== null) loggedIn = true;
-      console.log(value);
+      //if(login !== null && token !== null && pw !== null)
+      // loggedIn = true;
+      console.log("retrieving data");
       this.setState({ loggedIn });
     } catch (error) {
       const loggedIn = false;
@@ -24,8 +42,21 @@ class App extends Component {
     }
   };
 
-  renderContent() {
-    console.log("Here");
+  renderLogoPage() {
+    return (
+      <ImageBackground
+        style={{ flex: 1 }}
+        source={require("./components/UIdesign/logoPage.jpg")}
+      >
+        <Spinner style={{ marginTop: "70%" }} size="large" />
+      </ImageBackground>
+    );
+  }
+
+  /**
+   * A function that renders the page depending on the loggedIn value
+   */
+  checkLoginState() {
     switch (this.state.loggedIn) {
       case true:
         return (
@@ -33,10 +64,19 @@ class App extends Component {
           <Button>Log out</Button>
         );
       case false:
-        console.log("inside AuthPage");
         return <AuthPage />;
       default:
         return <Spinner size="large" />;
+    }
+  }
+
+  renderContent() {
+    switch (this.state.startApp) {
+      case true:
+        console.log("Here");
+        return this.checkLoginState();
+      default:
+        return this.renderLogoPage(); // I will keep showing the startup image until I change the startApp value
     }
   }
 
