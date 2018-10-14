@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { AsyncStorage, ImageBackground } from "react-native";
+import { View, ActivityIndicator, ImageBackground } from "react-native";
 import { Button, Spinner } from "./components/common";
 import AuthPage from "./components/AuthPage";
 
@@ -9,7 +9,7 @@ class App extends Component {
   componentDidMount() {
     setTimeout(() => {
       this.startApplication();
-    }, 3000);
+    }, 2000);
     this.retrieveData();
   }
 
@@ -28,9 +28,9 @@ class App extends Component {
    */
   retrieveData = async () => {
     try {
-      const login = await AsyncStorage.getItem("login");
-      const userToken = await AsyncStorage.getItem("Usertoken");
-      const pw = await AsyncStorage.getItem("pass");
+      //const login = await AsyncStorage.getItem("login");
+      //const userToken = await AsyncStorage.getItem("Usertoken");
+      //const pw = await AsyncStorage.getItem("pass");
       var loggedIn = false;
       //if(login !== null && token !== null && pw !== null)
       // loggedIn = true;
@@ -43,12 +43,21 @@ class App extends Component {
   };
 
   renderLogoPage() {
+    const styles = {
+      spinnerStyle: {
+        flex: 1,
+        alignItems: "center",
+        marginTop: "110%"
+      }
+    };
     return (
       <ImageBackground
         style={{ flex: 1 }}
         source={require("./components/UIdesign/logoPage.jpg")}
       >
-        <Spinner style={{ marginTop: "70%" }} size="large" />
+        <View style={styles.spinnerStyle}>
+          <ActivityIndicator color="#3695d0" size="large" />
+        </View>
       </ImageBackground>
     );
   }
