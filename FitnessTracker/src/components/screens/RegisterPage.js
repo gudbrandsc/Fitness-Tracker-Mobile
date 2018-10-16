@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { AsyncStorage, View } from "react-native";
-import { Button, Card, CardSection, Input, Spinner } from "./common";
-import AnimationErrorBox from "./common/AnimationErrorBox"; // this uses export default so can't be in {}
+import { Button, Card, CardSection, Input, Spinner } from "../common";
+import AnimationErrorBox from "../common/AnimationErrorBox"; // this uses export default so can't be in {}
 
 class RegisterPage extends Component {
   static navigationOptions = {
@@ -76,6 +76,7 @@ class RegisterPage extends Component {
   }
 
   handleRegister() {
+    this.onRegisterSuccess();
     this.setState({ error: "", loading: true });
     try {
       fetch("http://192.168.11.25:8885/signup", {
@@ -95,12 +96,14 @@ class RegisterPage extends Component {
           zipcode: this.state.zipcode
         })
       })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(
           response => {
             console.log(response);
             if (response === "Account created") {
               console.log("Account creation Successful");
+              const id = response.id;
+              this.setState({ id });
               this.storeDataIsolatedStorage();
               this.onRegisterSuccess();
             } else {
@@ -127,12 +130,12 @@ class RegisterPage extends Component {
    */
   storeDataIsolatedStorage = async () => {
     try {
-      const username = this.state.email;
+      const id = this.state.id;
       const pass = this.state.password;
-      await AsyncStorage.setItem("login", username).then(() => {
+      await AsyncStorage.setItem("login", id).then(() => {
         return AsyncStorage.setItem("Usertoken", "Token").then(() => {
           return AsyncStorage.setItem("pass", pass).then(() => {
-            this.props.navigation.navigate("Home");
+            this.onRegisterSuccess();
           });
         });
       });
@@ -158,6 +161,7 @@ class RegisterPage extends Component {
       loading: false,
       error: ""
     });
+    this.props.navigation.navigate("Login");
   }
 
   renderButton() {

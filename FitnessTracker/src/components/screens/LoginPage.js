@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { AsyncStorage, View } from "react-native";
-import { Button, Card, CardSection, Input, Spinner } from "./common";
-import AnimationErrorBox from "./common/AnimationErrorBox"; // this uses export default so can't be in {}
+import { Button, Card, CardSection, Input, Spinner } from "../common";
+import AnimationErrorBox from "../common/AnimationErrorBox"; // this uses export default so can't be in {}
 
 /**
  * A class that handles Login functionality
@@ -65,11 +65,13 @@ class LoginPage extends Component {
           password: this.state.password
         })
       })
-        .then(response => response.text())
+        .then(response => response.json())
         .then(
           response => {
-            if (response === "Login Successful") {
+            if (response !== null) {
               console.log("Login Successful");
+              const userToken = response.token;
+              this.setState({ userToken });
               this.storeDataIsolatedStorage();
               this.onLoginSuccess();
             } else {
@@ -94,13 +96,11 @@ class LoginPage extends Component {
    */
   storeDataIsolatedStorage = async () => {
     try {
-      const username = this.state.email;
+      const userToken = this.state.userToken;
       const pass = this.state.password;
-      await AsyncStorage.setItem("login", username).then(() => {
-        return AsyncStorage.setItem("Usertoken", "Token").then(() => {
-          return AsyncStorage.setItem("pass", pass).then(() => {
-            this.props.navigation.navigate("Home");
-          });
+      await AsyncStorage.setItem("Usertoken", userToken).then(() => {
+        return AsyncStorage.setItem("pass", pass).then(() => {
+          this.onLoginSuccess();
         });
       });
     } catch (error) {
@@ -119,6 +119,7 @@ class LoginPage extends Component {
       loading: false,
       error: ""
     });
+    this.props.navigation.navigate("Home");
   }
 
   renderButton() {
