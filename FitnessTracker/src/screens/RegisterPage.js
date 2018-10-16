@@ -76,31 +76,31 @@ class RegisterPage extends Component {
   }
 
   handleRegister() {
-    this.onRegisterSuccess();
+  //  this.onRegisterSuccess();
     this.setState({ error: "", loading: true });
     try {
-      fetch("http://192.168.11.25:8885/signup", {
+      fetch("http://localhost:8000/api/userregistration", {
         method: "POST",
         headers: {
           Accept: "application/json",
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
-          fname: this.state.fname,
-          lname: this.state.lname,
-          username: this.state.email,
-          password: this.state.password,
-          street: this.state.street,
-          city: this.state.city,
-          state: this.state._state,
-          zipcode: this.state.zipcode
+          FirstName: this.state.fname,
+          LastName: this.state.lname,
+          UserName: this.state.email,
+          Password: this.state.password,
+          StreetAddress: this.state.street,
+          City: this.state.city,
+          State: this.state._state,
+          Zipcode: this.state.zipcode
         })
       })
         .then(response => response.json())
         .then(
           response => {
             console.log(response);
-            if (response === "Account created") {
+            if (response !== null) {
               console.log("Account creation Successful");
               const id = response.id;
               this.setState({ id });
