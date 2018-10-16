@@ -20,10 +20,6 @@ class LoginPage extends Component {
     loading: false
   };
 
-  componentWillMount() {
-    console.log("Inside log page");
-  }
-
   /**
    * A function that validates the email and password then calls handleLogin function.
    */
@@ -32,8 +28,7 @@ class LoginPage extends Component {
     const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
     var passwordMatch = regexPass.test(this.state.password);
     var emailMatch = regexEmail.test(this.state.email);
-    console.log(passwordMatch);
-    console.log(emailMatch);
+
     if (!passwordMatch) {
       const error =
         "Password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
@@ -51,6 +46,8 @@ class LoginPage extends Component {
    * Otherwise, show error message.
    */
   handleLogin() {
+    this.storeDataIsolatedStorage();
+
     console.log("handle login");
     const { email, password } = this.state;
 
@@ -72,38 +69,47 @@ class LoginPage extends Component {
         .then(
           response => {
             if (response === "Login Successful") {
-              this.onLoginSuccess();
               console.log("Login Successful");
-              this.storeLoginData();
+              this.storeDataIsolatedStorage();
+              this.onLoginSuccess();
             } else {
-              this.onLoginFail();
+              this.onLoginFail("Password or username doesn't match.");
               console.log("Login Failed");
             }
           },
           error => {
             console.log(error);
-            this.onLoginFail();
+            this.onLoginFail(
+              "Login failed. Please check internet connectivity."
+            );
           }
         );
     } catch (error) {
-      console.log(error);
-      this.onLoginFail();
+      this.onLoginFail("Login failed. Please check internet connectivity.");
     }
   }
 
   /**
    * A function that stores login, password, and token to the isolated storage.
    */
-  storeLoginData = async () => {
+  storeDataIsolatedStorage = async () => {
     try {
-      await AsyncStorage.setItem("login", "yes");
+      const username = this.state.email;
+      const pass = this.state.password;
+      await AsyncStorage.setItem("login", username).then(() => {
+        return AsyncStorage.setItem("Usertoken", "Token").then(() => {
+          return AsyncStorage.setItem("pass", pass).then(() => {
+            this.props.navigation.navigate("Home");
+          });
+        });
+      });
     } catch (error) {
       console.log(error);
     }
   };
 
-  onLoginFail() {
-    this.setState({ error: "Authentication Failed", loading: false });
+  onLoginFail(err) {
+    this.setState({ error: err, loading: false });
   }
 
   onLoginSuccess() {

@@ -27,7 +27,6 @@ class FadeBox extends React.Component {
   }
 
   renderContent() {
-    console.log("Inside Fade box and error is " + this.props.errorMsg);
     if (this.props.errorMsg !== "") this.fadeIn();
     else this.fadeout();
     let { fadeAnim } = this.state;
@@ -50,9 +49,6 @@ class FadeBox extends React.Component {
 }
 
 class AnimationErrorBox extends Component {
-  componentDidUpdate() {
-    console.log("Props is " + this.props.errorMsg);
-  }
   render() {
     return (
       <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
