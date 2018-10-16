@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { createStackNavigator, Text } from "react-navigation";
-import RegisterPage from "./screens/RegisterPage";
-import LoginPage from "./screens/LoginPage";
+import RegisterPage from "../screens/RegisterPage";
+import LoginPage from "../screens/LoginPage";
 import PageHandler from "./PageHandler";
 
 const RootStack = createStackNavigator(

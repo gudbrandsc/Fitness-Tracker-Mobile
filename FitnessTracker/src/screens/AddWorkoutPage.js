@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Card, CardSection, Button, Input, Spinner, Header } from "../common";
+import { Card, CardSection, Button, Input, Spinner, Header } from "../components/common";
 
 export default class AddWorkoutPage extends Component {
   render() {

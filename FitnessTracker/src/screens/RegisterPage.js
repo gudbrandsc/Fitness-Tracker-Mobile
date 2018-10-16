@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { AsyncStorage, View } from "react-native";
-import { Button, Card, CardSection, Input, Spinner } from "../common";
-import AnimationErrorBox from "../common/AnimationErrorBox"; // this uses export default so can't be in {}
+import { Card, CardSection, Button, Input, Spinner, Header } from "../components/common";
+import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
 
 class RegisterPage extends Component {
   static navigationOptions = {

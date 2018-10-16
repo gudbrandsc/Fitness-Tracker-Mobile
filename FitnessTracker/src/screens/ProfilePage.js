@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { View, Text } from "react-native";
-import { Card, CardSection, Button, Input, Spinner, Header } from "../common";
+import { Card, CardSection, Button, Input, Spinner, Header } from "../components/common";
 
 class ProfilePage extends Component {
   render() {
