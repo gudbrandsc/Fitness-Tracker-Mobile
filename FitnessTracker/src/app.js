@@ -1,96 +1,30 @@
-import React, { Component } from "react";
-import { View, ActivityIndicator, ImageBackground } from "react-native";
-import { Button, Spinner } from "./components/common";
-import AuthPage from "./components/AuthPage";
+const express = require('express');
+const logger = require('morgan');
+const bodyParser = require('body-parser');
+const Sequelize = require('sequelize');
+//const bcrypt = require('bcryptjs');
 
-class App extends Component {
-  state = { loggedIn: null, startApp: null };
 
-  componentDidMount() {
-    setTimeout(() => {
-      this.startApplication();
-    }, 2000);
-    this.retrieveData();
-  }
 
-  /**
-   * A function that updates startApp variable
-   */
-  startApplication() {
-    console.log("updating startApp");
-    const startApp = true;
-    this.setState({ startApp });
-  }
 
-  /**
-   * A function that gets all 3 variables stored in the isolated storage. If all of them exist, then
-   * it changes the loggedIn variable to true otherwise to false.
-   */
-  retrieveData = async () => {
-    try {
-      //const userToken = await AsyncStorage.getItem("Usertoken");
-      //const pw = await AsyncStorage.getItem("pass");
-      var loggedIn = false;
-      //if(userToken !== null && pw !== null)
-      // loggedIn = true;
-      console.log("retrieving data");
-      this.setState({ loggedIn });
-    } catch (error) {
-      const loggedIn = false;
-      this.setState({ loggedIn });
-    }
-  };
 
-  renderLogoPage() {
-    const styles = {
-      spinnerStyle: {
-        flex: 1,
-        alignItems: "center",
-        marginTop: "110%"
-      }
-    };
-    return (
-      <ImageBackground
-        style={{ flex: 1 }}
-        source={require("./components/UIdesign/logoPage.jpg")}
-      >
-        <View style={styles.spinnerStyle}>
-          <ActivityIndicator color="#3695d0" size="large" />
-        </View>
-      </ImageBackground>
-    );
-  }
+// Set up the express app
+const app = express();
 
-  /**
-   * A function that renders the page depending on the loggedIn value
-   */
-  checkLoginState() {
-    switch (this.state.loggedIn) {
-      case true:
-        return (
-          // <Button onPress={() => firebase.auth().signOut()}>Log Out</Button>
-          <Button>Log out</Button>
-        );
-      case false:
-        return <AuthPage />;
-      default:
-        return <Spinner size="large" />;
-    }
-  }
+// Log requests to the console.
+app.use(logger('dev'));
 
-  renderContent() {
-    switch (this.state.startApp) {
-      case true:
-        console.log("Here");
-        return this.checkLoginState();
-      default:
-        return this.renderLogoPage(); // I will keep showing the startup image until I change the startApp value
-    }
-  }
+// Parse incoming requests data (https://github.com/expressjs/body-parser)
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(Sequelize);
+//app.use(bcrypt);
 
-  render() {
-    return this.renderContent();
-  }
-}
+require('./server/routes')(app);
 
-export default App;
+// Setup a default catch-all route that sends back a welcome message in JSON format.
+app.get('*', (req, res) => res.status(200).send({
+  message: 'Welcome to the beginning of nothingness.',
+}));
+
+module.exports = app;

@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import { AsyncStorage, View } from "react-native";
-import { Card, CardSection, Button, Input, Spinner, Header } from "../components/common";
+import {
+  Card,
+  CardSection,
+  Button,
+  Input,
+  Spinner,
+  Header
+} from "../components/common";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
 
 /**
@@ -46,15 +53,13 @@ class LoginPage extends Component {
    * Otherwise, show error message.
    */
   handleLogin() {
-    this.storeDataIsolatedStorage();
-
     console.log("handle login");
     const { email, password } = this.state;
 
     this.setState({ error: "", loading: true });
 
     try {
-      fetch("http://localhost:8000/login", {
+      fetch("http://10.10.34.172:8000/api/userlogin", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -65,12 +70,18 @@ class LoginPage extends Component {
           password: this.state.password
         })
       })
-        .then(response => response.json())
+        .then(response =>
+          response.json().then(data => ({
+            data: data,
+            status: response.status
+          }))
+        )
         .then(
-          response => {
-            if (response !== null) {
+          res => {
+            console.log("json", res.data);
+            if (res.status === 200) {
               console.log("Login Successful");
-              const userToken = response.token;
+              const userToken = res.data.token;
               this.setState({ userToken });
               this.storeDataIsolatedStorage();
               this.onLoginSuccess();

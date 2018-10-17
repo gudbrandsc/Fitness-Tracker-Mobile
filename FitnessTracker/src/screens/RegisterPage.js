@@ -84,10 +84,9 @@ class RegisterPage extends Component {
   }
 
   handleRegister() {
-    let statusCode;
     this.setState({ error: "", loading: true });
     try {
-      fetch("http://localhost:8000/api/userregistration", {
+      fetch("http://10.10.34.172:8000/api/userregistration", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -104,12 +103,17 @@ class RegisterPage extends Component {
           Zipcode: this.state.zipcode
         })
       })
-        .then(response => response.json())
+        .then(response =>
+          response.json().then(data => ({
+            data: data,
+            status: response.status
+          }))
+        )
         .then(
-          response => {
-            if (response !== null) {
+          res => {
+            if (res.status === 200) {
               console.log("Account creation Successful");
-              const id = response.id;
+              const id = res.data.id;
               this.setState({ id });
               this.storeDataIsolatedStorage();
               this.onRegisterSuccess();
@@ -140,10 +144,8 @@ class RegisterPage extends Component {
       const id = this.state.id;
       const pass = this.state.password;
       await AsyncStorage.setItem("login", id.toString()).then(() => {
-        return AsyncStorage.setItem("Usertoken", "Token").then(() => {
-          return AsyncStorage.setItem("pass", pass.toString()).then(() => {
-            this.onRegisterSuccess();
-          });
+        return AsyncStorage.setItem("pass", pass.toString()).then(() => {
+          this.onRegisterSuccess();
         });
       });
     } catch (error) {
