@@ -45,7 +45,7 @@ export default class SearchUserPage extends Component {
         <Card>
           <CardSection>
             <Input
-              placeholder="Search term"
+              placeholder="Enter search term..."
               label="term"
               onChangeText={term => this.setState({ term })}
             />
