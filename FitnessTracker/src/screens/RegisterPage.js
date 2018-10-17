@@ -87,7 +87,7 @@ class RegisterPage extends Component {
     let statusCode;
     this.setState({ error: "", loading: true });
     try {
-      fetch("http://10.10.34.172:8000/api/userregistration", {
+      fetch("http://localhost:8000/api/userregistration", {
         method: "POST",
         headers: {
           Accept: "application/json",

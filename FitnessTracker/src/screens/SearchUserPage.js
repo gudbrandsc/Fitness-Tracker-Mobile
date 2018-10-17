@@ -1,6 +1,9 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { Card, CardSection, Button, Input, Spinner, Header } from "../components/common";
+import UserList from '../components/userSearch/UserList';
+import axios from 'axios';
+
 
 export default class SearchUserPage extends Component {
   constructor(props) {
@@ -9,22 +12,30 @@ export default class SearchUserPage extends Component {
       term: "",
       error: "",
       loading: false,
-      data: ""
+      users:[]
     };
+
+    this.onButtonPress = this.onButtonPress.bind(this)
   }
 
   onButtonPress() {
-    const { term, error, data } = this.state;
-    console.log(this.state.term);
-    //  this.setState({error: '', loading: true })
-    this.setState({ data: "hello from data" });
+    console.log('Button is clicked: ' + this.state.term);
+    axios.get('http://localhost:8000/api/searchuser/' + this.state.term).then(response => this.setState({ users: response.data }));
+  }
+
+  loadData(){
+    if(this.state.users && this.state.users.length > 0){
+      return <UserList users={this.state.users}/>
+    }else{
+      return <Text>No users matching the search term!</Text>
+    }
   }
 
   renderButton() {
     if (this.state.loading) {
       return <Spinner size={"small"} />;
     }
-    return <Button onPress={this.onButtonPress.bind(this)}>Search</Button>;
+    return <Button onPress={this.onButtonPress}>Search</Button>;
   }
 
   render() {
@@ -41,7 +52,9 @@ export default class SearchUserPage extends Component {
           </CardSection>
           <CardSection>
             {this.renderButton()}
-            <Text>{this.state.data}</Text>
+          </CardSection>
+          <CardSection>
+            {this.loadData()}
           </CardSection>
         </Card>
       </View>

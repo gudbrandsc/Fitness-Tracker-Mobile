@@ -54,7 +54,7 @@ class LoginPage extends Component {
     this.setState({ error: "", loading: true });
 
     try {
-      fetch("http://192.168.11.25:8885/login", {
+      fetch("http://localhost:8000/login", {
         method: "POST",
         headers: {
           Accept: "application/json",

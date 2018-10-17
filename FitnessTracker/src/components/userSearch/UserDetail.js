@@ -3,8 +3,8 @@ import {Platform, StyleSheet, Text, View, Image, Linking} from 'react-native';
 import {Card, CardSection, Button} from '../common'
 
 
-const UserDetail = ({album}) => {
-  const {title, artist, thumbnail_image, image, url} = album;
+const UserDetail = ({user}) => {
+  const {FirstName, LastName} = user;
   const {
     thumbnailStyle,
     headerContentStyle,
@@ -17,8 +17,8 @@ const UserDetail = ({album}) => {
     <Card>
       <CardSection>
         <View>
-          <Text>{ title }</Text>
-          <Text>{ artist }</Text>
+          <Text>{ FirstName }</Text>
+          <Text>{ LastName }</Text>
         </View>
       </CardSection>
     </Card>
