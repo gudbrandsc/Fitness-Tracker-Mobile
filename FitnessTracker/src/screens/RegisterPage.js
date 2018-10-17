@@ -194,7 +194,7 @@ class RegisterPage extends Component {
           <CardSection>
             <Input
               placeholder="First Name"
-              label="Fname"
+              label="First Name"
               value={this.state.fname}
               onChangeText={fname => this.setState({ fname })}
             />
@@ -202,7 +202,7 @@ class RegisterPage extends Component {
           <CardSection>
             <Input
               placeholder="Last Name"
-              label="Lname"
+              label="Last Name"
               value={this.state.lname}
               onChangeText={lname => this.setState({ lname })}
             />
@@ -227,7 +227,7 @@ class RegisterPage extends Component {
           <CardSection>
             <Input
               placeholder="Street Address"
-              label="street"
+              label="Street"
               value={this.state.street}
               onChangeText={street => this.setState({ street })}
             />
@@ -251,7 +251,7 @@ class RegisterPage extends Component {
           <CardSection>
             <Input
               placeholder="Zip Code"
-              label="zipcode"
+              label="Zipcode"
               value={this.state.zipcode}
               onChangeText={zipcode => this.setState({ zipcode })}
             />

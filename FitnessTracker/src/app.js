@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { View, ActivityIndicator, ImageBackground } from "react-native";
-import { Button, Spinner } from "./components/common";
 import AuthPage from "./components/AuthPage";
+import PageHandler from "./components/PageHandler";
 
 class App extends Component {
-  state = { loggedIn: null, startApp: null };
+  state = { loggedIn: -1, startApp: 0 };
 
   componentDidMount() {
     setTimeout(() => {
@@ -18,7 +18,7 @@ class App extends Component {
    */
   startApplication() {
     console.log("updating startApp");
-    const startApp = true;
+    const startApp = 1;
     this.setState({ startApp });
   }
 
@@ -30,12 +30,14 @@ class App extends Component {
     try {
       const userToken = await AsyncStorage.getItem("Usertoken");
       const pw = await AsyncStorage.getItem("pass");
-      var loggedIn = false;
-      if (userToken !== null && pw !== null) loggedIn = true;
+      console.log("token", userToken);
+      console.log("pass", pw);
+      var loggedIn = 0;
+      if (userToken !== null && pw !== null) loggedIn = 1;
       console.log("retrieving data");
       this.setState({ loggedIn });
     } catch (error) {
-      const loggedIn = false;
+      const loggedIn = 0;
       this.setState({ loggedIn });
     }
   };
@@ -64,27 +66,14 @@ class App extends Component {
    * A function that renders the page depending on the loggedIn value
    */
   checkLoginState() {
-    switch (this.state.loggedIn) {
-      case true:
-        return (
-          // <Button onPress={() => firebase.auth().signOut()}>Log Out</Button>
-          <Button>Log out</Button>
-        );
-      case false:
-        return <AuthPage />;
-      default:
-        return <Spinner size="large" />;
-    }
+    if (this.state.loggedIn === 1) return <PageHandler />;
+    else return <AuthPage />;
   }
 
   renderContent() {
-    switch (this.state.startApp) {
-      case true:
-        console.log("Here");
-        return this.checkLoginState();
-      default:
-        return this.renderLogoPage(); // I will keep showing the startup image until I change the startApp value
-    }
+    if (this.state.startApp === 1 && this.state.loggedIn > 1)
+      return this.checkLoginState();
+    else return this.renderLogoPage(); // I will keep showing the startup image until I change the startApp value
   }
 
   render() {
