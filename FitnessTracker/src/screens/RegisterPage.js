@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import { AsyncStorage, View } from "react-native";
-import { Card, CardSection, Button, Input, Spinner, Header } from "../components/common";
+import {
+  Card,
+  CardSection,
+  Button,
+  Input,
+  Spinner,
+  Header
+} from "../components/common";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
 
 class RegisterPage extends Component {
@@ -8,6 +15,7 @@ class RegisterPage extends Component {
     headerTitle: "Create Account"
   };
   state = {
+    id: "",
     fname: "",
     lname: "",
     street: "",
@@ -76,10 +84,10 @@ class RegisterPage extends Component {
   }
 
   handleRegister() {
-  //  this.onRegisterSuccess();
+    let statusCode;
     this.setState({ error: "", loading: true });
     try {
-      fetch("http://localhost:8000/api/userregistration", {
+      fetch("http://10.10.34.172:8000/api/userregistration", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -99,7 +107,6 @@ class RegisterPage extends Component {
         .then(response => response.json())
         .then(
           response => {
-            console.log(response);
             if (response !== null) {
               console.log("Account creation Successful");
               const id = response.id;
@@ -132,9 +139,9 @@ class RegisterPage extends Component {
     try {
       const id = this.state.id;
       const pass = this.state.password;
-      await AsyncStorage.setItem("login", id).then(() => {
+      await AsyncStorage.setItem("login", id.toString()).then(() => {
         return AsyncStorage.setItem("Usertoken", "Token").then(() => {
-          return AsyncStorage.setItem("pass", pass).then(() => {
+          return AsyncStorage.setItem("pass", pass.toString()).then(() => {
             this.onRegisterSuccess();
           });
         });
