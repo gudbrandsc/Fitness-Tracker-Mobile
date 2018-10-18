@@ -10,13 +10,24 @@ import {
 } from "../components/common";
 
 class ProfilePage extends Component {
+  static navigationOptions = {
+    header: null
+  };
+
   render() {
     return (
       <View>
-        <Header headerText={"Profile"} />
+        <Header headerText={"My Profile"} />
         <Card>
           <CardSection>
-            <Button type={"danger"}>Log out</Button>
+            <Button
+              type={"secondary"}
+              onPress={() => {
+                this.props.navigation.navigate("details");
+              }}
+            >
+              Details
+            </Button>
           </CardSection>
         </Card>
       </View>

@@ -3,7 +3,7 @@ import { createBottomTabNavigator } from "react-navigation";
 import Icon from "react-native-vector-icons/Ionicons";
 
 import Homepage from "./Homepage";
-import ProfilePage from "./ProfilePage";
+import ProfilePage from "./ProfilePageRouter";
 import AnalyticsPage from "./AnalyticsPage";
 import AddWorkoutPage from "./AddWorkoutPage";
 import SearchUserPage from "./SearchUserPage";

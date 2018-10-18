@@ -26,10 +26,6 @@ const RootStack = createStackNavigator(
 );
 
 class AuthPage extends Component {
-  componentWillMount() {
-    console.log(RootStack);
-  }
-
   render() {
     return <RootStack />;
   }

@@ -12,7 +12,7 @@ const Button = ({ onPress, children, type, size }) => {
     } else if (type === "danger") {
       return { backgroundColor: "#dc3545", borderColor: "#dc3545" };
     }
-    return { backgroundColor: "#007aff", borderColor: "#0071ec" };
+    return { backgroundColor: "#00ab38", borderColor: "#00ab38" };
   };
 
   const buttonSize = function(size) {
