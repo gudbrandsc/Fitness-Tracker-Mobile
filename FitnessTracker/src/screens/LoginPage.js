@@ -5,8 +5,7 @@ import {
   CardSection,
   Button,
   Input,
-  Spinner,
-  Header
+  Spinner
 } from "../components/common";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
 
@@ -59,7 +58,7 @@ class LoginPage extends Component {
     this.setState({ error: "", loading: true });
 
     try {
-      fetch("http://10.10.34.172:8000/api/userlogin", {
+      fetch("http://localhost:8000/api/userlogin", {
         method: "POST",
         headers: {
           Accept: "application/json",

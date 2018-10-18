@@ -1,5 +1,10 @@
 import React, { Component } from "react";
-import { View, ActivityIndicator, ImageBackground } from "react-native";
+import {
+  AsyncStorage,
+  View,
+  ActivityIndicator,
+  ImageBackground
+} from "react-native";
 import AuthPage from "./components/AuthPage";
 import PageHandler from "./components/PageHandler";
 
@@ -71,7 +76,7 @@ class App extends Component {
   }
 
   renderContent() {
-    if (this.state.startApp === 1 && this.state.loggedIn > 1)
+    if (this.state.startApp === 1 && this.state.loggedIn > -1)
       return this.checkLoginState();
     else return this.renderLogoPage(); // I will keep showing the startup image until I change the startApp value
   }

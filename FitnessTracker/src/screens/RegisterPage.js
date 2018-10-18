@@ -5,8 +5,7 @@ import {
   CardSection,
   Button,
   Input,
-  Spinner,
-  Header
+  Spinner
 } from "../components/common";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
 
@@ -47,14 +46,6 @@ class RegisterPage extends Component {
     var zipCodeMatch = regexZipCode.test(this.state.zipcode);
     if (this.state.zipcode.length > 5) zipCodeMatch = false;
 
-    console.log(passwordMatch);
-    console.log(emailMatch);
-    console.log(fnameMatch);
-    console.log(lnameMatch);
-    console.log(stateMatch);
-    console.log(cityMatch);
-    console.log(streetMatch);
-    console.log(zipCodeMatch);
     if (!fnameMatch) {
       const error = "First name is invalid.";
       this.setState({ error });
@@ -86,7 +77,7 @@ class RegisterPage extends Component {
   handleRegister() {
     this.setState({ error: "", loading: true });
     try {
-      fetch("http://10.10.34.172:8000/api/userregistration", {
+      fetch("http://localhost:8000/api/userregistration", {
         method: "POST",
         headers: {
           Accept: "application/json",
