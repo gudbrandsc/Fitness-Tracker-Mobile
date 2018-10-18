@@ -80,20 +80,22 @@ class ProfileDetails extends Component {
                 _state: res.data.State
               });
               this.storeDataIsolatedStorage();
-              this.onUpdateSuccess();
+              this.onSuccess();
             } else {
-              this.onUpdateFail("Update failed.");
+              this.onFailure(
+                "Can't get Data. Please check internet connectivity."
+              );
             }
           },
           error => {
             console.log(error);
-            this.onUpdateFail(
-              "Update failed. Please check internet connectivity."
+            this.onFailure(
+              "Can't get Data. Please check internet connectivity."
             );
           }
         );
     } catch (error) {
-      this.onUpdateFail("Update failed. Please check internet connectivity.");
+      this.onFailure("Can't get Data. Please check internet connectivity.");
     }
   };
 
@@ -214,21 +216,21 @@ class ProfileDetails extends Component {
               const id = res.data.id;
               this.setState({ id });
               this.storeDataIsolatedStorage();
-              this.onUpdateSuccess();
+              this.onSuccess();
             } else {
-              this.onUpdateFail("Update failed.");
+              this.onFailure("Update failed.");
               console.log("Account update Failed");
             }
           },
           error => {
             console.log(error);
-            this.onUpdateFail(
+            this.onFailure(
               "Update failed. Please check internet connectivity."
             );
           }
         );
     } catch (error) {
-      this.onUpdateFail("Update failed. Please check internet connectivity.");
+      this.onFailure("Update failed. Please check internet connectivity.");
     }
   }
 
@@ -241,7 +243,7 @@ class ProfileDetails extends Component {
       const pass = this.state.password;
       await AsyncStorage.setItem("login", id.toString()).then(() => {
         return AsyncStorage.setItem("pass", pass.toString()).then(() => {
-          this.onUpdateSuccess();
+          this.onSuccess();
         });
       });
     } catch (error) {
@@ -249,11 +251,11 @@ class ProfileDetails extends Component {
     }
   };
 
-  onUpdateFail(err) {
+  onFailure(err) {
     this.setState({ error: err, loading: false, animationErrorHeight: "auto" });
   }
 
-  onUpdateSuccess() {
+  onSuccess() {
     this.setState({ loading: false, error: "", animationErrorHeight: "0.5%" });
   }
 
