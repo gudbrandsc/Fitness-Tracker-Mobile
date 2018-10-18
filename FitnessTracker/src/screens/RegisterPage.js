@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { AsyncStorage, View } from "react-native";
+import {
+  AsyncStorage,
+  View,
+  Text,
+  TouchableOpacity,
+  Image
+} from "react-native";
+import ImagePicker from "react-native-image-picker";
 import {
   Card,
   CardSection,
@@ -9,10 +16,17 @@ import {
 } from "../components/common";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
 
+const options = {
+  title: "Profile Picture",
+  takePhotoButtonTitle: "Take a photo",
+  chooseFromLibraryButtonTitle: "Choose photo from library"
+};
+
 class RegisterPage extends Component {
   static navigationOptions = {
     headerTitle: "Create Account"
   };
+
   state = {
     id: "",
     fname: "",
@@ -24,7 +38,31 @@ class RegisterPage extends Component {
     email: "",
     password: "",
     error: "",
-    loading: false
+    loading: false,
+    avatarSource: require("../components/UIdesign/blank-profile-picture.png"),
+    pic: null
+  };
+
+  selectImage = () => {
+    ImagePicker.showImagePicker(options, response => {
+      console.log("Response = ", response);
+
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("Image Picker Error: ", response.error);
+      } else {
+        let source = { uri: response.uri };
+        console.log("source", source);
+        // You can also display the image using data:
+        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
+
+        this.setState({
+          avatarSource: source,
+          pic: response.data
+        });
+      }
+    });
   };
 
   /**
@@ -74,6 +112,9 @@ class RegisterPage extends Component {
     } else this.handleRegister();
   }
 
+  /**
+   * A function that sends a register request to the backend to store the data
+   */
   handleRegister() {
     this.setState({ error: "", loading: true });
     try {
@@ -164,6 +205,9 @@ class RegisterPage extends Component {
     this.props.navigation.navigate("Login");
   }
 
+  /**
+   * A function called when pressing the Register button
+   */
   renderButton() {
     if (this.state.loading) {
       return <Spinner size="small" />;
@@ -174,14 +218,38 @@ class RegisterPage extends Component {
     );
   }
 
+  /**
+   * A function called when pressing the close button in the animation error box
+   */
   onCloseAnimationBox() {
     this.setState({ error: "" });
   }
 
   render() {
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, justifyContent: "center" }}>
         <Card>
+          <CardSection>
+            <View style={styles.profileImgContainer}>
+              <Image
+                source={this.state.avatarSource}
+                style={{
+                  height: 80,
+                  width: 80,
+                  borderRadius: 40
+                }}
+              />
+            </View>
+            <View
+              style={{ justifyContent: "center", flex: 1, marginLeft: "10%" }}
+            >
+              <TouchableOpacity onPress={this.selectImage}>
+                <Text style={{ color: "#007aff", fontSize: 18 }}>
+                  Select Profile Picture
+                </Text>
+              </TouchableOpacity>
+            </View>
+          </CardSection>
           <CardSection>
             <Input
               placeholder="First Name"
@@ -259,11 +327,25 @@ class RegisterPage extends Component {
 }
 
 const styles = {
+  profileImgContainer: {
+    marginLeft: 8,
+    height: 80,
+    width: 80,
+    borderRadius: 40,
+    overflow: "hidden",
+    borderColor: "#007aff",
+    borderWidth: 1
+  },
   errorTextStyle: {
     fontSize: 20,
     alignSelf: "center",
     color: "red"
   }
 };
+/*
+<TouchableOpacity onPress={this.uploadPic}>
+              <Text>Upload</Text>
+            </TouchableOpacity>
+            */
 
 export default RegisterPage;
