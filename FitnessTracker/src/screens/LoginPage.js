@@ -58,7 +58,7 @@ class LoginPage extends Component {
     this.setState({ error: "", loading: true });
 
     try {
-      fetch("http://localhost:8000/api/userlogin", {
+      fetch("http://10.1.86.4:8000/api/userlogin", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -137,7 +137,15 @@ class LoginPage extends Component {
       return <Spinner size="small" />;
     }
 
-    return <Button size={'large'} type={'primary'}  onPress={this.validateInput.bind(this)}>Log in</Button>;
+    return (
+      <Button
+        size={"large"}
+        type={"primary"}
+        onPress={this.validateInput.bind(this)}
+      >
+        Log in
+      </Button>
+    );
   }
 
   onRegisterButtonPress() {
@@ -172,7 +180,11 @@ class LoginPage extends Component {
           </CardSection>
           <CardSection>{this.renderButton()}</CardSection>
           <CardSection>
-            <Button size={'large'} type={'secondary'} onPress={this.onRegisterButtonPress.bind(this)}>
+            <Button
+              size={"large"}
+              type={"secondary"}
+              onPress={this.onRegisterButtonPress.bind(this)}
+            >
               Create account
             </Button>
           </CardSection>
