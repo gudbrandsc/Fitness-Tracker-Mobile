@@ -58,7 +58,7 @@ const RootStack = createBottomTabNavigator(
   }
 );
 
-export default class App extends Component {
+export default class HomePageRouter extends Component {
   static navigationOptions = {
     header: null
   };

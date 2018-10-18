@@ -50,10 +50,11 @@ class ProfileDetails extends Component {
 
   retrieveDetails = async () => {
     try {
-      const id = await AsyncStorage.getItem("login");
+      //const id = await AsyncStorage.getItem("login");
+      const id = "39";
       const pw = await AsyncStorage.getItem("pass");
       this.setState({ id: id, password: pw });
-      fetch("http://10.1.86.4:8000/api/user_details/" + id, {
+      fetch("http://10.10.34.234:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -186,7 +187,7 @@ class ProfileDetails extends Component {
     this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
     try {
       const id = this.state.id;
-      fetch("http://10.1.86.4:8000/api/userregistration/" + id + "/update", {
+      fetch("http://10.10.34.234:8000/api/userregistration/" + id + "/update", {
         method: "POST",
         headers: {
           Accept: "application/json",

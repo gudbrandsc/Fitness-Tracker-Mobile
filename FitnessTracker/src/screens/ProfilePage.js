@@ -1,4 +1,6 @@
 import React, { Component } from "react";
+import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
+import ProfileSubCategoriesRouter from "./ProfileSubCategoriesRouter";
 import {
   AsyncStorage,
   View,
@@ -7,18 +9,11 @@ import {
   TouchableOpacity,
   Image
 } from "react-native";
-import {
-  Card,
-  CardSection,
-  Button,
-  Input,
-  Spinner
-} from "../components/common";
-import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
+import { Button } from "../components/common";
 
 class ProfilePage extends Component {
   static navigationOptions = {
-    headerTitle: "Create Account"
+    headerTitle: "My Profile"
   };
 
   state = {
@@ -37,10 +32,10 @@ class ProfilePage extends Component {
 
   retrieveDetails = async () => {
     try {
-      const id = await AsyncStorage.getItem("login");
-      const pw = await AsyncStorage.getItem("pass");
-      this.setState({ id: id, password: pw });
-      fetch("http://10.1.86.4:8000/api/user_details/" + id, {
+      //const id = await AsyncStorage.getItem("login");
+      const id = "39";
+      this.setState({ id });
+      fetch("http://10.10.34.234:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -172,6 +167,15 @@ class ProfilePage extends Component {
               </Text>
             </TouchableOpacity>
           </View>
+        </View>
+        <View
+          style={{
+            flexDirection: "column",
+            width: "100%",
+            height: "60%"
+          }}
+        >
+          <ProfileSubCategoriesRouter />
         </View>
         <AnimationErrorBox
           errorMsg={this.state.error}
