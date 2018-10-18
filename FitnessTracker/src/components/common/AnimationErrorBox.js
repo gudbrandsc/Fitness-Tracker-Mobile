@@ -51,11 +51,17 @@ class FadeBox extends React.Component {
 class AnimationErrorBox extends Component {
   render() {
     return (
-      <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
+      <View
+        style={{
+          flex: 1,
+          alignItems: "center",
+          justifyContent: "center"
+        }}
+      >
         <FadeBox
           style={{
             width: "100%",
-            height: "auto",
+            height: this.props.viewHeight,
             backgroundColor: "#FF0000",
             justifyContent: "space-between",
             position: "absolute",

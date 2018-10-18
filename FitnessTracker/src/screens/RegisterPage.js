@@ -40,7 +40,8 @@ class RegisterPage extends Component {
     error: "",
     loading: false,
     avatarSource: require("../components/UIdesign/blank-profile-picture.png"),
-    pic: null
+    pic: null,
+    animationErrorHeight: "0.5%"
   };
 
   selectImage = () => {
@@ -87,28 +88,36 @@ class RegisterPage extends Component {
     if (!fnameMatch) {
       const error = "First name is invalid.";
       this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
     } else if (!lnameMatch) {
       const error = "Last name is invalid.";
       this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
     } else if (!emailMatch) {
       const error = "Wrong Email Format.";
       this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
     } else if (!passwordMatch) {
       const error =
         "Password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
       this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
     } else if (!streetMatch) {
       const error = "Street Address Format is invalid";
       this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
     } else if (!cityMatch) {
       const error = "City Format is invalid";
       this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
     } else if (!stateMatch) {
       const error = "State Format is invalid";
       this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
     } else if (!zipCodeMatch) {
       const error = "Zipcode Format is invalid";
       this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
     } else this.handleRegister();
   }
 
@@ -116,9 +125,9 @@ class RegisterPage extends Component {
    * A function that sends a register request to the backend to store the data
    */
   handleRegister() {
-    this.setState({ error: "", loading: true });
+    this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
     try {
-      fetch("http://localhost:8000/api/userregistration", {
+      fetch("http://10.1.86.4:8000/api/userregistration", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -186,7 +195,7 @@ class RegisterPage extends Component {
   };
 
   onRegisterFail(err) {
-    this.setState({ error: err, loading: false });
+    this.setState({ error: err, loading: false, animationErrorHeight: "auto" });
   }
 
   onRegisterSuccess() {
@@ -200,7 +209,8 @@ class RegisterPage extends Component {
       _state: "",
       zipcode: "",
       loading: false,
-      error: ""
+      error: "",
+      animationErrorHeight: "0.5%"
     });
     this.props.navigation.navigate("Login");
   }
@@ -222,7 +232,7 @@ class RegisterPage extends Component {
    * A function called when pressing the close button in the animation error box
    */
   onCloseAnimationBox() {
-    this.setState({ error: "" });
+    this.setState({ error: "", animationErrorHeight: "0.5%" });
   }
 
   render() {
@@ -319,6 +329,7 @@ class RegisterPage extends Component {
         </Card>
         <AnimationErrorBox
           errorMsg={this.state.error}
+          viewHeight={this.state.animationErrorHeight}
           onPress={this.onCloseAnimationBox.bind(this)}
         />
       </View>

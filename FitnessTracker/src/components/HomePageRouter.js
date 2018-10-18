@@ -2,11 +2,11 @@ import React, { Component } from "react";
 import { createBottomTabNavigator } from "react-navigation";
 import Icon from "react-native-vector-icons/Ionicons";
 
-import Homepage from "../screens/Homepage";
-import ProfilePage from "../screens/ProfilePage";
-import AnalyticsPage from "../screens/AnalyticsPage";
-import AddWorkoutPage from "../screens/AddWorkoutPage";
-import SearchUserPage from "../screens/SearchUserPage";
+import Homepage from "./Homepage";
+import ProfilePage from "./ProfilePage";
+import AnalyticsPage from "./AnalyticsPage";
+import AddWorkoutPage from "./AddWorkoutPage";
+import SearchUserPage from "./SearchUserPage";
 
 const RootStack = createBottomTabNavigator(
   {
@@ -53,7 +53,7 @@ const RootStack = createBottomTabNavigator(
     tabBarOptions: {
       activeTintColor: "#007aff",
       inactiveTintColor: "gray",
-      showLabel: false, //Remove text under icons
+      showLabel: false //Remove text under icons
     }
   }
 );

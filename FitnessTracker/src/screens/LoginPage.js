@@ -23,7 +23,8 @@ class LoginPage extends Component {
     password: "",
     userToken: "",
     error: "",
-    loading: false
+    loading: false,
+    animationErrorHeight: "0.5%"
   };
 
   /**
@@ -55,7 +56,7 @@ class LoginPage extends Component {
     console.log("handle login");
     const { email, password } = this.state;
 
-    this.setState({ error: "", loading: true });
+    this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
 
     try {
       fetch("http://10.1.86.4:8000/api/userlogin", {
@@ -119,7 +120,11 @@ class LoginPage extends Component {
   };
 
   onLoginFail(err) {
-    this.setState({ error: err, loading: false });
+    this.setState({
+      error: err,
+      loading: false,
+      animationErrorHeight: "auto"
+    });
   }
 
   onLoginSuccess() {
@@ -127,7 +132,8 @@ class LoginPage extends Component {
       email: "",
       password: "",
       loading: false,
-      error: ""
+      error: "",
+      animationErrorHeight: "0.5%"
     });
     this.props.navigation.navigate("Home");
   }
@@ -153,7 +159,10 @@ class LoginPage extends Component {
   }
 
   onCloseAnimationBox() {
-    this.setState({ error: "" });
+    this.setState({
+      error: "",
+      animationErrorHeight: "0.5%"
+    });
   }
 
   render() {

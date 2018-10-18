@@ -5,8 +5,8 @@ import {
   ActivityIndicator,
   ImageBackground
 } from "react-native";
-import AuthPage from "./components/AuthPage";
-import PageHandler from "./components/PageHandler";
+import AuthPage from "./screens/AuthPageRouter";
+import HomePageRouter from "./screens/HomePageRouter";
 
 class App extends Component {
   state = { loggedIn: -1, startApp: 0 };
@@ -71,7 +71,7 @@ class App extends Component {
    * A function that renders the page depending on the loggedIn value
    */
   checkLoginState() {
-    if (this.state.loggedIn === 1) return <PageHandler />;
+    if (this.state.loggedIn === 1) return <HomePageRouter />;
     else return <AuthPage />;
   }
 
