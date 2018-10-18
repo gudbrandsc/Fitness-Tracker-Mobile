@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Card, CardSection, Button, Input, Spinner, Header } from "../components/common";
+import { Card, CardSection, Input, Spinner,Button, Header } from "../components/common";
 import UserList from '../components/userSearch/UserList';
 import axios from 'axios';
 
@@ -35,7 +35,7 @@ export default class SearchUserPage extends Component {
     if (this.state.loading) {
       return <Spinner size={"small"} />;
     }
-    return <Button onPress={this.onButtonPress}>Search</Button>;
+    return <Button size={'large'} type={'primary'} onPress={this.onButtonPress} children={'Search'}/>;
   }
 
   render() {

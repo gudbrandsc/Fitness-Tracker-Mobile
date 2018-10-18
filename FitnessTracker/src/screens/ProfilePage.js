@@ -9,7 +9,7 @@ class ProfilePage extends Component {
         <Header headerText={"Profile Page"} />
         <Card>
           <CardSection>
-            <Button>Log out</Button>
+            <Button type={'danger'}>Log out</Button>
           </CardSection>
         </Card>
       </View>

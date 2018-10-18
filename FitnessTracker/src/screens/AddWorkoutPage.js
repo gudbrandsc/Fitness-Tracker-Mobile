@@ -9,7 +9,7 @@ export default class AddWorkoutPage extends Component {
         <Header headerText={"Add Workout"} />
         <Card>
           <CardSection>
-            <Button>Log out</Button>
+            <Button type={'primary'}>Log out</Button>
           </CardSection>
         </Card>
       </View>

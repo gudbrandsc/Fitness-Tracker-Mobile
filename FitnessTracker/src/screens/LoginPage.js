@@ -137,7 +137,7 @@ class LoginPage extends Component {
       return <Spinner size="small" />;
     }
 
-    return <Button onPress={this.validateInput.bind(this)}>Log in</Button>;
+    return <Button size={'large'} type={'primary'}  onPress={this.validateInput.bind(this)}>Log in</Button>;
   }
 
   onRegisterButtonPress() {
@@ -172,7 +172,7 @@ class LoginPage extends Component {
           </CardSection>
           <CardSection>{this.renderButton()}</CardSection>
           <CardSection>
-            <Button onPress={this.onRegisterButtonPress.bind(this)}>
+            <Button size={'large'} type={'secondary'} onPress={this.onRegisterButtonPress.bind(this)}>
               Create account
             </Button>
           </CardSection>

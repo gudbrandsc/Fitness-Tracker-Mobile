@@ -3,51 +3,59 @@ import {Platform, StyleSheet, Text, View, Image, Linking} from 'react-native';
 import {Card, CardSection, Button} from '../common'
 
 
-const UserDetail = ({user}) => {
-  const {FirstName, LastName} = user;
-  const {
-    thumbnailStyle,
-    headerContentStyle,
-    thumbnailContainerStyle,
-    headerTextStyle,
-    imageStyle
-  }= styles;
+class UserDetail extends Component {
 
-  return (
-    <Card>
-      <CardSection>
-        <View>
-          <Text>{ FirstName }</Text>
-          <Text>{ LastName }</Text>
+  constructor(props) {
+    super(props);
+  }
+
+  renderFollowingButton(){
+    if(this.props.user.follows === 'true'){
+      return <Button type={'danger'} size={'small'} children={'Unfollow'} />;
+    }
+    return <Button type={'primary'} size={'small'} children={'Follow'} />;
+  }
+
+
+  render(){
+    return (
+      <View style={styles.viewStyleOne}>
+        <View style={styles.textStyle}>
+          <Text > {this.props.user.FirstName} {this.props.user.LastName}</Text>
         </View>
-      </CardSection>
-    </Card>
-  )
+        <View style={styles.textStyle3}>
+          {this.renderFollowingButton()}
+        </View>
+
+    </View>
+    );
+  }
 }
 
-const styles = {
-  headerContentStyle: {
-    flexDirection: 'column',
-    justifyContent: 'space-around'
+const styles = StyleSheet.create({
+  viewStyleOne: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding: 50,
+    borderBottomWidth: 1,
+    borderColor: '#ddd',
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    elevation: 2,
   },
-  headerTextStyle: {
-    fontSize: 18
+  textStyle:{
+    alignItems:'flex-start',
   },
-  thumbnailStyle: {
-    height: 50,
-    width: 50
+  textStyle2:{
+    alignItems:'center',
   },
-  thumbnailContainerStyle: {
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginLeft: 10,
-    marginRight: 10
-  },
-  imageStyle: {
-    height: 300,
-    flex: 1,
-    width: null
+  textStyle3:{
+    width:100,
+    height:15,
+    alignItems:'flex-end',
   }
-};
+
+})
 
 export default UserDetail;

@@ -11,17 +11,16 @@ class UserList extends Component {
   }
 
 
-  renderAlbums () {
+  renderUser () {
       return this.props.users.map(user =>
-        <UserDetail key={user.id} user={user} />
+        <UserDetail key={user.Id} user={user} />
       );
-
   }
 
   render(){
     return (
       <ScrollView>
-        { this.renderAlbums() }
+        { this.renderUser() }
       </ScrollView>
     );
   }

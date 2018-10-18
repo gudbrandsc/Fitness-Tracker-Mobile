@@ -1,12 +1,35 @@
 import React from 'react';
 import { Text, TouchableOpacity } from 'react-native';
 
-const Button = ({ onPress, children }) => {
-  const { buttonStyle, textStyle } = styles;
+const Button = ({ onPress, children, type, size}) => {
+
+  const { buttonStyle, textStyle} = styles;
+
+  const buttonType = function(type) {
+    if(type === 'primary'){
+      return { backgroundColor: '#007aff', borderColor: '#0071ec' }
+    } else if(type === 'secondary'){
+      return { backgroundColor: '#6c757d', borderColor: '#6c757d'}
+    } else if(type === 'danger'){
+      return { backgroundColor: '#dc3545', borderColor: '#dc3545'}
+    }
+    return { backgroundColor: '#007aff', borderColor: '#0071ec' }
+  }
+
+  const buttonSize = function(size) {
+    if(size === 'large'){
+      return { fontSize: 16, fontWeight: '600'}
+    } else if(size === 'medium'){
+      return { fontSize: 10, fontWeight: '300'}
+    } else if(size === 'small'){
+      return { fontSize: 8, fontWeight: '200'}
+    }
+    return { fontSize: 16, fontWeight: '600'}
+  }
 
   return (
-    <TouchableOpacity onPress={onPress} style={buttonStyle}>
-      <Text style={textStyle}>
+    <TouchableOpacity onPress={onPress} style={[buttonStyle, buttonType(type)]}>
+      <Text style={[textStyle, buttonSize(size)]}>
         {children}
       </Text>
     </TouchableOpacity>
@@ -15,23 +38,17 @@ const Button = ({ onPress, children }) => {
 
 const styles = {
   textStyle: {
-    alignSelf: 'center',
-    color: '#007aff',
-    fontSize: 16,
-    fontWeight: '600',
-    paddingTop: 10,
-    paddingBottom: 10
+    color: '#fff',
+    textAlign: 'center',
   },
   buttonStyle: {
     flex: 1,
     alignSelf: 'stretch',
-    backgroundColor: '#fff',
-    borderRadius: 5,
+    borderRadius: 10,
     borderWidth: 1,
-    borderColor: '#007aff',
     marginLeft: 5,
     marginRight: 5
-  }
+  },
 };
 
 export { Button };

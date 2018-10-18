@@ -9,7 +9,7 @@ export default class AnalyticsPage extends Component {
         <Header headerText={"Analytics"} />
         <Card>
           <CardSection>
-            <Button>Log out</Button>
+            <Button type={'primary'}>Log out</Button>
           </CardSection>
         </Card>
       </View>

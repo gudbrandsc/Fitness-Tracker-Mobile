@@ -13,7 +13,7 @@ export default class Homepage extends Component {
         <Header headerText={"HomePage"} />
         <Card>
           <CardSection>
-            <Button>Log out</Button>
+            <Button type={'primary'}>Log out</Button>
           </CardSection>
         </Card>
       </View>
