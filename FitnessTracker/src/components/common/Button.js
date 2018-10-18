@@ -21,7 +21,7 @@ const Button = ({ onPress, children, type, size }) => {
     } else if (size === "medium") {
       return { fontSize: 10, fontWeight: "300" };
     } else if (size === "small") {
-      return { fontSize: 8, fontWeight: "200" };
+      return { fontSize: 8, fontWeight: "200", minWidth: '15%' };
     }
     return { fontSize: 16, fontWeight: "600" };
   };

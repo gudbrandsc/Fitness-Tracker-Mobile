@@ -7,13 +7,27 @@ class UserDetail extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {'follows': this.props.user.follows}
   }
 
+  onFollowPress = () => {
+    this.setState({
+      follows: 'true'
+    });
+  }
+
+  onUnfollowPress = () => {
+    this.setState({
+      follows: 'false'
+    });
+  }
+
+
   renderFollowingButton(){
-    if(this.props.user.follows === 'true'){
-      return <Button type={'danger'} size={'small'} children={'Unfollow'} />;
+    if(this.state.follows === 'true'){
+      return <Button onPress={this.onUnfollowPress} type={'danger'} size={'small'} children={'Unfollow'} />;
     }
-    return <Button type={'primary'} size={'small'} children={'Follow'} />;
+    return <Button onPress={this.onFollowPress} type={'primary'} size={'small'} children={'Follow'} />;
   }
 
 
@@ -26,7 +40,6 @@ class UserDetail extends Component {
         <View style={styles.textStyle3}>
           {this.renderFollowingButton()}
         </View>
-
     </View>
     );
   }
@@ -36,8 +49,8 @@ const styles = StyleSheet.create({
   viewStyleOne: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    padding: 50,
     borderBottomWidth: 1,
+    padding: 5,
     borderColor: '#ddd',
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -45,14 +58,13 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   textStyle:{
+    justifyContent: 'center',
     alignItems:'flex-start',
   },
   textStyle2:{
     alignItems:'center',
   },
   textStyle3:{
-    width:100,
-    height:15,
     alignItems:'flex-end',
   }
 
