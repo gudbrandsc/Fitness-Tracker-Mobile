@@ -1,13 +1,14 @@
 import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, View, Image, Linking} from 'react-native';
-import {Card, CardSection, Button} from '../common'
-
+import {StyleSheet, Text, View} from 'react-native';
+import {Button} from '../common'
+import {Avatar} from 'react-native-elements'
 
 class UserDetail extends Component {
 
   constructor(props) {
     super(props);
-    this.state = {'follows': this.props.user.follows}
+    this.state = {
+      'follows': this.props.user.follows}
   }
 
   onFollowPress = () => {
@@ -32,14 +33,25 @@ class UserDetail extends Component {
 
 
   render(){
+    const {viewStyleOne, textStyle, textStyle3} = styles;
+    const {FirstName, LastName, follows} = this.props.user;
+
     return (
       <View style={styles.viewStyleOne}>
-        <View style={styles.textStyle}>
-          <Text > {this.props.user.FirstName} {this.props.user.LastName}</Text>
-        </View>
-        <View style={styles.textStyle3}>
-          {this.renderFollowingButton()}
-        </View>
+          <Avatar
+            small
+            rounded
+            source={{uri: "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"}}
+            onPress={() => console.log("Works!")}
+            activeOpacity={0.7}
+          />
+          <View style={textStyle}>
+            <Text style={styles.title}> {FirstName} {LastName}</Text>
+          </View>
+
+          <View style={textStyle3}>
+            {this.renderFollowingButton()}
+          </View>
     </View>
     );
   }
@@ -49,25 +61,39 @@ const styles = StyleSheet.create({
   viewStyleOne: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    borderBottomWidth: 1,
+    borderWidth: 1,
     padding: 5,
     borderColor: '#ddd',
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
     elevation: 2,
   },
   textStyle:{
-    justifyContent: 'center',
     alignItems:'flex-start',
   },
   textStyle2:{
     alignItems:'center',
   },
   textStyle3:{
+    flex:0.4,
     alignItems:'flex-end',
-  }
-
+  },
+  container: {
+    paddingTop: 10,
+    paddingRight: 10,
+    paddingBottom: 10,
+    borderBottomColor: '#bbb',
+    borderBottomWidth: 1,
+    backgroundColor: 'transparent',
+  },
+  wrapper: {
+    flexDirection: 'row',
+    marginLeft: 10,
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 14,
+    fontFamily:'HelveticaNeue',
+    color: '#94989a',
+  },
 })
 
 export default UserDetail;
