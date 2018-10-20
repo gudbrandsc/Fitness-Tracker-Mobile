@@ -1,10 +1,9 @@
 import React, { Component } from "react";
-import { Text, View, TextInput } from "react-native";
-import {  CardSection, Input, Spinner, Button, Header} from "../components/common";
+import { Text, View, AsyncStorage } from "react-native";
+import { Spinner, Header} from "../components/common";
 import UserList from '../components/userSearch/UserList';
 import axios from 'axios';
-import Icon from "react-native-vector-icons/Ionicons";
-import {Card, SearchBar} from 'react-native-elements'
+import {SearchBar} from 'react-native-elements'
 
 
 export default class SearchUserPage extends Component {
@@ -16,13 +15,27 @@ export default class SearchUserPage extends Component {
       error: "",
       loading: false,
       users:[],
+      userId: '',
     };
     this.onButtonPress = this.onButtonPress.bind(this)
   }
+  componentDidMount() {
+    this.retrieveDetails();
+  }
+
+  retrieveDetails = async () => {
+    try {
+      const id = await AsyncStorage.getItem("login");
+      this.setState({userId: id})
+    } catch (error) {
+      this.onFailure("Can't get Data. Please check internet connectivity.");
+    }
+  }
+
 
   onButtonPress(term) {
     this.setState({error: '', loading: true })
-    axios.get('http://localhost:8000/api/searchuser/' + term).then(response => this.setState({ users: response.data })).then(this.checkSearchResp.bind(this));
+    axios.get('http://localhost:8000/api/searchuser/' + term + '/'+ this.state.userId).then(response => this.setState({ users: response.data })).then(this.checkSearchResp.bind(this));
   }
 
   checkSearchResp(){
@@ -39,7 +52,8 @@ export default class SearchUserPage extends Component {
       return <Spinner  size={"small"} />;
     }
     if((users && users.length > 0)){
-      return  <UserList users={users}/>
+      console.log(this.state.userId + ' is the user id ')
+      return  <UserList users={users} userId={this.state.userId} />
     }
   }
 
