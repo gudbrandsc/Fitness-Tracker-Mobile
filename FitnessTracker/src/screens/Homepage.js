@@ -1,6 +1,13 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Card, CardSection, Button, Input, Spinner, Header } from "../components/common";
+import {
+  Card,
+  CardSection,
+  Button,
+  Input,
+  Spinner,
+  Header
+} from "../components/common";
 
 export default class Homepage extends Component {
   constructor(props) {
@@ -13,7 +20,7 @@ export default class Homepage extends Component {
         <Header headerText={"HomePage"} />
         <Card>
           <CardSection>
-            <Button type={'primary'}>Log out</Button>
+            <Text>Under Construction</Text>
           </CardSection>
         </Card>
       </View>

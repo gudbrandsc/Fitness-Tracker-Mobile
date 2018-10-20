@@ -152,11 +152,10 @@ class RegisterPage extends Component {
         )
         .then(
           res => {
-            if (res.status === 200) {
+            if (res.status === 201) {
               console.log("Account creation Successful");
               const id = res.data.id;
               this.setState({ id });
-              this.storeDataIsolatedStorage();
               this.onRegisterSuccess();
             } else {
               this.onRegisterFail("Registration failed.");
@@ -176,23 +175,6 @@ class RegisterPage extends Component {
       );
     }
   }
-
-  /**
-   * A function that stores login, password, and token to the isolated storage.
-   */
-  storeDataIsolatedStorage = async () => {
-    try {
-      const id = this.state.id;
-      const pass = this.state.password;
-      await AsyncStorage.setItem("login", id.toString()).then(() => {
-        return AsyncStorage.setItem("pass", pass.toString()).then(() => {
-          this.onRegisterSuccess();
-        });
-      });
-    } catch (error) {
-      console.log(error);
-    }
-  };
 
   onRegisterFail(err) {
     this.setState({ error: err, loading: false, animationErrorHeight: "auto" });

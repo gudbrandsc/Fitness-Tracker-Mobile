@@ -1,6 +1,12 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Card, CardSection, Button, Input, Spinner, Header } from "../components/common";
+import {
+  Card,
+  CardSection,
+  Input,
+  Spinner,
+  Header
+} from "../components/common";
 
 export default class AddWorkoutPage extends Component {
   render() {
@@ -9,7 +15,7 @@ export default class AddWorkoutPage extends Component {
         <Header headerText={"Add Workout"} />
         <Card>
           <CardSection>
-            <Button type={'primary'}>Log out</Button>
+            <Text>Under Construction</Text>
           </CardSection>
         </Card>
       </View>

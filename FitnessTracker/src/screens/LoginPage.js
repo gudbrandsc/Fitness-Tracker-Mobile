@@ -19,6 +19,7 @@ class LoginPage extends Component {
   };
 
   state = {
+    id: "",
     email: "",
     password: "",
     userToken: "",
@@ -78,13 +79,12 @@ class LoginPage extends Component {
         )
         .then(
           res => {
-            console.log("json", res.data);
             if (res.status === 200) {
               console.log("Login Successful");
               const userToken = res.data.token;
-              this.setState({ userToken });
+              const id = res.data.userId;
+              this.setState({ userToken, id });
               this.storeDataIsolatedStorage();
-              this.onLoginSuccess();
             } else {
               this.onLoginFail("Password or username doesn't match.");
               console.log("Login Failed");
@@ -109,9 +109,12 @@ class LoginPage extends Component {
     try {
       const userToken = this.state.userToken;
       const pass = this.state.password;
-      await AsyncStorage.setItem("Usertoken", userToken).then(() => {
-        return AsyncStorage.setItem("pass", pass).then(() => {
-          this.onLoginSuccess();
+      const id = this.state.id;
+      await AsyncStorage.setItem("Usertoken", userToken.toString()).then(() => {
+        return AsyncStorage.setItem("pass", pass.toString()).then(() => {
+          return AsyncStorage.setItem("login", id.toString()).then(() => {
+            this.onLoginSuccess();
+          });
         });
       });
     } catch (error) {

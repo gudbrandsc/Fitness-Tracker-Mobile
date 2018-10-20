@@ -25,10 +25,10 @@ const RootStack = createStackNavigator(
   }
 );
 
-class AuthPage extends Component {
+class AuthPageRouter extends Component {
   render() {
     return <RootStack />;
   }
 }
 
-export default AuthPage;
+export default AuthPageRouter;

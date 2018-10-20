@@ -3,6 +3,7 @@ import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this 
 import {
   AsyncStorage,
   View,
+  ScrollView,
   Text,
   TouchableOpacity,
   Image
@@ -24,6 +25,7 @@ const options = {
 
 class ProfileDetails extends Component {
   state = {
+    fullName: "",
     id: "",
     fname: "",
     lname: "",
@@ -50,11 +52,10 @@ class ProfileDetails extends Component {
 
   retrieveDetails = async () => {
     try {
-      //const id = await AsyncStorage.getItem("login");
-      const id = "39";
+      const id = await AsyncStorage.getItem("login");
       const pw = await AsyncStorage.getItem("pass");
       this.setState({ id: id, password: pw });
-      fetch("http://10.10.34.234:8000/api/user_details/" + id, {
+      fetch("http://10.1.86.4:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -78,7 +79,8 @@ class ProfileDetails extends Component {
                 street: res.data.StreetAddress,
                 city: res.data.City,
                 zipcode: res.data.Zipcode,
-                _state: res.data.State
+                _state: res.data.State,
+                fullName: res.data.FirstName + " " + res.data.LastName
               });
               this.storeDataIsolatedStorage();
               this.onSuccess();
@@ -187,7 +189,7 @@ class ProfileDetails extends Component {
     this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
     try {
       const id = this.state.id;
-      fetch("http://10.10.34.234:8000/api/userregistration/" + id + "/update", {
+      fetch("http://10.1.86.4:8000/api/userregistration/" + id + "/update", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -215,9 +217,12 @@ class ProfileDetails extends Component {
             if (res.status === 200) {
               console.log("Details updated");
               const id = res.data.id;
-              this.setState({ id });
+              const fullName = this.state.fname + " " + this.state.lname;
+              this.setState({ id, fullName });
               this.storeDataIsolatedStorage();
               this.onSuccess();
+              const { params } = this.props.navigation.state;
+              params.updateInfo(fullName); // this will update the name and call the updateInfo in the ProfilePage class
             } else {
               this.onFailure("Update failed.");
               console.log("Account update Failed");
@@ -260,6 +265,20 @@ class ProfileDetails extends Component {
     this.setState({ loading: false, error: "", animationErrorHeight: "0.5%" });
   }
 
+  logout = async () => {
+    try {
+      await AsyncStorage.removeItem("Usertoken").then(() => {
+        return AsyncStorage.removeItem("pass").then(() => {
+          return AsyncStorage.removeItem("login").then(() => {
+            this.props.navigation.navigate("login");
+          });
+        });
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   /**
    * A function called when pressing the Update button
    */
@@ -288,7 +307,7 @@ class ProfileDetails extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, justifyContent: "center" }}>
+      <ScrollView>
         <Card>
           <CardSection>
             <View style={styles.profileImgContainer}>
@@ -378,13 +397,22 @@ class ProfileDetails extends Component {
             />
           </CardSection>
           <CardSection>{this.renderButton()}</CardSection>
+          <CardSection>
+            <Button
+              size={"large"}
+              type={"danger"}
+              onPress={this.logout.bind(this)}
+            >
+              Logout
+            </Button>
+          </CardSection>
         </Card>
         <AnimationErrorBox
           errorMsg={this.state.error}
           viewHeight={this.state.animationErrorHeight}
           onPress={this.onCloseAnimationBox.bind(this)}
         />
-      </View>
+      </ScrollView>
     );
   }
 }

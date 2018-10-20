@@ -32,10 +32,9 @@ class ProfilePage extends Component {
 
   retrieveDetails = async () => {
     try {
-      //const id = await AsyncStorage.getItem("login");
-      const id = "39";
+      const id = await AsyncStorage.getItem("login");
       this.setState({ id });
-      fetch("http://10.10.34.234:8000/api/user_details/" + id, {
+      fetch("http://10.1.86.4:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -80,6 +79,11 @@ class ProfilePage extends Component {
     this.setState({ loading: false, error: "", animationErrorHeight: "0.5%" });
   }
 
+  updateInfo(name) {
+    alert("Updating name");
+    this.setState({ name });
+  }
+
   /**
    * A function called when pressing the close button in the animation error box
    */
@@ -121,7 +125,9 @@ class ProfilePage extends Component {
                   size={"large"}
                   type={"secondary"}
                   onPress={() => {
-                    this.props.navigation.navigate("details");
+                    this.props.navigation.navigate("details", {
+                      updateInfo: this.updateInfo.bind(this)
+                    });
                   }}
                 >
                   Edit Profile

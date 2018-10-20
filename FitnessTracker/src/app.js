@@ -5,7 +5,7 @@ import {
   ActivityIndicator,
   ImageBackground
 } from "react-native";
-import AuthPage from "./screens/AuthPageRouter";
+import AuthPageRouter from "./screens/AuthPageRouter";
 import HomePageRouter from "./screens/HomePageRouter";
 
 class App extends Component {
@@ -22,7 +22,6 @@ class App extends Component {
    * A function that updates startApp variable
    */
   startApplication() {
-    console.log("updating startApp");
     const startApp = 1;
     this.setState({ startApp });
   }
@@ -72,7 +71,7 @@ class App extends Component {
    */
   checkLoginState() {
     if (this.state.loggedIn === 1) return <HomePageRouter />;
-    else return <AuthPage />;
+    else return <AuthPageRouter />;
   }
 
   renderContent() {
