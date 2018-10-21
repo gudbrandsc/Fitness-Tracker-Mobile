@@ -15,7 +15,8 @@ import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this 
  */
 class LoginPage extends Component {
   static navigationOptions = {
-    headerTitle: "Login to your account"
+    headerTitle: "Login to your account",
+    headerLeft: null
   };
 
   state = {
