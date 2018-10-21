@@ -16,20 +16,21 @@ class FollowingUsers extends Component {
       error: "",
       loading: false,
       users: [],
-      userId: "43"
+      userId: ""
     };
   }
 
   componentDidMount() {
-    axios
-      .get("http://10.1.86.4:8000/api/listfollower/" + this.state.userId)
-      .then(response => this.setState({ users: response.data }))
-      .then(this.checkSearchResp.bind(this));
+    this.retrieveDetails();
   }
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
       this.setState({ userId: id });
+      axios
+        .get("http://localhost:8000/api/listfollower/" + id)
+        .then(response => this.setState({ users: response.data }))
+        .then(this.checkSearchResp.bind(this));
     } catch (error) {
       this.onFailure("Can't get Data. Please check internet connectivity.");
     }

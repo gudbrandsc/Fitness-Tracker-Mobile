@@ -34,7 +34,7 @@ class ProfilePage extends Component {
     try {
       const id = await AsyncStorage.getItem("login");
       this.setState({ id });
-      fetch("http://localhost:8000/api/user_details/" + id, {
+      fetch("http://10.1.86.4:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
