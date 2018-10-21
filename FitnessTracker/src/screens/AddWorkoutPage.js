@@ -11,13 +11,15 @@ import {
 export default class AddWorkoutPage extends Component {
   render() {
     return (
-      <View>
+      <View style={{flex:1}}>
         <Header headerText={"Add Workout"} />
+        <View style={{flex:1, backgroundColor: '#e9e9ef'}}>
         <Card>
           <CardSection>
             <Text>Under Construction</Text>
           </CardSection>
         </Card>
+        </View>
       </View>
     );
   }

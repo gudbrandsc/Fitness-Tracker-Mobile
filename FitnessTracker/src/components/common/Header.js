@@ -15,19 +15,21 @@ const Header = props => {
 
 const styles = {
   viewStyle: {
-    backgroundColor: "#F8F8F8",
+    backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
-    height: 80,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
+    height: 63,
     elevation: 2,
-    position: "relative"
+    position: "relative",
+    borderBottomWidth: 0.5,
+    borderColor: '#d6d7da',
   },
   textStyle: {
-    fontSize: 20
-  }
+    paddingTop:20,
+    fontWeight: '600',
+    color: '#636463',
+    fontSize: 22,
+    fontFamily:'HelveticaNeue',  }
 };
 
 // Make the component available to other parts of the app

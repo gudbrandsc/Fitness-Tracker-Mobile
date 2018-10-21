@@ -4,13 +4,15 @@ import ProfilePage from "./ProfilePage";
 import ProfileDetails from "./ProfileDetails";
 import FollowingUsers from "./FollowingUsers";
 import LoginPage from "./LoginPage";
+import SearchUserPage from "./SearchUserPage";
 
 const RootStack = createStackNavigator(
   {
     mainProfile: { screen: ProfilePage },
     details: { screen: ProfileDetails },
     following: { screen: FollowingUsers },
-    login: { screen: LoginPage }
+    login: { screen: LoginPage },
+    search: {screen: SearchUserPage}
   },
   {
     initialRouteName: "mainProfile",
@@ -21,7 +23,8 @@ const RootStack = createStackNavigator(
         alignItems: "center",
         justifyContent: "center",
         textAlign: "center",
-        color: "#646464"
+        color: "#646464",
+        fontFamily:'HelveticaNeue',
       }
     }
   }

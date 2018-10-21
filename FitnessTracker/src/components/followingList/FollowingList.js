@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import UserDetail from './UserDetail'
+import FollowingDetail from './FollowingDetail'
 
 
-class UserList extends Component {
+class FollowingList extends Component {
 
   constructor(props) {
     super(props);
@@ -15,8 +15,9 @@ class UserList extends Component {
 
 
   renderUser () {
+    console.log(this.props.userId + ' from list ')
     return this.props.users.map(user =>
-      <UserDetail key={user.id} user={user} userId={this.props.userId}/>
+      <FollowingDetail key={user.id} user={user} userId={this.props.userId}/>
     );
   }
 
@@ -44,4 +45,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default UserList;
+export default FollowingList;

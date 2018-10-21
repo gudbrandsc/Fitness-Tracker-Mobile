@@ -4,42 +4,21 @@ import {Button, Spinner} from '../common'
 import {Avatar} from 'react-native-elements'
 import axios from 'axios';
 
-class UserDetail extends Component {
+class FollowingDetail extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      'user_following': this.props.user.user_following,
       'statusCode': '',
       'error': '',
       'loading': false,
-      'follows': false,
-      'start':  true,
+      'follows': true,
     };
-  }
-
-  componentDidMount() {
-    console.log('Setting init follows')
-    if((this.props.user.follower_tables && this.props.user.follower_tables.length > 0)){
-      this.setState({
-        follows: true,
-        start: false,
-      })
-      console.log('Setting init follows --> true' )
-
-    }else{
-      this.setState({
-        follows:false,
-        start: false,
-      })
-      console.log('Setting init follows --> false' )
-
-    }
   }
 
   onFollowPress = () => {
     console.log('Send follow request')
-    const requestUrl = ('http://localhost:8000/api/createfollower/' + this.props.userId + '/' + this.props.user.id);
+    const requestUrl = ('http://localhost:8000/api/createfollower/' + this.props.userId + '/' + this.props.user.FollowingId);
     console.log(requestUrl)
     axios.get(requestUrl).then(function (response) {
       console.log('Check response')
@@ -61,7 +40,7 @@ class UserDetail extends Component {
 
   onUnfollowPress = () => {
     console.log('Send unfollow request')
-    const requestUrl = ('http://localhost:8000/api/removefollower/' + this.props.userId + '/' + this.props.user.id);
+    const requestUrl = ('http://localhost:8000/api/removefollower/' + this.props.userId + '/' + this.props.user.FollowingId);
     console.log(requestUrl)
     axios.get(requestUrl).then(function (response) {
       console.log('Check response')
@@ -85,19 +64,11 @@ class UserDetail extends Component {
 
   renderFollowingButton(){
     console.log('rendering button')
-    if(this.state.start){
-      if((this.props.user.follower_tables && this.props.user.follower_tables.length > 0)){
-        return <Button onPress={this.onUnfollowPress} type={'danger'} size={'small'} children={'Unfollow'} />;
-      }else {
-        return <Button onPress={this.onFollowPress} type={'primary'} size={'small'} children={'Follow'} />;
-      }
-    }else{
       if(this.state.follows){
         return <Button onPress={this.onUnfollowPress} type={'danger'} size={'small'} children={'Unfollow'} />;
       }else {
         return <Button onPress={this.onFollowPress} type={'primary'} size={'small'} children={'Follow'} />;
       }
-    }
   }
 
 
@@ -143,7 +114,6 @@ const styles = StyleSheet.create({
       paddingRight: 16,
       marginTop: 0,
       backgroundColor: '#fff'
-
     },
     row_cell_timeplace: {
       flex: 1,
@@ -172,4 +142,4 @@ const styles = StyleSheet.create({
     },
   });
 
-export default UserDetail;
+export default FollowingDetail;

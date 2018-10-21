@@ -8,6 +8,7 @@ import {SearchBar} from 'react-native-elements'
 
 export default class SearchUserPage extends Component {
 
+
   constructor(props) {
     super(props);
     this.state = {
@@ -19,6 +20,7 @@ export default class SearchUserPage extends Component {
     };
     this.onButtonPress = this.onButtonPress.bind(this)
   }
+
   componentDidMount() {
     this.retrieveDetails();
   }
@@ -53,7 +55,7 @@ export default class SearchUserPage extends Component {
     }
     if((users && users.length > 0)){
       console.log(this.state.userId + ' is the user id ')
-      return  <UserList users={users} userId={this.state.userId} />
+      return  <UserList users={users} userId={this.state.userId}/>
     }
   }
 
@@ -68,8 +70,7 @@ export default class SearchUserPage extends Component {
             onChangeText={term => this.onButtonPress(term)}
             icon={{ type: 'font-awesome', name: 'search' }}
             placeholder='Search...' />
-
-        <View style={{ flex: 1}}>
+        <View style={{ flex: 1, backgroundColor: '#e9e9ef'}}>
           {this.checkResponse(users, loading)}
           <Text>{this.state.error}</Text>
         </View>
@@ -78,33 +79,3 @@ export default class SearchUserPage extends Component {
   }
 }
 
-const styles = {
-  viewStyle: {
-    backgroundColor: "#F8F8F8",
-    justifyContent: "center",
-    height: 60,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.2,
-    elevation: 2,
-    position: "relative"
-  },
-  searchSection: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderRadius: 10,
-    backgroundColor: '#eff0f1',
-  },
-  searchIcon: {
-    padding: 5,
-  },
-  input: {
-    flex: 0.5,
-    paddingTop: 5,
-    paddingRight: 5,
-    paddingBottom: 5,
-    paddingLeft: 0,
-    color: '#424242',
-  },
-}
