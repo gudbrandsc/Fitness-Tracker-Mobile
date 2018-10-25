@@ -15,9 +15,9 @@ class FollowingList extends Component {
 
 
   renderUser () {
-    console.log(this.props.userId + ' from list ')
+    console.log(this.props.users)
     return this.props.users.map(user =>
-      <FollowingDetail key={user.id} user={user} userId={this.props.userId}/>
+      <FollowingDetail key={user.FollowingId} user={user} userId={this.props.userId}/>
     );
   }
 

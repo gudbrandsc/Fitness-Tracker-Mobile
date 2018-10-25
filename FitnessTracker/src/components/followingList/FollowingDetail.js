@@ -16,16 +16,8 @@ class FollowingDetail extends Component {
   }
 
   onFollowPress = () => {
-    console.log("Send follow request");
-    const requestUrl =
-      "http://10.1.86.4:8000/api/createfollower/" +
-      this.props.userId +
-      "/" +
-      this.props.user.FollowingId;
-    console.log(requestUrl);
-    axios.get(requestUrl).then(
-      function(response) {
-        console.log("Check response");
+    const requestUrl = "http://10.1.86.4:8000/api/createfollower/" + this.props.userId + "/" + this.props.user.FollowingId;
+    axios.get(requestUrl).then( function(response) {
         if (response.status === 200) {
           console.log("Follow ok 200");
           this.setState({
