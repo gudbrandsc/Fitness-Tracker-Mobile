@@ -9,8 +9,9 @@ import {
   TouchableOpacity,
   Image
 } from "react-native";
-import { Button } from "../components/common";
-import FollowingButton from "../components/profilePage/FollowingButton";
+import { Button, Spinner } from "../components/common";
+import  FollowersButton  from "../components/profilePage/FollowingButton";
+import  FollowingButton  from "../components/profilePage/FollowersButton";
 
 class ProfilePage extends Component {
   static navigationOptions = {
@@ -21,7 +22,7 @@ class ProfilePage extends Component {
     id: "",
     name: "",
     error: "",
-    loading: false,
+    loading: true,
     avatarSource: require("../components/UIdesign/blank-profile-picture.png"),
     pic: null,
     animationErrorHeight: "0.5%",
@@ -37,7 +38,7 @@ class ProfilePage extends Component {
     try {
       const id = await AsyncStorage.getItem("login");
       this.setState({ id });
-      fetch("http://10.1.86.4:8000/api/user_details/" + id, {
+      fetch("http://localhost:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -93,6 +94,33 @@ class ProfilePage extends Component {
     this.setState({ error: "", animationErrorHeight: "0.5%" });
   }
 
+  renderFollowersButton(){
+    if (this.state.loading === false) {
+      return (
+      <TouchableOpacity onPress={() => { this.props.navigation.navigate("followers"); }}>
+        <FollowingButton userid={this.state.id} />
+      </TouchableOpacity>
+      );
+    }else{
+      return <Spinner />;
+    }
+  }
+
+  renderFollowingButton(){
+    if (this.state.loading === false) {
+      return (
+      <TouchableOpacity onPress={() => { this.props.navigation.navigate("following"); }}>
+        <FollowersButton userid={this.state.id} />
+      </TouchableOpacity>
+      );
+    }else{
+      return <Spinner />;
+    }
+
+
+  }
+
+
   render() {
     return (
       <View style={{ flex: 1, marginTop: 20 }}>
@@ -132,22 +160,10 @@ class ProfilePage extends Component {
                   }}
                 >
                   <View style={{ width: "100%" }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.props.navigation.navigate("following");
-                      }}
-                    >
-                      <FollowingButton />
-                    </TouchableOpacity>
+                  {this.renderFollowingButton()}
                   </View>
                   <View style={{ width: "100%" }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.props.navigation.navigate("following");
-                      }}
-                    >
-                      <FollowingButton />
-                    </TouchableOpacity>
+                  {this.renderFollowersButton()}
                   </View>
                 </View>
 

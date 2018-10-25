@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { createStackNavigator } from "react-navigation";
 import ProfilePage from "./ProfilePage";
 import ProfileDetails from "./ProfileDetails";
-import FollowingUsers from "./FollowingUsers";
+import FollowingPage from "./FollowingPage";
+import FollowersPage from "./FollowersPage";
 import TopAuthPageRouter from "./TopAuthPageRouter";
 import SearchUserPage from "./SearchUserPage";
 
@@ -10,9 +11,10 @@ const RootStack = createStackNavigator(
   {
     mainProfile: { screen: ProfilePage },
     details: { screen: ProfileDetails },
-    following: { screen: FollowingUsers },
+    following: { screen: FollowingPage },
+    followers: {screen: FollowersPage},
     topAuthPage: { screen: TopAuthPageRouter },
-    search: { screen: SearchUserPage }
+    search: { screen: SearchUserPage },
   },
   {
     initialRouteName: "mainProfile",
