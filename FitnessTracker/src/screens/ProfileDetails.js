@@ -270,7 +270,7 @@ class ProfileDetails extends Component {
       await AsyncStorage.removeItem("Usertoken").then(() => {
         return AsyncStorage.removeItem("pass").then(() => {
           return AsyncStorage.removeItem("login").then(() => {
-            this.props.navigation.navigate("login");
+            this.props.navigation.navigate("topAuthPage");
           });
         });
       });

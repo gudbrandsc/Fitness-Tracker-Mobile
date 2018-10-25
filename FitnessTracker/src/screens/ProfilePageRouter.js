@@ -3,7 +3,7 @@ import { createStackNavigator } from "react-navigation";
 import ProfilePage from "./ProfilePage";
 import ProfileDetails from "./ProfileDetails";
 import FollowingUsers from "./FollowingUsers";
-import LoginPage from "./LoginPage";
+import TopAuthPageRouter from "./TopAuthPageRouter";
 import SearchUserPage from "./SearchUserPage";
 
 const RootStack = createStackNavigator(
@@ -11,8 +11,8 @@ const RootStack = createStackNavigator(
     mainProfile: { screen: ProfilePage },
     details: { screen: ProfileDetails },
     following: { screen: FollowingUsers },
-    login: { screen: LoginPage },
-    search: {screen: SearchUserPage}
+    topAuthPage: { screen: TopAuthPageRouter },
+    search: { screen: SearchUserPage }
   },
   {
     initialRouteName: "mainProfile",
@@ -24,7 +24,7 @@ const RootStack = createStackNavigator(
         justifyContent: "center",
         textAlign: "center",
         color: "#646464",
-        fontFamily:'HelveticaNeue',
+        fontFamily: "HelveticaNeue"
       }
     }
   }

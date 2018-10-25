@@ -2,12 +2,14 @@ import React, { Component } from "react";
 import { createStackNavigator } from "react-navigation";
 import RegisterPage from "./RegisterPage";
 import LoginPage from "./LoginPage";
+import ForgetPassword from "./ForgetPassword";
 import HomePageRouter from "./HomePageRouter";
 
 const RootStack = createStackNavigator(
   {
     Login: { screen: LoginPage },
     Register: { screen: RegisterPage },
+    ForgetPass: { screen: ForgetPassword },
     Home: { screen: HomePageRouter }
   },
   {

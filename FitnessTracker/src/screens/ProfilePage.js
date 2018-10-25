@@ -10,8 +10,7 @@ import {
   Image
 } from "react-native";
 import { Button } from "../components/common";
-import  FollowingButton  from "../components/profilePage/FollowingButton";
-
+import FollowingButton from "../components/profilePage/FollowingButton";
 
 class ProfilePage extends Component {
   static navigationOptions = {
@@ -26,7 +25,7 @@ class ProfilePage extends Component {
     avatarSource: require("../components/UIdesign/blank-profile-picture.png"),
     pic: null,
     animationErrorHeight: "0.5%",
-    followingNumber: '',
+    followingNumber: "",
     followData: []
   };
 
@@ -34,12 +33,11 @@ class ProfilePage extends Component {
     this.retrieveDetails();
   }
 
-
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
       this.setState({ id });
-      fetch("http://localhost:8000/api/user_details/" + id, {
+      fetch("http://10.1.86.4:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -73,7 +71,7 @@ class ProfilePage extends Component {
         );
     } catch (error) {
       this.onFailure("Can't get Data. Please check internet connectivity.");
-    }    
+    }
   };
 
   onFailure(err) {
@@ -97,7 +95,7 @@ class ProfilePage extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, marginTop: 20}}>
+      <View style={{ flex: 1, marginTop: 20 }}>
         <View
           style={{
             flexDirection: "column",
@@ -124,49 +122,68 @@ class ProfilePage extends Component {
                 marginLeft: 40
               }}
             >
-            <View style={{flex:1, marginRight: 5}}>
-            <View style={{flex:1, flexDirection: "row", justifyContent: 'space-between', alignContent: 'stretch'}}>
-              <View style={{width: '100%'}}>
-                <TouchableOpacity onPress={() => { this.props.navigation.navigate("following"); }}>
-                  <FollowingButton />
-                </TouchableOpacity>
+              <View style={{ flex: 1, marginRight: 5 }}>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    justifyContent: "space-between",
+                    alignContent: "stretch"
+                  }}
+                >
+                  <View style={{ width: "100%" }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate("following");
+                      }}
+                    >
+                      <FollowingButton />
+                    </TouchableOpacity>
+                  </View>
+                  <View style={{ width: "100%" }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate("following");
+                      }}
+                    >
+                      <FollowingButton />
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View style={{width: '100%'}}>
-                <TouchableOpacity onPress={() => { this.props.navigation.navigate("following"); }}>
-                  <FollowingButton />
-                </TouchableOpacity>
-              </View>
-            </View>
 
-              <View style={{flex:1, flexDirection: "row", justifyContent: 'space-between'}}>
-                <View style={{ height: 32, marginBottom: 20, width: '100%' }}>
-                  <Button
-                    size={"large"}
-                    type={"secondary"}
-                    onPress={() => {
-                      this.props.navigation.navigate("details", {
-                        updateInfo: this.updateInfo.bind(this)
-                      });
-                    }}
-                  >
-                    Edit Profile
-                  </Button>
+                <View
+                  style={{
+                    flex: 1,
+                    flexDirection: "row",
+                    justifyContent: "space-between"
+                  }}
+                >
+                  <View style={{ height: 32, marginBottom: 20, width: "100%" }}>
+                    <Button
+                      size={"large"}
+                      type={"secondary"}
+                      onPress={() => {
+                        this.props.navigation.navigate("details", {
+                          updateInfo: this.updateInfo.bind(this)
+                        });
+                      }}
+                    >
+                      Edit Profile
+                    </Button>
+                  </View>
+                  <View style={{ height: 32, width: "100%", marginBottom: 20 }}>
+                    <Button
+                      size={"large"}
+                      type={"green"}
+                      onPress={() => {
+                        this.props.navigation.navigate("following");
+                      }}
+                    >
+                      Add Journal
+                    </Button>
+                  </View>
                 </View>
-                <View style={{ height: 32, width: '100%',marginBottom: 20 }}>
-                  <Button
-                    size={"large"}
-                    type={"green"}
-                    onPress={() => {
-                      this.props.navigation.navigate("following");
-                    }}
-                  >
-                    Add Journal
-                  </Button>
-                </View>
               </View>
-              </View>
-
-
             </View>
           </View>
           <View

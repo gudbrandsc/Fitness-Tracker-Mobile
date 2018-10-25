@@ -162,6 +162,10 @@ class LoginPage extends Component {
     this.props.navigation.navigate("Register");
   }
 
+  onForgetPassButtonPress() {
+    this.props.navigation.navigate("ForgetPass");
+  }
+
   onCloseAnimationBox() {
     this.setState({
       error: "",
@@ -199,6 +203,15 @@ class LoginPage extends Component {
               onPress={this.onRegisterButtonPress.bind(this)}
             >
               Create account
+            </Button>
+          </CardSection>
+          <CardSection>
+            <Button
+              size={"large"}
+              type={"secondary"}
+              onPress={this.onForgetPassButtonPress.bind(this)}
+            >
+              Forget Password
             </Button>
           </CardSection>
         </Card>
