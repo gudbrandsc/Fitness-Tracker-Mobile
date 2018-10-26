@@ -31,7 +31,8 @@ class FollowingPage extends Component {
 
   componentDidMount() {
     this.retrieveDetails();
-}
+  }
+
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
@@ -44,7 +45,7 @@ class FollowingPage extends Component {
 
   fetchData(id){
     console.log(id + ' this is the userid in fetch data')
-    axios.get('http://localhost:8000/api/listfollower/' + id).then(response => this.setState({ users: response.data })).then(this.checkSearchResp.bind(this));
+    axios.get('http://localhost:8000/api/listfollows/' + id).then(response => this.setState({ users: response.data })).then(this.checkSearchResp.bind(this));
   }
 
   checkSearchResp(){

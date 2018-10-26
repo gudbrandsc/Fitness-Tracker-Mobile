@@ -1,7 +1,5 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import { Spinner } from "../common";
-import axios from "axios";
 
 
 class FollowingButton extends Component {
@@ -9,38 +7,44 @@ class FollowingButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      loading: true,
-      data: []
-    };
+      followingCount: ''
+    }
   }
 
   componentDidMount() {
-    axios
-      .get(
-        "http://localhost:8000/api/listfollower/" + this.props.userId
+
+    fetch("http://localhost:8000/api/getnooffollowers/" + this.props.userid, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response =>
+        response.json().then(data => ({
+          data: data,
+          status: response.status
+        }))
       )
-      .then(response => this.setState({ users: response.data }))
-    this.setState({loading: false});
+      .then(
+        res => {
+          if (res.status === 200) {
+            console.log('hello')
+            const count = res.data.count;
+            this.setState({followingCount: count})
+          } else {
+            this.setState({followingCount: 'null'})
+          }
+        });
   }
 
-  renderCount(){
-    if(this.state.loading === false){
-      return(
-        <View>
-      <Text style={{ fontSize: 15, fontWeight: "bold", textAlign: 'center' }}>{this.state.data.length}</Text>
-      <Text style={{ fontSize: 15, textAlign: 'center', color: '#a0a0a0' }}>Followers</Text>
-      </View>
-      );
-    }else {
-      return <Text>Rendering</Text>;
-    }
-  }
 
   render() {
     return (
       
       <View style={{ flexDirection: "column"}} >
-        {this.renderCount()}
+        <Text style={{ fontSize: 15, fontWeight: "bold", textAlign: 'center' }}>{this.state.followingCount}</Text>
+       <Text style={{ fontSize: 15, textAlign: 'center', color: '#a0a0a0' }}>Followers</Text> 
       </View>
 
     );

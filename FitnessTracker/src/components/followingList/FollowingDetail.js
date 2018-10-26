@@ -16,10 +16,9 @@ class FollowingDetail extends Component {
   }
 
   onFollowPress = () => {
-    const requestUrl = "http://10.1.86.4:8000/api/createfollower/" + this.props.userId + "/" + this.props.user.FollowingId;
+    const requestUrl = "http://localhost:8000/api/createfollower/" + this.props.userId + "/" + this.props.user.FollowingId;
     axios.get(requestUrl).then( function(response) {
         if (response.status === 200) {
-          console.log("Follow ok 200");
           this.setState({
             follows: true,
             loading: false
@@ -37,7 +36,7 @@ class FollowingDetail extends Component {
   onUnfollowPress = () => {
     console.log("Send unfollow request");
     const requestUrl =
-      "http://10.1.86.4:8000/api/removefollower/" +
+      "http://localhost:8000/api/removefollower/" +
       this.props.userId +
       "/" +
       this.props.user.FollowingId;

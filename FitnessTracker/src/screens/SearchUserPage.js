@@ -35,7 +35,7 @@ export default class SearchUserPage extends Component {
     this.setState({ error: "", loading: true });
     axios
       .get(
-        "http://10.1.86.4:8000/api/searchuser/" + term + "/" + this.state.userId
+        "http://localhost:8000/api/searchuser/" + term + "/" + this.state.userId
       )
       .then(response => this.setState({ users: response.data }))
       .then(this.checkSearchResp.bind(this));

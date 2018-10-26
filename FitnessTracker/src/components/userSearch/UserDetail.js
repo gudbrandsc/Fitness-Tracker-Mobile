@@ -40,7 +40,7 @@ class UserDetail extends Component {
   onFollowPress = () => {
     console.log("Send follow request");
     const requestUrl =
-      "http://10.1.86.4:8000/api/createfollower/" +
+      "http://localhost:8000/api/createfollower/" +
       this.props.userId +
       "/" +
       this.props.user.id;
@@ -67,7 +67,7 @@ class UserDetail extends Component {
   onUnfollowPress = () => {
     console.log("Send unfollow request");
     const requestUrl =
-      "http://10.1.86.4:8000/api/removefollower/" +
+      "http://localhost:8000/api/removefollower/" +
       this.props.userId +
       "/" +
       this.props.user.id;

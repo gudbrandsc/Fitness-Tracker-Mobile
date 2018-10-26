@@ -10,8 +10,8 @@ import {
   Image
 } from "react-native";
 import { Button, Spinner } from "../components/common";
-import  FollowersButton  from "../components/profilePage/FollowingButton";
-import  FollowingButton  from "../components/profilePage/FollowersButton";
+import  FollowersButton  from "../components/profilePage/FollowersButton";
+import  FollowingButton  from "../components/profilePage/FollowingButton";
 
 class ProfilePage extends Component {
   static navigationOptions = {
@@ -19,7 +19,7 @@ class ProfilePage extends Component {
   };
 
   state = {
-    id: "",
+    userid: "",
     name: "",
     error: "",
     loading: true,
@@ -37,7 +37,8 @@ class ProfilePage extends Component {
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
-      this.setState({ id });
+      this.setState({ userid: id });
+      console.log('async id : ' + this.state.userid)
       fetch("http://localhost:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
@@ -95,10 +96,11 @@ class ProfilePage extends Component {
   }
 
   renderFollowersButton(){
-    if (this.state.loading === false) {
+    if (this.state.loading === false && this.state.userid !== "") {
+      console.log('profile page render button with id: ' + this.state.userid)
       return (
       <TouchableOpacity onPress={() => { this.props.navigation.navigate("followers"); }}>
-        <FollowingButton userid={this.state.id} />
+        <FollowingButton userid={this.state.userid} />
       </TouchableOpacity>
       );
     }else{
@@ -107,10 +109,10 @@ class ProfilePage extends Component {
   }
 
   renderFollowingButton(){
-    if (this.state.loading === false) {
+    if (this.state.loading === false && this.state.userid !== "") {
       return (
       <TouchableOpacity onPress={() => { this.props.navigation.navigate("following"); }}>
-        <FollowersButton userid={this.state.id} />
+        <FollowersButton userid={this.state.userid} />
       </TouchableOpacity>
       );
     }else{

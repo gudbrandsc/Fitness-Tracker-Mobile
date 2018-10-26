@@ -1,5 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
+import { Spinner } from "../common";
+import axios from "axios";
 
 
 class FollowingButton extends Component {
@@ -7,43 +9,45 @@ class FollowingButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      followingCount: ''
-    }
+      loading: true,
+      users: []
+    };
   }
 
   componentDidMount() {
-    fetch("http://localhost:8000/api/getnooffollowers/43", {
-      method: "GET",
-      headers: {
-        Accept: "application/json",
-        "Content-Type": "application/json"
-      }
-    })
-      .then(response =>
-        response.json().then(data => ({
-          data: data,
-          status: response.status
-        }))
+    console.log('Hello from following button with id' + this.props.userid)
+    try {
+    axios
+      .get(
+        "http://localhost:8000/api/listfollows/" + this.props.userid
       )
-      .then(
-        res => {
-          if (res.status === 200) {
-            console.log('hello')
-            const count = res.data.count;
-            this.setState({followingCount: count})
-          } else {
-            this.setState({followingCount: 'null'})
-          }
-        });  
+      .then(response => this.setState({ users: response.data }))
+    this.setState({loading: false});
+      }catch(error){
+        console.log('Unable to fetch data')
+      }
   }
 
+  renderCount(){
+    console.log('Render in following')
+    console.log(this.state.users)
+    if(this.state.loading === false){
+      return(
+      <View>
+      <Text style={{ fontSize: 15, fontWeight: "bold", textAlign: 'center' }}>{this.state.users.length}</Text>
+      <Text style={{ fontSize: 15, textAlign: 'center', color: '#a0a0a0' }}>Following</Text>
+      </View>
+      );
+    }else {
+      return <Text>Rendering</Text>;
+    }
+  }
 
   render() {
     return (
       
       <View style={{ flexDirection: "column"}} >
-        <Text style={{ fontSize: 15, fontWeight: "bold", textAlign: 'center' }}>{this.state.followingCount}</Text>
-       <Text style={{ fontSize: 15, textAlign: 'center', color: '#a0a0a0' }}>Following</Text> 
+        {this.renderCount()}
       </View>
 
     );
