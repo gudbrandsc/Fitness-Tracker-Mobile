@@ -16,8 +16,13 @@ class FollowingDetail extends Component {
   }
 
   onFollowPress = () => {
-    const requestUrl = "http://localhost:8000/api/createfollower/" + this.props.userId + "/" + this.props.user.FollowingId;
-    axios.get(requestUrl).then( function(response) {
+    const requestUrl =
+      "http://localhost:8000/api/createfollower/" +
+      this.props.userId +
+      "/" +
+      this.props.user.FollowingId;
+    axios.get(requestUrl).then(
+      function(response) {
         if (response.status === 200) {
           this.setState({
             follows: true,
@@ -85,15 +90,20 @@ class FollowingDetail extends Component {
 
   render() {
     const { viewStyleOne, textStyle, textStyle3 } = styles;
-    const { FirstName, LastName, follows, UserName } = this.props.user;
+    const {
+      FirstName,
+      LastName,
+      follows,
+      UserName,
+      ImageUrl
+    } = this.props.user;
     return (
       <View style={styles.row}>
         <Avatar
           small
           rounded
           source={{
-            uri:
-              "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+            uri: ImageUrl
           }}
           onPress={() => console.log("Works!")}
           activeOpacity={0.7}

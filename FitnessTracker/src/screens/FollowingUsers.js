@@ -1,17 +1,8 @@
 import React, { Component } from "react";
-import {
-  AsyncStorage,
-  View,
-  Text,
-} from "react-native";
-import {
-  Spinner,
-  Header
-} from "../components/common";
-import axios from 'axios';
-import FollowingList from '../components/followingList/FollowingList';
-
-
+import { AsyncStorage, View, Text } from "react-native";
+import { Spinner, Header } from "../components/common";
+import axios from "axios";
+import FollowingList from "../components/followingList/FollowingList";
 
 class FollowingUsers extends Component {
   static navigationOptions = {
@@ -24,49 +15,55 @@ class FollowingUsers extends Component {
       term: "",
       error: "",
       loading: false,
-      users:[],
-      userId: '43',
+      users: [],
+      userId: "43"
     };
   }
 
   componentDidMount() {
-    axios.get('http://localhost:8000/api/listfollower/' + this.state.userId).then(response => this.setState({ users: response.data })).then(this.checkSearchResp.bind(this));
-}
+    axios
+      .get("http://localhost:8000/api/listfollower/" + this.state.userId)
+      .then(response => this.setState({ users: response.data }))
+      .then(this.checkSearchResp.bind(this));
+  }
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
-      this.setState({userId: id})
+      this.setState({ userId: id });
     } catch (error) {
       this.onFailure("Can't get Data. Please check internet connectivity.");
     }
-  }
+  };
 
-  checkSearchResp(){
-    if((this.state.users && this.state.users.length > 0)){
-      this.setState({error: '', loading: false })
+  checkSearchResp() {
+    if (this.state.users && this.state.users.length > 0) {
+      this.setState({ error: "", loading: false });
     } else {
-      this.setState({error: 'You are not following any users yet..', loading: false })
+      this.setState({
+        error: "You are not following any users yet..",
+        loading: false
+      });
     }
   }
 
-  checkResponse(users, loading){
-    console.log(this.state.userId+ ' from comonent')
+  checkResponse(users, loading) {
+    console.log(this.state.userId + " from comonent");
 
     if (loading) {
-      return <Spinner  size={"small"} />;
+      return <Spinner size={"small"} />;
     }
-    if((users && users.length > 0)){
-      console.log(users.length +' number of people i follow')
-      console.log(this.state.userId + ' is the user id ')
-      return  <FollowingList users={users} userId={this.state.userId}/>
+    if (users && users.length > 0) {
+      console.log(users.length + " number of people i follow");
+      console.log(this.state.userId + " is the user id ");
+      return <FollowingList users={users} userId={this.state.userId} />;
     }
   }
 
   render() {
-    const {users, loading} = this.state;
+    const { users, loading } = this.state;
 
     return (
-      <View style={{ flex: 1}}>
+      <View style={{ flex: 1 }}>
         {this.checkResponse(users, loading)}
         <Text>{this.state.error}</Text>
       </View>

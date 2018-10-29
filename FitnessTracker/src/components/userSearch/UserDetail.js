@@ -141,15 +141,20 @@ class UserDetail extends Component {
 
   render() {
     const { viewStyleOne, textStyle, textStyle3 } = styles;
-    const { FirstName, LastName, follows, UserName } = this.props.user;
+    const {
+      FirstName,
+      LastName,
+      follows,
+      UserName,
+      ImageUrl
+    } = this.props.user;
     return (
       <View style={styles.row}>
         <Avatar
           small
           rounded
           source={{
-            uri:
-              "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+            uri: ImageUrl
           }}
           onPress={() => console.log("Works!")}
           activeOpacity={0.7}

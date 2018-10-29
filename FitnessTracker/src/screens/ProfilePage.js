@@ -26,8 +26,8 @@ class ProfilePage extends Component {
     avatarSource:
       "https://res.cloudinary.com/fitnesstracker/image/upload/v1540766575/blank-profile-picture.png",
     animationErrorHeight: "0.5%",
-    followingNumber: "",
-    followData: []
+    loadFollowers: false,
+    loadFollowing: false
   };
 
   componentDidMount() {
@@ -39,7 +39,7 @@ class ProfilePage extends Component {
       const id = await AsyncStorage.getItem("login");
       this.setState({ userid: id });
       console.log("async id : " + this.state.userid);
-      fetch("http://10.1.86.4:8000/api/user_details/" + id, {
+      fetch("http://localhost:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -54,8 +54,8 @@ class ProfilePage extends Component {
         )
         .then(
           res => {
+            this.setState({ loadFollowers: true, loadFollowing: true });
             if (res.status === 200) {
-              console.log(res.ImageUrl);
               const name = res.data.FirstName + " " + res.data.LastName;
               this.setState({ name });
               this.setState({ avatarSource: res.data.ImageUrl });
@@ -107,7 +107,7 @@ class ProfilePage extends Component {
             this.props.navigation.navigate("followers");
           }}
         >
-          <FollowingButton userid={this.state.userid} />
+          <FollowersButton userid={this.state.userid} />
         </TouchableOpacity>
       );
     } else {
@@ -123,7 +123,7 @@ class ProfilePage extends Component {
             this.props.navigation.navigate("following");
           }}
         >
-          <FollowersButton userid={this.state.userid} />
+          <FollowingButton userid={this.state.userid} />
         </TouchableOpacity>
       );
     } else {
@@ -138,7 +138,7 @@ class ProfilePage extends Component {
           style={{
             flexDirection: "column",
             width: "100%",
-            height: "40%"
+            height: "35%"
           }}
         >
           <View style={{ flexDirection: "row", width: 100 }}>
@@ -171,7 +171,7 @@ class ProfilePage extends Component {
                   <View style={{ width: "100%" }}>
                     {this.renderFollowingButton()}
                   </View>
-                  <View style={{ width: "100%" }}>
+                  <View style={{ width: "100%", marginLeft: 15 }}>
                     {this.renderFollowersButton()}
                   </View>
                 </View>
@@ -183,7 +183,7 @@ class ProfilePage extends Component {
                     justifyContent: "space-between"
                   }}
                 >
-                  <View style={{ height: 32, marginBottom: 20, width: "100%" }}>
+                  <View style={{ height: 32, marginTop: 15, width: "100%" }}>
                     <Button
                       size={"large"}
                       type={"secondary"}
@@ -196,7 +196,14 @@ class ProfilePage extends Component {
                       Edit Profile
                     </Button>
                   </View>
-                  <View style={{ height: 32, width: "100%", marginBottom: 20 }}>
+                  <View
+                    style={{
+                      height: 32,
+                      width: "100%",
+                      marginTop: 15,
+                      marginLeft: 15
+                    }}
+                  >
                     <Button
                       size={"large"}
                       type={"green"}
@@ -232,7 +239,7 @@ class ProfilePage extends Component {
           style={{
             flexDirection: "column",
             width: "100%",
-            height: "60%"
+            height: "65%"
           }}
         >
           <ProfileSubCategoriesRouter />
