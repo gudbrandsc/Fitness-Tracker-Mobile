@@ -5,8 +5,7 @@ import {
   View,
   ScrollView,
   Text,
-  TouchableOpacity,
-  Image
+  TouchableOpacity
 } from "react-native";
 import ImagePicker from "react-native-image-picker";
 import {
@@ -16,6 +15,8 @@ import {
   Input,
   Spinner
 } from "../components/common";
+import { Avatar } from "react-native-elements";
+import axios from "axios";
 
 const options = {
   title: "Profile Picture",
@@ -37,8 +38,10 @@ class ProfileDetails extends Component {
     password: "",
     error: "",
     loading: false,
-    avatarSource: require("../components/UIdesign/blank-profile-picture.png"),
-    pic: null,
+    avatarSource:
+      "https://res.cloudinary.com/fitnesstracker/image/upload/v1540766575/blank-profile-picture.png",
+    picName: "",
+    picData: null,
     animationErrorHeight: "0.5%"
   };
 
@@ -80,7 +83,8 @@ class ProfileDetails extends Component {
                 city: res.data.City,
                 zipcode: res.data.Zipcode,
                 _state: res.data.State,
-                fullName: res.data.FirstName + " " + res.data.LastName
+                fullName: res.data.FirstName + " " + res.data.LastName,
+                avatarSource: res.data.ImageUrl
               });
               this.storeDataIsolatedStorage();
               this.onSuccess();
@@ -102,9 +106,6 @@ class ProfileDetails extends Component {
     }
   };
 
-  /**
-   * A function to select an image from device
-   */
   selectImage = () => {
     ImagePicker.showImagePicker(options, response => {
       console.log("Response = ", response);
@@ -114,18 +115,40 @@ class ProfileDetails extends Component {
       } else if (response.error) {
         console.log("Image Picker Error: ", response.error);
       } else {
-        let source = { uri: response.uri };
-        console.log("source", source);
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
         this.setState({
-          avatarSource: source,
-          pic: response.data
+          avatarSource: response.uri,
+          picData: response.data,
+          picName: response.fileName
         });
       }
     });
   };
+
+  uploadImage() {
+    var bodyFormData = new FormData();
+    bodyFormData.append("data", this.state.picData);
+    bodyFormData.append("filename", this.state.picName);
+    bodyFormData.append("name", "image");
+
+    console.log("Uploading.. \n" + bodyFormData);
+    axios({
+      method: "post",
+      url: "http://10.1.86.4:8000/api/uploadfile",
+      data: bodyFormData,
+      config: { headers: { enctype: "multipart/form-data" } }
+    })
+      .then(
+        function(response) {
+          this.setState({ avatarSource: response.data });
+          console.log(response);
+          this.handleUpdate();
+        }.bind(this)
+      )
+      .catch(function(response) {
+        console.log(response);
+        this.handleUpdate();
+      });
+  }
 
   /**
    * A function that validates all the inputs.
@@ -179,14 +202,17 @@ class ProfileDetails extends Component {
       const error = "Zipcode Format is invalid";
       this.setState({ error });
       this.setState({ animationErrorHeight: "auto" });
-    } else this.handleUpdate();
+    } else {
+      this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
+      if (this.state.picData !== null) this.uploadImage();
+      else this.handleUpdate();
+    }
   }
 
   /**
    * A function that sends a Update request to the backend to store the data
    */
   handleUpdate() {
-    this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
     try {
       const id = this.state.id;
       fetch("http://10.1.86.4:8000/api/userregistration/" + id + "/update", {
@@ -196,6 +222,7 @@ class ProfileDetails extends Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
+          ImageUrl: this.state.avatarSource,
           FirstName: this.state.fname,
           LastName: this.state.lname,
           UserName: this.state.email,
@@ -222,7 +249,7 @@ class ProfileDetails extends Component {
               this.storeDataIsolatedStorage();
               this.onSuccess();
               const { params } = this.props.navigation.state;
-              params.updateInfo(fullName); // this will update the name and call the updateInfo in the ProfilePage class
+              params.updateInfo(fullName, this.state.avatarSource); // this will update the name and call the updateInfo in the ProfilePage class
             } else {
               this.onFailure("Update failed.");
               console.log("Account update Failed");
@@ -311,12 +338,11 @@ class ProfileDetails extends Component {
         <Card>
           <CardSection>
             <View style={styles.profileImgContainer}>
-              <Image
-                source={this.state.avatarSource}
-                style={{
-                  height: 80,
-                  width: 80,
-                  borderRadius: 40
+              <Avatar
+                large
+                rounded
+                source={{
+                  uri: this.state.avatarSource
                 }}
               />
             </View>
@@ -419,13 +445,7 @@ class ProfileDetails extends Component {
 
 const styles = {
   profileImgContainer: {
-    marginLeft: 8,
-    height: 80,
-    width: 80,
-    borderRadius: 40,
-    overflow: "hidden",
-    borderColor: "#007aff",
-    borderWidth: 1
+    marginLeft: 8
   },
   errorTextStyle: {
     fontSize: 20,

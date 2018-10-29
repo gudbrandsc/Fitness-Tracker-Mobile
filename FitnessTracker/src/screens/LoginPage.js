@@ -34,20 +34,12 @@ class LoginPage extends Component {
    */
   validateInput() {
     const regexEmail = /^\w+[\w-\.]*@\w+((-\w+)|(\w*))(.[a-z]{2,})*$/;
-    const regexPass = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    var passwordMatch = regexPass.test(this.state.password);
     var emailMatch = regexEmail.test(this.state.email);
-
-    if (!passwordMatch) {
-      const error =
-        "Password should be minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character";
-      this.setState({ error });
-    }
     if (!emailMatch) {
       const error = "Wrong Email Format.";
       this.setState({ error });
     }
-    if (emailMatch && passwordMatch) this.handleLogin();
+    if (emailMatch) this.handleLogin();
   }
 
   /**

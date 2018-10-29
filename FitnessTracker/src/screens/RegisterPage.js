@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-  AsyncStorage,
-  View,
-  Text,
-  TouchableOpacity,
-  Image
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import ImagePicker from "react-native-image-picker";
 import {
   Card,
@@ -15,6 +9,8 @@ import {
   Spinner
 } from "../components/common";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
+import { Avatar } from "react-native-elements";
+import axios from "axios";
 
 const options = {
   title: "Profile Picture",
@@ -39,8 +35,10 @@ class RegisterPage extends Component {
     password: "",
     error: "",
     loading: false,
-    avatarSource: require("../components/UIdesign/blank-profile-picture.png"),
-    pic: null,
+    avatarSource:
+      "https://res.cloudinary.com/fitnesstracker/image/upload/v1540766575/blank-profile-picture.png",
+    picName: "",
+    picData: null,
     animationErrorHeight: "0.5%"
   };
 
@@ -53,18 +51,40 @@ class RegisterPage extends Component {
       } else if (response.error) {
         console.log("Image Picker Error: ", response.error);
       } else {
-        let source = { uri: response.uri };
-        console.log("source", source);
-        // You can also display the image using data:
-        // let source = { uri: 'data:image/jpeg;base64,' + response.data };
-
         this.setState({
-          avatarSource: source,
-          pic: response.data
+          avatarSource: response.uri,
+          picData: response.data,
+          picName: response.fileName
         });
       }
     });
   };
+
+  uploadImage() {
+    var bodyFormData = new FormData();
+    bodyFormData.append("data", this.state.picData);
+    bodyFormData.append("filename", this.state.picName);
+    bodyFormData.append("name", "image");
+
+    console.log("Uploading.. \n" + bodyFormData);
+    axios({
+      method: "post",
+      url: "http://10.1.86.4:8000/api/uploadfile",
+      data: bodyFormData,
+      config: { headers: { enctype: "multipart/form-data" } }
+    })
+      .then(
+        function(response) {
+          this.setState({ avatarSource: response.data });
+          console.log(response);
+          this.handleRegister();
+        }.bind(this)
+      )
+      .catch(function(response) {
+        console.log(response);
+        this.handleRegister();
+      });
+  }
 
   /**
    * A function that validates all the inputs.
@@ -118,14 +138,17 @@ class RegisterPage extends Component {
       const error = "Zipcode Format is invalid";
       this.setState({ error });
       this.setState({ animationErrorHeight: "auto" });
-    } else this.handleRegister();
+    } else {
+      this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
+      if (this.state.picData !== null) this.uploadImage();
+      else this.handleRegister();
+    }
   }
 
   /**
    * A function that sends a register request to the backend to store the data
    */
   handleRegister() {
-    this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
     try {
       fetch("http://10.1.86.4:8000/api/userregistration", {
         method: "POST",
@@ -134,6 +157,7 @@ class RegisterPage extends Component {
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
+          ImageUrl: this.state.avatarSource,
           FirstName: this.state.fname,
           LastName: this.state.lname,
           UserName: this.state.email,
@@ -223,12 +247,11 @@ class RegisterPage extends Component {
         <Card>
           <CardSection>
             <View style={styles.profileImgContainer}>
-              <Image
-                source={this.state.avatarSource}
-                style={{
-                  height: 80,
-                  width: 80,
-                  borderRadius: 40
+              <Avatar
+                large
+                rounded
+                source={{
+                  uri: this.state.avatarSource
                 }}
               />
             </View>
@@ -321,13 +344,7 @@ class RegisterPage extends Component {
 
 const styles = {
   profileImgContainer: {
-    marginLeft: 8,
-    height: 80,
-    width: 80,
-    borderRadius: 40,
-    overflow: "hidden",
-    borderColor: "#007aff",
-    borderWidth: 1
+    marginLeft: 8
   },
   errorTextStyle: {
     fontSize: 20,
@@ -335,10 +352,5 @@ const styles = {
     color: "red"
   }
 };
-/*
-<TouchableOpacity onPress={this.uploadPic}>
-              <Text>Upload</Text>
-            </TouchableOpacity>
-            */
 
 export default RegisterPage;
