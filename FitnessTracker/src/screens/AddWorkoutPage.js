@@ -34,7 +34,7 @@ export default class AddWorkoutPage extends Component {
     if(this.state.loading === false){
       console.log(this.state.workouts)
       console.log('Render CategoryList')
-      return <CategoryList workouts={this.state.workouts}/>
+      return <CategoryList workouts={ this.state.workouts }/>
     }
     return <Spinner />
   }
