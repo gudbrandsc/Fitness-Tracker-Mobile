@@ -6,15 +6,17 @@ import FollowingPage from "./FollowingPage";
 import FollowersPage from "./FollowersPage";
 import TopAuthPageRouter from "./TopAuthPageRouter";
 import SearchUserPage from "./SearchUserPage";
+import Journal from "./Journal";
 
 const RootStack = createStackNavigator(
   {
     mainProfile: { screen: ProfilePage },
     details: { screen: ProfileDetails },
     following: { screen: FollowingPage },
-    followers: {screen: FollowersPage},
+    followers: { screen: FollowersPage },
     topAuthPage: { screen: TopAuthPageRouter },
     search: { screen: SearchUserPage },
+    journal: { screen: Journal }
   },
   {
     initialRouteName: "mainProfile",

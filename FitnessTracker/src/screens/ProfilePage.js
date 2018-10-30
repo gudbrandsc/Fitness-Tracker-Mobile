@@ -208,7 +208,7 @@ class ProfilePage extends Component {
                       size={"large"}
                       type={"green"}
                       onPress={() => {
-                        this.props.navigation.navigate("following");
+                        this.props.navigation.navigate("journal");
                       }}
                     >
                       Add Journal
