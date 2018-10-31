@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 import { Spinner, Header } from "../components/common";
 import axios from 'axios';
 import CategoryList from "../components/addWorkout/CategoryList";
@@ -17,7 +17,17 @@ export default class AddWorkoutPage extends Component {
     };
   }
 
+  retrieveDetails = async () => {
+    try {
+      const id = await AsyncStorage.getItem("login");
+      this.setState({ userId: id });
+    } catch (error) {
+      this.setState({ error: "Can't get Data. Please check internet connectivity." });
+    }
+  };
+
   componentDidMount(){
+    this.retrieveDetails();
     axios.get('http://localhost:8000/api/workoutcategories').then(response => this.setState({ workouts: response.data })).then(this.checkSearchResp.bind(this));
   }
 
@@ -31,10 +41,8 @@ export default class AddWorkoutPage extends Component {
 
 
   renderWorkoutList(){
-    if(this.state.loading === false){
-      console.log(this.state.workouts)
-      console.log('Render CategoryList')
-      return <CategoryList workouts={ this.state.workouts }/>
+    if(this.state.loading === false && this.state.userId !== ''){
+      return <CategoryList workouts={ this.state.workouts } userId={this.state.userId} />
     }
     return <Spinner />
   }

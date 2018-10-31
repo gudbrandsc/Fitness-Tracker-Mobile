@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import CategoryDetail from './CategoryDetail'
 import { Button } from '../common';
-
+import axios from 'axios';
 
 
 class CategoryList extends Component {
@@ -15,11 +15,12 @@ class CategoryList extends Component {
     }
   }
 
-  onUpdate = (id, value1, value2) => {
+  onUpdate = (id, value1, value2, value3) => {
     const newelement =  { 
       id: id,
       value1: value1,
-      value2: value2
+      value2: value2,
+      value3: value3
     }
 
     var exist = this.state.inputValues.find(function(element) {
@@ -33,15 +34,14 @@ class CategoryList extends Component {
     }else{
       objIndex = this.state.inputValues.findIndex((obj => obj.id == id));
       //Remove elemt if the value is now empty
-      if(value1 === '' && value2 === '' ){
+      if(value1 === '' && value2 === '' && value3 === '' ){
         this.state.inputValues.splice(objIndex, 1)
       }else{
         this.state.inputValues[objIndex].value1 = value1
         this.state.inputValues[objIndex].value2 = value2
-
+        this.state.inputValues[objIndex].value3 = value3
       }
     }
-    console.log(this.state.inputValues)
   };
 
 
@@ -52,6 +52,18 @@ class CategoryList extends Component {
   }
 
   AddWorkout = () => {
+    console.log('Send post request')
+
+    axios.post('http://localhost:8000/api/newexercise', {
+      id: this.props.userId,
+      workouts: this.state.inputValues
+    }).then(function (response) {
+      console.log(response);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+
     this.setState({inputValues: []});
 
   }

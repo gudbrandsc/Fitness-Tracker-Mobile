@@ -19,15 +19,15 @@ class CategoryDetail extends Component {
   }
 
 
-  subUpdate = (id, value1, value2) => {
-    this.props.onUpdate(id, value1, value2)
+  subUpdate = (id, value1, value2,value3) => {
+    this.props.onUpdate(id, value1, value2, value3)
 
   };
 
   renderDescription(){
     if(this.state.active === true){
       return this.state.workoutTable.map(type =>
-        <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} inputValues={this.props.inputValues}>
+        <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} categoryId={this.props.workout.id} inputValues={this.props.inputValues}>
 
         </SubCategory>
       );

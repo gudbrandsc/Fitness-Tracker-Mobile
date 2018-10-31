@@ -12,6 +12,9 @@ class SubCategory extends Component {
             value1: '',
             value2: '',
             value3: '',
+            valueLable1: '',
+            valueLable2: '',
+            valueLable3: '',
             missingField1: false,
             missingField2: false,
             missingField3: false,
@@ -25,66 +28,45 @@ class SubCategory extends Component {
             return element.id === id ;
         });
         if(exist !== undefined){
-            if(exist.value1 === '' && exist.value2 !== ''){
-                this.setState({
-                    value1: exist.value1,
-                    value2: exist.value2,
-                    missingField1: true,
-                    missingField2: false,
-                    start: false,                })
-            }else if(exist.value2 === '' && exist.value1 !== ''){
-                this.setState({
-                    value1: exist.value1,
-                    value2: exist.value2,
-                    missingField1: false,
-                    missingField2: true,
-                    start: false,
-                })
-            }else{
-                this.setState({
-                    value1: exist.value1,
-                    value2: exist.value2,
-                    missingField1: false,
-                    missingField2: false,
-                    start: false,
-                })
-            }
+            this.setState({
+                value1: exist.value1,
+                value2: exist.value2,
+                value3: exist.value3,
+                start: false,      
+                active: true         
+            })
+        } else {
+            this.setState({
+                start: false
+            })
+        }
+        if(this.props.categoryId === 8 ){
+            this.setState({
+                valueLable1: 'Time',
+                valueLable2: 'Distance'
+            })
+        }else{
+            this.setState({
+                valueLable1: 'Sets',
+                valueLable2: 'Reps',
+                valueLable3: 'Weight'
+
+            })
         }
     }
     
     componentDidUpdate(){
-        this.props.subUpdate(this.state.id, this.state.value1, this.state.value2)
+        if(this.state.start === false){
+            this.props.subUpdate(this.state.id, this.state.value1, this.state.value2, this.state.value3)
+        }
     }
 
 
     handleValue1Change = (text) => {
         if (/^\d+$/.test(text) || text === '') {
-            if(text === '' && this.state.value2 !== ''){
-                this.setState({ 
-                    value1: text,
-                    missingField1: true})
-            }else if(text === '' && this.state.value2 === ''){
-                this.setState({ 
-                    value1: text,
-                    missingField1: false,
-                    missingField2: false
-                })
-            }else {
-                if(this.state.start === true){
-                    this.setState({
-                        value1: text,
-                        missingField1: false,
-                        missingField2: true,
-                        start: false
-
-                    })
-                }else {
-                    this.setState({
-                    value1: text,
-                    missingField1: false
-                    })
-                }
-            }
+            this.setState({ 
+                value1: text,
+            })
         }else{
             alert("Please enter numbers only"); 
         }
@@ -92,34 +74,9 @@ class SubCategory extends Component {
 
     handleValue2Change = (text) => {
         if (/^\d+$/.test(text) || text === '') {
-            if(text === '' && this.state.value1 !== ''){
-                this.setState({ 
-                    value2: text,
-                    missingField2: true
-                })
-            }else if(text === '' && this.state.value1 === ''){
-                console.log('Missing both fields')
-                this.setState({ 
-                    value2: text,
-                    missingField1: false,
-                    missingField2: false
-                })
-            }else {
-                if(this.state.start === true){
-                    this.setState({
-                        value1: text,
-                        missingField1: true,
-                        missingField2: false,
-                        start: false
-
-                    })
-                }else {
-                this.setState({
-                    value2: text,
-                    missingField2: false
-                    })
-                }
-            }
+            this.setState({ 
+                value2: text,
+            })
         }else{
             alert("Please enter numbers only"); 
         }
@@ -128,8 +85,7 @@ class SubCategory extends Component {
     handleValue3Change = (text) => {
         if (/^\d+$/.test(text) || text === '') {
             this.setState({ 
-                value2: text,
-                missingField2: true
+                value3: text,
             })
         }else{
             alert("Please enter numbers only"); 
@@ -142,12 +98,12 @@ class SubCategory extends Component {
 
             return (
                 <View>
-                    <Text style={styles.labelStyle}>Reps</Text>
+                    <Text style={styles.labelStyle}>{this.state.valueLable1}</Text>
                     <View style={[styles.inputField, this.state.missingField1 ? styles.missingFieldColor :  styles.normalFieldColor]}>
                         <NumericInput  
                             value={this.state.value1} 
                             onChangeText={this.handleValue1Change} 
-                            placeholder={'Enter reps...'} 
+                            placeholder={'Enter stuff'} 
                             missingField={this.state.missingField2} 
                             maxLength={3} 
                         />
@@ -161,12 +117,12 @@ class SubCategory extends Component {
         if(this.state.active === true){
             return (
                 <View>        
-                    <Text style={styles.labelStyle}>Weight</Text>
+                    <Text style={styles.labelStyle}>{this.state.valueLable2}</Text>
                     <View style={[styles.inputField, this.state.missingField2 ? styles.missingFieldColor :  styles.normalFieldColor]}>
                         <NumericInput  
                             value={this.state.value2} 
                             onChangeText={this.handleValue2Change} 
-                            placeholder={'Enter weight...'} 
+                            placeholder={'Enter reps...'} 
                             missingField={this.state.missingField1} 
                             maxLength={3} 
                         />
@@ -177,21 +133,23 @@ class SubCategory extends Component {
     }
 
     renderInput3(){
-        if(this.state.active === true){
-            return (
-                <View>        
-                    <Text style={styles.labelStyle}>Sets</Text>
-                    <View style={[styles.inputField, this.state.missingField2 ? styles.missingFieldColor :  styles.normalFieldColor]}>
-                        <NumericInput  
-                            value={this.state.value3} 
-                            onChangeText={this.handleValue3Change} 
-                            placeholder={'Enter sets...'} 
-                            missingField={this.state.missingField3} 
-                            maxLength={3} 
-                        />
+        if(this.props.categoryId !== 8 ){
+            if(this.state.active === true){
+                return (
+                    <View>        
+                        <Text style={styles.labelStyle}>{this.state.valueLable3}</Text>
+                        <View style={[styles.inputField, this.state.missingField2 ? styles.missingFieldColor :  styles.normalFieldColor]}>
+                            <NumericInput  
+                                value={this.state.value3} 
+                                onChangeText={this.handleValue3Change} 
+                                placeholder={'Weight...'} 
+                                missingField={this.state.missingField3} 
+                                maxLength={3} 
+                            />
+                        </View>
                     </View>
-                </View>
-            );
+                );
+            }
         }
     }
     getIcon(){
@@ -219,9 +177,10 @@ class SubCategory extends Component {
                             </View>
                         </View>
                         <View style={[styles.inputFieldsWrapper, this.state.active ? styles.cardExpandStyle : styles.cardCollapseStyle]}>
-                            {this.renderInput3()}
                             {this.renderInput1()}
                             {this.renderInput2()}
+                            {this.renderInput3()}
+
                         </View>
                     </View>
                 </View>
@@ -288,7 +247,8 @@ const styles = StyleSheet.create({
         padding: 5,
         margin: 5,
         flex: 1,
-        alignItems: 'stretch'
+        alignItems: 'stretch',
+        width: 90
 
     },
     missingFieldColor: {
