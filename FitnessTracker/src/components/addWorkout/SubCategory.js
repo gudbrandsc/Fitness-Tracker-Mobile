@@ -203,7 +203,7 @@ class SubCategory extends Component {
 
     render() {
             return (
-                <View style={{paddingTop: 10}}>
+                <View style={{paddingTop: 10, padding: 10}}>
                     <View style={styles.container}>                        
                         <View style={styles.cardStyle}>
                             <View style={styles.topCardWrapperStyle}>

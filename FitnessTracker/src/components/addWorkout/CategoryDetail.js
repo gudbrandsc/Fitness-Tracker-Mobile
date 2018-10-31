@@ -26,11 +26,11 @@ class CategoryDetail extends Component {
 
   renderDescription(){
     if(this.state.active === true){
-    return this.state.workoutTable.map(type =>
-      <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} inputValues={this.props.inputValues}>
+      return this.state.workoutTable.map(type =>
+        <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} inputValues={this.props.inputValues}>
 
-      </SubCategory>
-    );
+        </SubCategory>
+      );
     }
   }
   checkActive(){
@@ -50,7 +50,7 @@ class CategoryDetail extends Component {
             {this.props.workout.CategoryName}
             </Text>
           </View>
-          <View style={{ backgroundColor: "#f7f6ef", justifyContent: "center", flexDirection: "column" }}>
+          <View style={{ backgroundColor: "#f7f6ef", justifyContent: "center", flexDirection: "column"}}>
           {this.renderDescription()}
           </View>
         </View>
