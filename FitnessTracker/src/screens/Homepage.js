@@ -18,7 +18,7 @@ export default class Homepage extends Component {
     return (
       <View style={{flex:1}}>
         <Header headerText={"HomePage"} />
-        <View style={{flex:1, backgroundColor: '#e9e9ef'}}>
+        <View style={{flex:1, backgroundColor: '#f7f6ef'}}>
         <Card>
           <CardSection>
             <Text>Under Construction</Text>

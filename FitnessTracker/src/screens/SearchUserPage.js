@@ -33,6 +33,7 @@ export default class SearchUserPage extends Component {
 
   onButtonPress(term) {
     this.setState({ error: "", loading: true });
+    console.log('Search: ' + term + ' and id ' + this.state.userId)
     axios
       .get(
         "http://localhost:8000/api/searchuser/" + term + "/" + this.state.userId
@@ -74,7 +75,7 @@ export default class SearchUserPage extends Component {
           icon={{ type: "font-awesome", name: "search" }}
           placeholder="Search..."
         />
-        <View style={{ flex: 1, backgroundColor: "#e9e9ef" }}>
+        <View style={{ flex: 1, backgroundColor: "#f7f6ef" }}>
           {this.checkResponse(users, loading)}
           <Text>{this.state.error}</Text>
         </View>

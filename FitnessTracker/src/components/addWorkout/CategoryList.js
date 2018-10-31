@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import CategoryDetail from './CategoryDetail'
+import { Button } from '../common';
 
 
 
@@ -32,7 +33,7 @@ class CategoryList extends Component {
     }else{
       objIndex = this.state.inputValues.findIndex((obj => obj.id == id));
       //Remove elemt if the value is now empty
-      if(value1 === '' || value2 === '' ){
+      if(value1 === '' && value2 === '' ){
         this.state.inputValues.splice(objIndex, 1)
       }else{
         this.state.inputValues[objIndex].value1 = value1
@@ -44,17 +45,34 @@ class CategoryList extends Component {
   };
 
 
-  renderUser () {
+  renderCategoryDetail () {
    return this.props.workouts.map(workout =>
-    <CategoryDetail onUpdate={this.onUpdate.bind(this)} key={workout.id} workout={workout} />
+    <CategoryDetail onUpdate={this.onUpdate.bind(this)} key={workout.id} workout={workout} inputValues={this.state.inputValues} />
    );
+  }
+
+  AddWorkout = () => {
+    this.setState({inputValues: []});
+
   }
 
   render(){
     return (
+      <View>
       <ScrollView style={styles.container}>
-        { this.renderUser() }
+        { this.renderCategoryDetail() }
+        <View style={styles.buttonContainerStyle}>
+          <Button
+          onPress={this.AddWorkout}
+          type={"primary"}
+          size={"large"}
+          children={"Submit"}
+          />      
+        </View>
+
       </ScrollView>
+      
+        </View>
     );
   }
 }
@@ -68,6 +86,19 @@ const styles = StyleSheet.create({
   },
   container: {
     alignSelf: "stretch",
+  },
+  submitButtonStyle: {
+    height: 27
+  },
+  buttonContainerStyle: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    padding: 5,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    flexDirection: "row",
+    borderColor: "#fff",
+    position: "relative"
   }
 });
 

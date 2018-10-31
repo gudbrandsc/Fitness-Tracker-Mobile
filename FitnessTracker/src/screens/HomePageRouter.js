@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { createBottomTabNavigator } from "react-navigation";
 import Icon from "react-native-vector-icons/Ionicons";
-
 import Homepage from "./Homepage";
 import ProfilePage from "./ProfilePageRouter";
 import AnalyticsPage from "./AnalyticsPage";
@@ -51,7 +50,7 @@ const RootStack = createBottomTabNavigator(
       }
     }),
     tabBarOptions: {
-      activeTintColor: "#007aff",
+      activeTintColor: "#00e6d3",
       inactiveTintColor: "gray",
       showLabel: false //Remove text under icons
     }

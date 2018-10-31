@@ -44,7 +44,7 @@ export default class AddWorkoutPage extends Component {
     return (
       <View style={{flex:1}}>
         <Header headerText={"Add Workout"} />
-        <View style={{flex:1, backgroundColor: '#e9e9ef'}}>
+        <View style={{flex:1, backgroundColor: '#f7f6ef'}}>
         {this.renderWorkoutList()}
         </View>
       </View>

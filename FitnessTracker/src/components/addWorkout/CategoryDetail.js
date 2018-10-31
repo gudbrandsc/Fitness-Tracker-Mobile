@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, TouchableWithoutFeedback } from "react-native";
+import { Text, View, TouchableWithoutFeedback,  StyleSheet } from "react-native";
 import { Card, CardSection } from "../common";
 import SubCategory from "./SubCategory";
 
@@ -18,6 +18,7 @@ class CategoryDetail extends Component {
     };
   }
 
+
   subUpdate = (id, value1, value2) => {
     this.props.onUpdate(id, value1, value2)
 
@@ -26,7 +27,7 @@ class CategoryDetail extends Component {
   renderDescription(){
     if(this.state.active === true){
     return this.state.workoutTable.map(type =>
-      <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type}>
+      <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} inputValues={this.props.inputValues}>
 
       </SubCategory>
     );
@@ -41,24 +42,40 @@ class CategoryDetail extends Component {
 
   render() {
     return (
-      <Card>
-      <TouchableWithoutFeedback onPress={() => this.setState({active: !this.state.active})}>
+      <View>
+      <TouchableWithoutFeedback onPress={() => this.setState({ active: !this.state.active })}>
         <View>
-          <CardSection>
-            <Text>
+          <View style={styles.categoryTouchAbleStyle  }>
+            <Text style={styles.CategoryNameStyle}>
             {this.props.workout.CategoryName}
             </Text>
-          </CardSection>
-          <View style={{    backgroundColor: "#fff", justifyContent: "center", flexDirection: "column",}}>
+          </View>
+          <View style={{ backgroundColor: "#f7f6ef", justifyContent: "center", flexDirection: "column" }}>
           {this.renderDescription()}
           </View>
         </View>
       </TouchableWithoutFeedback>
-      </Card>
+      </View>
     );
   }
 }
-
+const styles = StyleSheet.create({
+  categoryTouchAbleStyle: {
+    borderBottomWidth: 1,
+    borderBottomColor: '#ddd',
+    padding: 20,
+    backgroundColor: "#fff",
+    justifyContent: "center",
+    flexDirection: "row",
+    borderColor: "#fff",
+    position: "relative",
+  },
+  CategoryNameStyle: {
+    color: '#636463',
+    fontSize: 20,
+    fontFamily:'HelveticaNeue',
+  }
+});
 
 
 export default CategoryDetail;
