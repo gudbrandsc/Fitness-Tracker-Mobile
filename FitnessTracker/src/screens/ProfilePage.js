@@ -206,7 +206,7 @@ class ProfilePage extends Component {
                   >
                     <Button
                       size={"large"}
-                      type={"green"}
+                      type={"success"}
                       onPress={() => {
                         this.props.navigation.navigate("journal");
                       }}

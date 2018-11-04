@@ -58,7 +58,7 @@ class ProfileDetails extends Component {
       const id = await AsyncStorage.getItem("login");
       const pw = await AsyncStorage.getItem("pass");
       this.setState({ id: id, password: pw });
-      fetch("http://10.1.86.4:8000/api/user_details/" + id, {
+      fetch("http://localhost:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -133,7 +133,7 @@ class ProfileDetails extends Component {
     console.log("Uploading.. \n" + bodyFormData);
     axios({
       method: "post",
-      url: "http://10.1.86.4:8000/api/uploadfile",
+      url: "http://localhost:8000/api/uploadfile",
       data: bodyFormData,
       config: { headers: { enctype: "multipart/form-data" } }
     })
@@ -215,7 +215,7 @@ class ProfileDetails extends Component {
   handleUpdate() {
     try {
       const id = this.state.id;
-      fetch("http://10.1.86.4:8000/api/userregistration/" + id + "/update", {
+      fetch("http://localhost:8000/api/userregistration/" + id + "/update", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -317,7 +317,7 @@ class ProfileDetails extends Component {
     return (
       <Button
         size={"large"}
-        type={"update"}
+        type={"success"}
         onPress={this.validateInput.bind(this)}
       >
         Update
@@ -350,7 +350,7 @@ class ProfileDetails extends Component {
               style={{ justifyContent: "center", flex: 1, marginLeft: "10%" }}
             >
               <TouchableOpacity onPress={this.selectImage}>
-                <Text style={{ color: "#007aff", fontSize: 18 }}>
+                <Text style={{ color: "#00aad5", fontSize: 18 }}>
                   Select Profile Picture
                 </Text>
               </TouchableOpacity>

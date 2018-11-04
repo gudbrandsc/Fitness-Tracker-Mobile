@@ -30,7 +30,7 @@ class Journal extends Component {
     try {
       const id = await AsyncStorage.getItem("login");
       this.setState({ id });
-      fetch("http://10.1.86.4:8000/api/getjournalentries/" + id, {
+      fetch("http://localhost:8000/api/getjournalentries/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -115,7 +115,7 @@ class Journal extends Component {
         });
         const id = this.state.id;
         const journalText = this.state.journalText.trim();
-        fetch("http://10.1.86.4:8000/api/appendjournal", {
+        fetch("http://localhost:8000/api/appendjournal", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -181,7 +181,7 @@ class Journal extends Component {
         });
         const id = this.state.id;
         const journalText = this.state.journalText.trim();
-        fetch("http://10.1.86.4:8000/api/appendjournal", {
+        fetch("http://localhost:8000/api/appendjournal", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -250,7 +250,7 @@ class Journal extends Component {
         const journalId = allJournals[index].id;
         const journalText = this.state.journalText.trim();
 
-        fetch("http://10.1.86.4:8000/api/updatejournal", {
+        fetch("http://localhost:8000/api/updatejournal", {
           method: "POST",
           headers: {
             Accept: "application/json",
@@ -314,7 +314,7 @@ class Journal extends Component {
       const journalId = allJournals[index].id;
       console.log(allJournals[index] + " \nand the id is " + journalId);
 
-      fetch("http://10.1.86.4:8000/api/removejournal/" + journalId, {
+      fetch("http://localhost:8000/api/removejournal/" + journalId, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -431,7 +431,7 @@ class Journal extends Component {
           >
             <Button
               size={"large"}
-              type="green"
+              type="success"
               onPress={this.updateJournal.bind(this)}
             >
               Update

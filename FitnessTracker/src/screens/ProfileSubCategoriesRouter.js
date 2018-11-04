@@ -2,8 +2,7 @@ import React, { Component } from "react";
 import { createMaterialTopTabNavigator } from "react-navigation";
 
 import WorkoutHistory from "./Homepage";
-import AnalyticsPage from "./AnalyticsPage";
-import AddWorkoutPage from "./AddWorkoutPage";
+import MapSearchPage from "./MapSearchPage";
 import SearchUserPage from "./SearchUserPage";
 
 export default createMaterialTopTabNavigator(
@@ -11,13 +10,10 @@ export default createMaterialTopTabNavigator(
     "Workout History": {
       screen: WorkoutHistory
     },
-    "Add Workout": {
-      screen: AddWorkoutPage
+    "GYM Search": {
+      screen: MapSearchPage
     },
-    GYMS: {
-      screen: AnalyticsPage
-    },
-    Search: {
+    "Calculate Expenses": {
       screen: SearchUserPage
     }
   },
@@ -29,7 +25,7 @@ export default createMaterialTopTabNavigator(
         color: "#007aff"
       },
       tabStyle: {
-        width: 100,
+        width: 138,
         height: 50
       },
       indicatorStyle: {

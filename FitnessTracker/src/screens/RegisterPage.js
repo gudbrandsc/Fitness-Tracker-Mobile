@@ -69,7 +69,7 @@ class RegisterPage extends Component {
     console.log("Uploading.. \n" + bodyFormData);
     axios({
       method: "post",
-      url: "http://10.1.86.4:8000/api/uploadfile",
+      url: "http://localhost:8000/api/uploadfile",
       data: bodyFormData,
       config: { headers: { enctype: "multipart/form-data" } }
     })
@@ -150,7 +150,7 @@ class RegisterPage extends Component {
    */
   handleRegister() {
     try {
-      fetch("http://10.1.86.4:8000/api/userregistration", {
+      fetch("http://localhost:8000/api/userregistration", {
         method: "POST",
         headers: {
           Accept: "application/json",
@@ -259,7 +259,7 @@ class RegisterPage extends Component {
               style={{ justifyContent: "center", flex: 1, marginLeft: "10%" }}
             >
               <TouchableOpacity onPress={this.selectImage}>
-                <Text style={{ color: "#007aff", fontSize: 18 }}>
+                <Text style={{ color: "#00aad5", fontSize: 18 }}>
                   Select Profile Picture
                 </Text>
               </TouchableOpacity>
