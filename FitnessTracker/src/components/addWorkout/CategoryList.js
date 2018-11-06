@@ -1,8 +1,9 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { StyleSheet, View, ScrollView } from "react-native";
 import CategoryDetail from './CategoryDetail'
-import { Button } from '../common';
+import { Button, Spinner } from '../common';
 import axios from 'axios';
+
 
 
 class CategoryList extends Component {
@@ -10,17 +11,18 @@ class CategoryList extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      error: '',
       inputValues: [],
+      loading: false
     }
   }
 
+  /*Method used by child components to add input data to state list*/ 
   onUpdate = (id, value1, value2, value3) => {
     const newelement =  { 
       id: id,
       value1: value1,
       value2: value2,
-      value3: value3
+      value3: value3,
     }
 
     var exist = this.state.inputValues.find(function(element) {
@@ -44,47 +46,53 @@ class CategoryList extends Component {
     }
   };
 
+  //Method to reset the state when a workout is submitted. 
+  componentWillReceiveProps(nextProps) {
+    if(this.props.reset !== nextProps.reset){
+      this.setState({inputValues:[], loading:false})
+    }
+  } 
 
   renderCategoryDetail () {
-   return this.props.workouts.map(workout =>
-    <CategoryDetail onUpdate={this.onUpdate.bind(this)} key={workout.id} workout={workout} inputValues={this.state.inputValues} />
-   );
+    if(this.state.loading !== true){
+      return this.props.workouts.map(workout =>
+        <CategoryDetail onUpdate={this.onUpdate.bind(this)} key={workout.id} workout={workout} inputValues={this.state.inputValues} reset={this.props.reset} />
+      );
+    }
+   return <Spinner size={"small"} />;
   }
 
   AddWorkout = () => {
-    console.log('Send post request')
-
+    this.setState({loading:true})
     axios.post('http://localhost:8000/api/newexercise', {
-      id: this.props.userId,
+      userid: this.props.userId,
       workouts: this.state.inputValues
-    }).then(function (response) {
-      console.log(response);
+    }).then(response => {
+      if(response.status === 200){
+        this.props.showAlert(true, 'Workout added');
+      }
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch(error => {
+      this.props.showAlert(false, error);
     });
-
-    this.setState({inputValues: []});
-
   }
 
   render(){
     return (
       <View>
-      <ScrollView style={styles.container}>
-        { this.renderCategoryDetail() }
-        <View style={styles.buttonContainerStyle}>
-          <Button
-          onPress={this.AddWorkout}
-          type={"primary"}
-          size={"large"}
-          children={"Submit"}
-          />      
-        </View>
+        <ScrollView style={styles.container}>
+          {this.renderCategoryDetail() }
+          <View style={styles.buttonContainerStyle}>
+            <Button
+            onPress={this.AddWorkout}
+            type={"primary"}
+            size={"large"}
+            children={"Add workout"}
+            />     
+          </View>
 
-      </ScrollView>
-      
-        </View>
+        </ScrollView>
+      </View>
     );
   }
 }
@@ -103,13 +111,9 @@ const styles = StyleSheet.create({
     height: 27
   },
   buttonContainerStyle: {
-    borderBottomWidth: 1,
-    borderBottomColor: '#ddd',
-    padding: 5,
-    backgroundColor: "#fff",
+    paddingTop: 25,
     justifyContent: "center",
     flexDirection: "row",
-    borderColor: "#fff",
     position: "relative"
   }
 });

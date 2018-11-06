@@ -18,7 +18,6 @@ class UserDetail extends Component {
   }
 
   componentDidMount() {
-    console.log("Setting init follows");
     if (
       this.props.user.follower_tables &&
       this.props.user.follower_tables.length > 0
@@ -27,29 +26,23 @@ class UserDetail extends Component {
         follows: true,
         start: false
       });
-      console.log("Setting init follows --> true");
     } else {
       this.setState({
         follows: false,
         start: false
       });
-      console.log("Setting init follows --> false");
     }
   }
 
   onFollowPress = () => {
-    console.log("Send follow request");
     const requestUrl =
       "http://localhost:8000/api/createfollower/" +
       this.props.userId +
       "/" +
       this.props.user.id;
-    console.log(requestUrl);
     axios.get(requestUrl).then(
       function(response) {
-        console.log("Check response");
         if (response.status === 200) {
-          console.log("Follow ok 200");
           this.setState({
             follows: true,
             loading: false
@@ -65,18 +58,14 @@ class UserDetail extends Component {
   };
 
   onUnfollowPress = () => {
-    console.log("Send unfollow request");
     const requestUrl =
       "http://localhost:8000/api/removefollower/" +
       this.props.userId +
       "/" +
       this.props.user.id;
-    console.log(requestUrl);
     axios.get(requestUrl).then(
       function(response) {
-        console.log("Check response");
         if (response.status === 200) {
-          console.log("unFollow ok 200");
           this.setState({
             follows: false,
             loading: false
@@ -92,7 +81,6 @@ class UserDetail extends Component {
   };
 
   renderFollowingButton() {
-    console.log("rendering button");
     if (this.state.start) {
       if (
         this.props.user.follower_tables &&

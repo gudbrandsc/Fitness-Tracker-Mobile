@@ -18,6 +18,13 @@ class CategoryDetail extends Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if(this.props.reset !== nextProps.reset){
+            console.log('reset from chil component detail')
+           this.setState({active: false})
+    }
+} 
+
 
   subUpdate = (id, value1, value2,value3) => {
     this.props.onUpdate(id, value1, value2, value3)
@@ -27,12 +34,13 @@ class CategoryDetail extends Component {
   renderDescription(){
     if(this.state.active === true){
       return this.state.workoutTable.map(type =>
-        <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} categoryId={this.props.workout.id} inputValues={this.props.inputValues}>
+        <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} categoryId={this.props.workout.id} inputValues={this.props.inputValues} reset={this.props.reset}>
 
         </SubCategory>
       );
     }
   }
+
   checkActive(){
     if(this.props.active === true){
       return false;

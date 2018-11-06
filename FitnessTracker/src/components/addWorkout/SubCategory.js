@@ -160,6 +160,7 @@ class SubCategory extends Component {
     }
 
     render() {
+        console.log('Render from sub category')
             return (
                 <View style={{paddingTop: 10, padding: 10}}>
                     <View style={styles.container}>                        

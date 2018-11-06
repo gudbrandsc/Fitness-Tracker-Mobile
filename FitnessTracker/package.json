@@ -13,6 +13,7 @@
     "react-native": "0.57.1",
     "react-native-dropdown-menu": "^2.0.0",
     "react-native-elements": "^0.19.1",
+    "react-native-flash-message": "^0.1.10",
     "react-native-image-picker": "^0.27.1",
     "react-native-linear-gradient": "^2.4.3",
     "react-native-maps": "^0.22.0",
