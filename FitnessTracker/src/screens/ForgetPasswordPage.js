@@ -42,7 +42,7 @@ class ForgetPassword extends Component {
         error: "",
         animationErrorHeight: "0.5%"
       });
-      fetch("http://10.1.86.4:8000/api/getnewpassword", {
+      fetch("http://localhost:8000/api/getnewpassword", {
         method: "POST",
         headers: {
           Accept: "application/json",

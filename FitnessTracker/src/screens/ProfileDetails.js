@@ -453,10 +453,5 @@ const styles = {
     color: "red"
   }
 };
-/*
-<TouchableOpacity onPress={this.uploadPic}>
-              <Text>Upload</Text>
-            </TouchableOpacity>
-            */
 
 export default ProfileDetails;

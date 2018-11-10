@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { View, AsyncStorage } from "react-native";
 import { Spinner, Header } from "../components/common";
-import axios from 'axios';
+import axios from "axios";
 import CategoryList from "../components/addWorkout/CategoryList";
 import FlashMessage from "react-native-flash-message";
 import { showMessage, hideMessage } from "react-native-flash-message";
@@ -13,8 +13,8 @@ export default class AddWorkoutPage extends Component {
       term: "",
       error: "",
       loading: true,
-      workouts:[],
-      userId: '',
+      workouts: [],
+      userId: "",
       resetState: false
     };
   }
@@ -24,55 +24,68 @@ export default class AddWorkoutPage extends Component {
       const id = await AsyncStorage.getItem("login");
       this.setState({ userId: id });
     } catch (error) {
-      this.setState({ error: "Can't get Data. Please check internet connectivity." });
+      this.setState({
+        error: "Can't get Data. Please check internet connectivity."
+      });
     }
   };
 
-  componentDidMount(){
+  componentDidMount() {
     this.retrieveDetails();
-    axios.get('http://localhost:8000/api/workoutcategories').then(response => this.setState({ workouts: response.data })).then(this.checkSearchResp.bind(this));
+    axios
+      .get("http://localhost:8000/api/workoutcategories")
+      .then(response => this.setState({ workouts: response.data }))
+      .then(this.checkSearchResp.bind(this));
   }
 
-  checkSearchResp(){
-    if((this.state.workouts && this.state.workouts.length > 0)){
-      this.setState({error: '', loading: false })
+  checkSearchResp() {
+    if (this.state.workouts && this.state.workouts.length > 0) {
+      this.setState({ error: "", loading: false });
     } else {
-      this.setState({error: 'Unable to fetch workouts', loading: false })
+      this.setState({ error: "Unable to fetch workouts", loading: false });
     }
   }
 
-  renderWorkoutList(){
-    if(this.state.loading === false && this.state.userId !== ''){
-      return <CategoryList showAlert={this.showAlert.bind(this)} workouts={ this.state.workouts } userId={this.state.userId} reset={this.state.resetState} />
+  renderWorkoutList() {
+    if (this.state.loading === false && this.state.userId !== "") {
+      return (
+        <CategoryList
+          showAlert={this.showAlert.bind(this)}
+          workouts={this.state.workouts}
+          userId={this.state.userId}
+          reset={this.state.resetState}
+        />
+      );
     }
-    return <Spinner />
+    return <Spinner />;
   }
 
   showAlert = (success, message) => {
-    const type = 'success';
+    const type = "success";
 
-    if(success !== true){
-      type = 'danger'
+    if (success !== true) {
+      type = "danger";
     } else {
-      this.setState({resetState: !this.state.resetState})
+      this.setState({ resetState: !this.state.resetState });
     }
 
     showMessage({
       message: message,
-      type: type,
+      type: type
     });
   };
 
-
-
   render() {
-    console.log('Call render from page class')
+    console.log("Call render from page class");
     return (
-      <View style={{flex:1}}>
+      <View style={{ flex: 1 }}>
         <Header headerText={"Add Workout"} />
-        <FlashMessage style={{height:80}} ref={ref => this.dropdown = ref} />
-        <View style={{flex:1, backgroundColor: '#f7f6ef'}}>
-        {this.renderWorkoutList()}
+        <FlashMessage
+          style={{ height: 80 }}
+          ref={ref => (this.dropdown = ref)}
+        />
+        <View style={{ flex: 1, backgroundColor: "#f7f6ef" }}>
+          {this.renderWorkoutList()}
         </View>
       </View>
     );

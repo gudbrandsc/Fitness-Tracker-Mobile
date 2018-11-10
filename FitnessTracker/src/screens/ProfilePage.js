@@ -8,14 +8,14 @@ import {
   Text,
   TouchableOpacity
 } from "react-native";
-import { Button, Spinner } from "../components/common";
+import { Button, Spinner, Header } from "../components/common";
 import FollowersButton from "../components/profilePage/FollowersButton";
 import FollowingButton from "../components/profilePage/FollowingButton";
 import { Avatar } from "react-native-elements";
 
 class ProfilePage extends Component {
   static navigationOptions = {
-    headerTitle: "My Profile"
+    header: <Header headerText={"Profile Page"} />
   };
 
   state = {

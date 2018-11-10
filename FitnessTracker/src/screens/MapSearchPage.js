@@ -21,7 +21,7 @@ class MapSearchPage extends Component {
     markerDetailsViewOpacity: 0,
     markerDetailsViewPress: "none",
     markerDetailsImage:
-      "https://res.cloudinary.com/fitnesstracker/image/upload/v1541359522/noimg.jpg",
+      "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg",
     loadingMarkerDetails: null,
     markerSelectedId: 0
   };

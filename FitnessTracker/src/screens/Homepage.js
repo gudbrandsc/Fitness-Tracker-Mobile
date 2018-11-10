@@ -8,6 +8,7 @@ import {
   Spinner,
   Header
 } from "../components/common";
+import NewsFeedRouter from "./NewsFeedRouter";
 
 export default class Homepage extends Component {
   constructor(props) {
@@ -16,16 +17,12 @@ export default class Homepage extends Component {
 
   render() {
     return (
-      <View style={{flex:1}}>
-        <Header headerText={"HomePage"} />
-        <View style={{flex:1, backgroundColor: '#f7f6ef'}}>
-        <Card>
-          <CardSection>
-            <Text>Under Construction</Text>
-          </CardSection>
-        </Card>
+      <React.Fragment>
+        <Header headerText={""} />
+        <View style={{ position: "absolute", width: "100%", height: "100%" }}>
+          <NewsFeedRouter />
         </View>
-      </View>
+      </React.Fragment>
     );
   }
 }

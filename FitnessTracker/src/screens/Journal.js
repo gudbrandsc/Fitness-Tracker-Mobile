@@ -1,8 +1,23 @@
 import React, { Component } from "react";
-import { View, TextInput, AsyncStorage } from "react-native";
+import {
+  View,
+  TextInput,
+  AsyncStorage,
+  TouchableOpacity,
+  Text
+} from "react-native";
 import { Button, Spinner } from "../components/common";
 import DropdownMenu from "react-native-dropdown-menu";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
+import { Avatar } from "react-native-elements";
+import axios from "axios";
+import ImagePicker from "react-native-image-picker";
+
+const options = {
+  title: "Add Journal Picture",
+  takePhotoButtonTitle: "Take a photo",
+  chooseFromLibraryButtonTitle: "Choose photo from library"
+};
 
 class Journal extends Component {
   static navigationOptions = {
@@ -19,7 +34,11 @@ class Journal extends Component {
     journalText: "",
     journalsAllData: [],
     journalPlaceholder: "Write your journal",
-    dropDownIndex: 0
+    dropDownIndex: 0,
+    avatarSource:
+      "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg",
+    picName: "",
+    picData: null
   };
 
   componentDidMount() {
@@ -78,6 +97,75 @@ class Journal extends Component {
     }
   };
 
+  selectImage = () => {
+    ImagePicker.showImagePicker(options, response => {
+      console.log("Response = ", response);
+
+      if (response.didCancel) {
+        console.log("User cancelled image picker");
+      } else if (response.error) {
+        console.log("Image Picker Error: ", response.error);
+      } else {
+        this.setState({
+          avatarSource: response.uri,
+          picData: response.data,
+          picName: response.fileName
+        });
+      }
+    });
+  };
+
+  uploadImage(mode) {
+    this.setState({
+      error: "",
+      loading: true,
+      animationErrorHeight: "0.5%"
+    });
+    if (this.state.picName !== "") {
+      var bodyFormData = new FormData();
+      bodyFormData.append("data", this.state.picData);
+      bodyFormData.append("filename", this.state.picName);
+      bodyFormData.append("name", "image");
+
+      console.log("Uploading.. \n" + bodyFormData);
+      axios({
+        method: "post",
+        url: "http://localhost:8000/api/uploadfile",
+        data: bodyFormData,
+        config: { headers: { enctype: "multipart/form-data" } }
+      })
+        .then(
+          function(response) {
+            this.setState({ avatarSource: response.data, picName: "" });
+            console.log(response.data);
+            if (mode === 0) this.addJournal();
+            else if (mode === 1) this.updateJournal();
+            else this.readdJournal();
+          }.bind(this)
+        )
+        .catch(function(response) {
+          this.setState({
+            avatarSource:
+              "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg"
+          });
+          this.onFailure("Couldn't upload the picture.");
+          console.log(response);
+        });
+    } else {
+      if (mode === 0) this.addJournal();
+      else if (mode === 1) this.updateJournal();
+      else this.readdJournal();
+    }
+  }
+
+  deletePicture() {
+    this.setState({
+      avatarSource:
+        "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg",
+      picName: ""
+    });
+  }
+
   onFailure(err) {
     this.setState({ error: err, loading: false, animationErrorHeight: "auto" });
   }
@@ -91,7 +179,9 @@ class Journal extends Component {
       this.setState({
         journalPlaceholder: "Write your journal",
         journalText: "",
-        dropDownIndex: 0
+        dropDownIndex: 0,
+        avatarSource:
+          "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg"
       });
     } else {
       const allJournals = this.state.journalsAllData;
@@ -99,7 +189,8 @@ class Journal extends Component {
       this.setState({
         journalPlaceholder: "",
         journalText: text,
-        dropDownIndex: index
+        dropDownIndex: index,
+        avatarSource: allJournals[index - 1].imageurl
       });
     }
   }
@@ -108,13 +199,9 @@ class Journal extends Component {
     try {
       const journalText = this.state.journalText.trim();
       if (journalText && journalText !== "[Deleted]") {
-        this.setState({
-          error: "",
-          loading: true,
-          animationErrorHeight: "0.5%"
-        });
         const id = this.state.id;
         const journalText = this.state.journalText.trim();
+        const avatarSource = this.state.avatarSource;
         fetch("http://localhost:8000/api/appendjournal", {
           method: "POST",
           headers: {
@@ -123,7 +210,8 @@ class Journal extends Component {
           },
           body: JSON.stringify({
             Journal: journalText,
-            UserId: id
+            UserId: id,
+            ImageUrl: avatarSource
           })
         })
           .then(response =>
@@ -146,7 +234,12 @@ class Journal extends Component {
                 );
                 const journalsAllData = [...this.state.journalsAllData];
                 journalsAllData.push(res.data.journalEntry);
-                this.setState({ dropdownData, journalsAllData });
+                this.setState({
+                  dropdownData,
+                  journalsAllData,
+                  avatarSource:
+                    "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg"
+                });
                 this.updateJournalElements(0);
                 this.onSuccess();
               } else {
@@ -174,13 +267,9 @@ class Journal extends Component {
     try {
       const journalText = this.state.journalText.trim();
       if (journalText && journalText !== "[Deleted]") {
-        this.setState({
-          error: "",
-          loading: true,
-          animationErrorHeight: "0.5%"
-        });
         const id = this.state.id;
         const journalText = this.state.journalText.trim();
+        const avatarSource = this.state.avatarSource;
         fetch("http://localhost:8000/api/appendjournal", {
           method: "POST",
           headers: {
@@ -189,7 +278,8 @@ class Journal extends Component {
           },
           body: JSON.stringify({
             Journal: journalText,
-            UserId: id
+            UserId: id,
+            ImageUrl: avatarSource
           })
         })
           .then(response =>
@@ -239,13 +329,9 @@ class Journal extends Component {
     try {
       const journalText = this.state.journalText.trim();
       if (journalText && journalText !== "[Deleted]") {
-        this.setState({
-          error: "",
-          loading: true,
-          animationErrorHeight: "0.5%"
-        });
         const index = this.state.dropDownIndex - 1;
         const allJournals = this.state.journalsAllData;
+        const avatarSource = this.state.avatarSource;
         console.log(allJournals[index]);
         const journalId = allJournals[index].id;
         const journalText = this.state.journalText.trim();
@@ -258,7 +344,8 @@ class Journal extends Component {
           },
           body: JSON.stringify({
             journal: journalText,
-            id: journalId + ""
+            id: journalId + "",
+            ImageUrl: avatarSource
           })
         })
           .then(response =>
@@ -379,7 +466,7 @@ class Journal extends Component {
             <Button
               size={"large"}
               type="primary"
-              onPress={this.addJournal.bind(this)}
+              onPress={() => this.uploadImage(0)}
             >
               Add
             </Button>
@@ -406,7 +493,7 @@ class Journal extends Component {
               <Button
                 size={"large"}
                 type="secondary"
-                onPress={this.readdJournal.bind(this)}
+                onPress={() => this.uploadImage(3)}
               >
                 Re-Add
               </Button>
@@ -432,7 +519,7 @@ class Journal extends Component {
             <Button
               size={"large"}
               type="success"
-              onPress={this.updateJournal.bind(this)}
+              onPress={() => this.uploadImage(2)}
             >
               Update
             </Button>
@@ -475,6 +562,22 @@ class Journal extends Component {
         height: "100%",
         textAlignVertical: "top",
         backgroundColor: "white"
+      },
+      journalInputContainer: {
+        marginTop: 15,
+        marginBottom: 5,
+        marginLeft: 6,
+        marginRight: 6,
+        height: "60%"
+      },
+      ImageContainer: {
+        height: "15%",
+        width: "100%",
+        marginTop: 5,
+        marginBottom: 20,
+        marginLeft: "2%",
+        marginRight: 6,
+        flexDirection: "row"
       }
     };
     return (
@@ -491,15 +594,7 @@ class Journal extends Component {
           }}
           data={this.state.dropdownData}
         >
-          <View
-            style={{
-              marginTop: 15,
-              marginBottom: 20,
-              marginLeft: 6,
-              marginRight: 6,
-              height: "75%"
-            }}
-          >
+          <View style={styles.journalInputContainer}>
             <TextInput
               placeholder={this.state.journalPlaceholder}
               style={styles.inputStyle}
@@ -508,6 +603,50 @@ class Journal extends Component {
               onChangeText={journalText => this.setState({ journalText })}
               multiline={true}
             />
+          </View>
+          <View style={styles.ImageContainer}>
+            <View>
+              <Avatar
+                large
+                source={{
+                  uri: this.state.avatarSource
+                }}
+              />
+            </View>
+            <View
+              style={{
+                flex: 1,
+                flexDirection: "row",
+                alignItems: "center"
+              }}
+            >
+              <View
+                style={{
+                  width: 120,
+                  height: 50,
+                  marginRight: 10,
+                  marginLeft: 15,
+                  marginTop: "5%"
+                }}
+              >
+                <Button
+                  size={"large"}
+                  type="success"
+                  onPress={this.selectImage.bind(this)}
+                >
+                  Add Picture
+                </Button>
+              </View>
+              <View style={{ width: 150, height: 50, marginTop: "5%" }}>
+                <Button
+                  size={"large"}
+                  type="secondary"
+                  onPress={this.deletePicture.bind(this)}
+                >
+                  Remove Picture
+                </Button>
+              </View>
+            </View>
           </View>
           {this.renderButton()}
           <AnimationErrorBox

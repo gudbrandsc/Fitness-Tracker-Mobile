@@ -13,7 +13,7 @@ export default class SearchUserPage extends Component {
       error: "",
       loading: false,
       users: [],
-      userId: "",
+      userId: ""
     };
     this.onButtonPress = this.onButtonPress.bind(this);
   }
@@ -25,7 +25,7 @@ export default class SearchUserPage extends Component {
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
-      this.setState({ userId: id});
+      this.setState({ userId: id });
     } catch (error) {
       this.onFailure("Can't get Data. Please check internet connectivity.");
     }
@@ -40,7 +40,8 @@ export default class SearchUserPage extends Component {
       .then(response => {
         console.log(response);
         this.setState({ users: response.data });
-    }).then(this.checkSearchResp.bind(this))
+      })
+      .then(this.checkSearchResp.bind(this));
   }
 
   checkSearchResp() {

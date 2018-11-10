@@ -53,7 +53,7 @@ class LoginPage extends Component {
     this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
 
     try {
-      fetch("http://10.1.86.4:8000/api/userlogin", {
+      fetch("http://localhost:8000/api/userlogin", {
         method: "POST",
         headers: {
           Accept: "application/json",
