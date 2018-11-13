@@ -22,6 +22,7 @@ class SubCategory extends Component {
             active: false
         };
     }
+    
     componentDidMount(){
         const id = this.state.id;
         var exist = this.props.inputValues.find(function(element) {
@@ -60,7 +61,6 @@ class SubCategory extends Component {
             this.props.subUpdate(this.state.id, this.state.value1, this.state.value2, this.state.value3)
         }
     }
-
 
     handleValue1Change = (text) => {
         if (/^\d+$/.test(text) || text === '') {

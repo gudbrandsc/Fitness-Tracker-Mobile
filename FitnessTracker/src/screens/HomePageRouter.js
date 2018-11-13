@@ -6,6 +6,7 @@ import ProfilePage from "./ProfilePageRouter";
 import AnalyticsPage from "./AnalyticsPage";
 import AddWorkoutPage from "./AddWorkoutPage";
 import SearchUserPage from "./SearchUserPage";
+import WorkoutHistory from "./WorkoutHistory"
 
 const RootStack = createBottomTabNavigator(
   {
@@ -23,6 +24,9 @@ const RootStack = createBottomTabNavigator(
     },
     Profile: {
       screen: ProfilePage
+    },
+    WorkoutHistory: {
+      screen: WorkoutHistory
     }
   },
   {
@@ -39,6 +43,8 @@ const RootStack = createBottomTabNavigator(
         } else if (routeName === "Profile") {
           iconName = `md-contact`;
         } else if (routeName === "SearchUser") {
+          iconName = `md-search`;
+        }else if (routeName === "WorkoutHistory") {
           iconName = `md-search`;
         }
 

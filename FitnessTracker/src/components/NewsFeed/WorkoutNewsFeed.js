@@ -5,7 +5,7 @@ import {
   FlatList,
   ActivityIndicator,
   AsyncStorage,
-  Dimensions
+  Dimensions,
 } from "react-native";
 import { List } from "react-native-elements";
 import WorkoutItems from "./WorkoutItems";
@@ -206,9 +206,13 @@ class WorkoutNewsFeed extends Component {
 
   render() {
     return (
+    <View>        
+      
       <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
         {this.renderItems()}
       </List>
+      </View>
+
     );
   }
 }

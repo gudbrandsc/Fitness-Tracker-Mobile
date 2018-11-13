@@ -51,17 +51,12 @@ class CategoryList extends Component {
     }
   }
 
-  renderCategoryDetail() {
-    if (this.state.loading !== true) {
-      return this.props.workouts.map(workout => (
-        <CategoryDetail
-          onUpdate={this.onUpdate.bind(this)}
-          key={workout.id}
-          workout={workout}
-          inputValues={this.state.inputValues}
-          reset={this.props.reset}
-        />
-      ));
+  /* Render all sub categories, if get request has not recieved data yet -> load spinner */
+  renderCategoryDetail () {
+    if(this.state.loading !== true){
+      return this.props.workouts.map(workout =>
+        <CategoryDetail onUpdate={this.onUpdate.bind(this)} key={workout.id} workout={workout} inputValues={this.state.inputValues} reset={this.props.reset} />
+      );
     }
     return <Spinner size={"small"} />;
   }

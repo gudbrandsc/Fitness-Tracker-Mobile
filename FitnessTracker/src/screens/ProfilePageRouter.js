@@ -14,6 +14,7 @@ const RootStack = createStackNavigator(
     details: { screen: ProfileDetails },
     following: { screen: FollowingPage },
     followers: { screen: FollowersPage },
+    
     topAuthPage: { screen: TopAuthPageRouter },
     search: { screen: SearchUserPage },
     journal: { screen: Journal }

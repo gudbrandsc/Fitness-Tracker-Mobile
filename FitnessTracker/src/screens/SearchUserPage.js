@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Text, View, AsyncStorage } from "react-native";
+import { Text, View, AsyncStorage, Platform } from "react-native";
 import { Spinner, Header } from "../components/common";
 import UserList from "../components/userSearch/UserList";
 import axios from "axios";
@@ -13,12 +13,18 @@ export default class SearchUserPage extends Component {
       error: "",
       loading: false,
       users: [],
-      userId: ""
+      userId: "",
+      backendIP: ''
     };
     this.onButtonPress = this.onButtonPress.bind(this);
   }
 
   componentDidMount() {
+    if(Platform.OS === 'ios'){
+      this.setState({backendIP: 'localhost'}) 
+    }else{
+      this.setState({backendIP: 'IP FOR android'}) 
+    }
     this.retrieveDetails();
   }
 
@@ -33,9 +39,11 @@ export default class SearchUserPage extends Component {
 
   onButtonPress(term) {
     this.setState({ error: "", loading: true });
+  
+    console.log('The path to send with is: ' + this.state.backendIP);
     axios
       .get(
-        "http://localhost:8000/api/searchuser/" + term + "/" + this.state.userId
+        "http://" + this.state.backendIP + ":8000/api/searchuser/" + term + "/" + this.state.userId
       )
       .then(response => {
         console.log(response);

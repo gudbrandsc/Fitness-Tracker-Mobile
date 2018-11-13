@@ -34,7 +34,7 @@ class CategoryDetail extends Component {
   renderDescription(){
     if(this.state.active === true){
       return this.state.workoutTable.map(type =>
-        <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} categoryId={this.props.workout.id} inputValues={this.props.inputValues} reset={this.props.reset}>
+        <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} categoryId={this.props.workout.id} inputValues={this.props.inputValues} >
 
         </SubCategory>
       );

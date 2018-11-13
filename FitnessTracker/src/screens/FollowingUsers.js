@@ -17,6 +17,7 @@ class FollowingUsers extends Component {
       loading: false,
       users: [],
       userId: "43"
+      //TODO FIX this
     };
   }
 

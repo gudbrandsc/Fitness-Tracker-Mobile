@@ -17,12 +17,12 @@ export default class Homepage extends Component {
 
   render() {
     return (
-      <React.Fragment>
+      <View style={{flex:1}}>
         <Header headerText={""} />
         <View style={{ position: "absolute", width: "100%", height: "100%" }}>
           <NewsFeedRouter />
         </View>
-      </React.Fragment>
+      </View>
     );
   }
 }
