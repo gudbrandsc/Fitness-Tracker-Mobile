@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import UserDetail from './UserDetail'
+import { Button } from 'react-native-elements';
 
 
 class UserList extends Component {
@@ -12,11 +13,9 @@ class UserList extends Component {
     }
   }
 
-
-
   renderUser () {
     return this.props.users.map(user =>
-      <UserDetail key={user.id} user={user} userId={this.props.userId}/>
+      <UserDetail navigation={this.props.navigation} key={user.id} user={user} userId={this.props.userId}/>
     );
   }
 

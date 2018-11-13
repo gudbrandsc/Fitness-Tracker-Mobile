@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import { Text, View, AsyncStorage, Platform } from "react-native";
-import { Spinner, Header } from "../components/common";
+import { Spinner, Header} from "../components/common";
 import UserList from "../components/userSearch/UserList";
 import axios from "axios";
 import { SearchBar } from "react-native-elements";
 
 export default class SearchUserPage extends Component {
+  static navigationOptions = {
+    header: <Header headerText={"Search"} />
+  };
   constructor(props) {
     super(props);
     this.state = {
@@ -68,17 +71,18 @@ export default class SearchUserPage extends Component {
       return <Spinner size={"small"} />;
     }
     if (users && users.length > 0) {
-      return <UserList users={users} userId={this.state.userId} />;
+      return <UserList navigation={this.props.navigation} users={users} userId={this.state.userId} />;
     }
   }
+
+
 
   render() {
     const { users, term, loading } = this.state;
 
     return (
       <View style={{ flex: 1 }}>
-        <Header headerText={"Search"} />
-        <SearchBar
+            <SearchBar
           lightTheme
           onChangeText={term => this.onButtonPress(term)}
           icon={{ type: "font-awesome", name: "search" }}

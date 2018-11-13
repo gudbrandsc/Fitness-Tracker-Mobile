@@ -12,11 +12,13 @@ import { Button, Spinner, Header } from "../components/common";
 import FollowersButton from "../components/profilePage/FollowersButton";
 import FollowingButton from "../components/profilePage/FollowingButton";
 import { Avatar } from "react-native-elements";
+import axios from "axios";
 
-class ProfilePage extends Component {
+class VisitProfilePage extends Component {
   static navigationOptions = {
-    header: <Header headerText={"Profile Page"} />
+    headerTitle: "Following"
   };
+
 
   state = {
     userid: "",
@@ -27,10 +29,14 @@ class ProfilePage extends Component {
       "https://res.cloudinary.com/fitnesstracker/image/upload/v1540766575/blank-profile-picture.png",
     animationErrorHeight: "0.5%",
     loadFollowers: false,
-    loadFollowing: false
+    loadFollowing: false,
+    imFollowing: false
   };
 
   componentDidMount() {
+    const { navigation } = this.props;
+    const follows = navigation.getParam('follows', 'false');
+    this.setState({imFollowing: follows})
     this.retrieveDetails();
   }
 
@@ -38,7 +44,6 @@ class ProfilePage extends Component {
     try {
       const id = await AsyncStorage.getItem("login");
       this.setState({ userid: id });
-      console.log("async id : " + this.state.userid);
       fetch("http://localhost:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
@@ -100,7 +105,6 @@ class ProfilePage extends Component {
 
   renderFollowersButton() {
     if (this.state.loading === false && this.state.userid !== "") {
-      console.log("profile page render button with id: " + this.state.userid);
       return (
         <TouchableOpacity
           onPress={() => {
@@ -131,17 +135,89 @@ class ProfilePage extends Component {
     }
   }
 
+  renderFollowUnfollowButton(){
+    if(this.state.imFollowing === true){
+      return <Button  
+      onPress={this.onUnfollowPress}
+      type={"danger"}
+      size={"large"}
+      children={"Unfollow"} />
+    }
+    return <Button  
+    onPress={this.onFollowPress}
+    type={"primary"}
+    size={"large"}
+    children={"Follow"} />
+  }
+
+  onFollowPress = () => {
+    const { navigation } = this.props;
+    const myUserId = navigation.getParam('myUserId');
+    const otherUserId = navigation.getParam('otherUserId');
+
+    const requestUrl =
+      "http://localhost:8000/api/createfollower/" +
+      myUserId +
+      "/" +
+      otherUserId;
+    axios.get(requestUrl).then(
+      function(response) {
+        if (response.status === 200) {
+          this.setState({
+            imFollowing: true,
+            loading: false
+          });
+          navigation.state.params.updateFollow(true)
+        } else {
+          this.setState({
+            loading: false,
+            error: "Unable to unfollow.."
+          });
+        }
+      }.bind(this)
+    );
+  };
+
+  onUnfollowPress = () => {
+    const { navigation } = this.props;
+    const myUserId = navigation.getParam('myUserId');
+    const otherUserId = navigation.getParam('otherUserId');
+
+    const requestUrl =
+      "http://localhost:8000/api/removefollower/" +
+      myUserId +
+      "/" +
+      otherUserId
+    axios.get(requestUrl).then(
+      function(response) {
+        if (response.status === 200) {
+          this.setState({
+            imFollowing: false,
+            loading: false
+          });
+          navigation.state.params.updateFollow(false )
+
+        } else {
+          this.setState({
+            loading: false,
+            error: "Unable to unfollow.."
+          });
+        }
+      }.bind(this)
+    );
+  };
+
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: '#f7f6ef' }}>
-      <View style={{ marginTop: 20 }}>
-        <View
-          style={{
-            flexDirection: "column",
-            width: "100%",
-            height: "35%"
-          }}
-        >
+        <View style={{ marginTop: 20 }}>
+          <View
+            style={{
+              flexDirection: "column",
+              width: "100%",
+              height: "35%"
+            }}
+          >
           <View style={{ flexDirection: "row", width: 100 }}>
             <View style={styles.profileImgContainer}>
               <Avatar
@@ -169,49 +245,17 @@ class ProfilePage extends Component {
                     {this.renderFollowersButton()}
                   </View>
                 </View>
+              </View>
 
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between"
-                  }}
-                >
-                  <View style={{ height: 32, marginTop: 15, width: "100%" }}>
-                    <Button
-                      size={"large"}
-                      type={"secondary"}
-                      onPress={() => {
-                        this.props.navigation.navigate("details", {
-                          updateInfo: this.updateInfo.bind(this)
-                        });
-                      }}
-                    >
-                      Edit Profile
-                    </Button>
+            <View style={{flex:1, flexDirection:'row'}}>
+              <View style={{ width:'190%', paddingTop:10}}>
+              {this.renderFollowUnfollowButton()}
+              
                   </View>
-                  <View
-                    style={{
-                      height: 32,
-                      width: "100%",
-                      marginTop: 15,
-                      marginLeft: 15
-                    }}
-                  >
-                    <Button
-                      size={"large"}
-                      type={"success"}
-                      onPress={() => {
-                        this.props.navigation.navigate("journal");
-                      }}
-                    >
-                      Add Journal
-                    </Button>
-                  </View>
-                </View>
               </View>
             </View>
           </View>
+       
           <View
             style={{
               height: "auto",
@@ -260,4 +304,4 @@ const styles = {
   }
 };
 
-export default ProfilePage;
+export default VisitProfilePage;

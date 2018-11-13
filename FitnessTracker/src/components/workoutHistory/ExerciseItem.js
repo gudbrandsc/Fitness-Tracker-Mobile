@@ -38,7 +38,6 @@ export default class ExerciseItem extends Component {
     );
   }
 
-
   render() {
     return (
         <View style={styles.MainContainer}>   

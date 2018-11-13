@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Button, Spinner } from "../common";
 import { Avatar } from "react-native-elements";
 import axios from "axios";
+import { StackNavigator } from 'react-navigation';
 
 class UserDetail extends Component {
   constructor(props) {
@@ -127,6 +128,24 @@ class UserDetail extends Component {
     }
   }
 
+
+  updateFollow = data => {
+    console.log("Updating follows in parent")
+    this.setState({follows: data});
+    this.forceUpdate()
+  };
+
+  goToUserProfile(){
+    this.props.navigation.navigate(
+      "visitProfilePage", {
+        follows: this.state.follows,
+        myUserId: this.props.userId,
+        otherUserId: this.props.user.id,
+        updateFollow: this.updateFollow
+      }
+    );
+  }
+
   render() {
     const { viewStyleOne, textStyle, textStyle3 } = styles;
     const {
@@ -144,7 +163,7 @@ class UserDetail extends Component {
           source={{
             uri: ImageUrl
           }}
-          onPress={() => console.log("Works!")}
+          onPress={() => this.goToUserProfile()}
           activeOpacity={0.7}
         />
         <View style={styles.row_cell_timeplace}>

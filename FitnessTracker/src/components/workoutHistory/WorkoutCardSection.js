@@ -24,7 +24,6 @@ class WorkoutCardSection extends Component {
     return (
       <View style={{flex: 1}}>
        <ExerciseItem
-            time={"2018-11-05T23:37:36.487Z"}
             imageurl={"https://res.cloudinary.com/fitnesstracker/image/upload/v1541742154/chest.gif"}
             workoutName={"Dumbell Press"}
             category={"Chest"}

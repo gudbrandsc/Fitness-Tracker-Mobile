@@ -5,7 +5,7 @@ import Homepage from "./Homepage";
 import ProfilePage from "./ProfilePageRouter";
 import AnalyticsPage from "./AnalyticsPage";
 import AddWorkoutPage from "./AddWorkoutPage";
-import SearchUserPage from "./SearchUserPage";
+import SearchUserPage from "./SearchUserRouter";
 import WorkoutHistory from "./WorkoutHistory"
 
 const RootStack = createBottomTabNavigator(
