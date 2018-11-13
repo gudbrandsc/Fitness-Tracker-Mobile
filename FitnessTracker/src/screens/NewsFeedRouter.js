@@ -24,7 +24,6 @@ export default createMaterialTopTabNavigator(
         fontFamily: "arial"
       },
       tabStyle: {
-        width: 210,
         height: 80
       },
       indicatorStyle: {

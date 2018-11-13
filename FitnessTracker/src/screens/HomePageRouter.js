@@ -25,9 +25,6 @@ const RootStack = createBottomTabNavigator(
     Profile: {
       screen: ProfilePage
     },
-    WorkoutHistory: {
-      screen: WorkoutHistory
-    }
   },
   {
     navigationOptions: ({ navigation }) => ({
