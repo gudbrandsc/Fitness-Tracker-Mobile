@@ -39,11 +39,32 @@ class WorkoutCard extends Component {
         return  'add-circle-outline' ;
     }
 
+    renderDateText(){
+        const dateDiff = Math.abs(
+            new Date() - new Date("2018-11-05T23:37:36.487Z")
+          );
+        const seconds = dateDiff / 1000;
+        var date = "";
+        if (seconds / 86400 !== 0)
+          date = Math.round(seconds / 86400) + "d ago";
+        else if (seconds / 3600 !== 0)
+          date = Math.round(seconds / 3600) + "hr ago";
+        else if (seconds / 60 !== 0)
+          date = Math.round(seconds / 60) + "min ago";
+        else date = Math.round(seconds) + "sec ago";
+    
+        return <Text style={{ fontSize: 12, color: '#636463' }}>{date}</Text>
+    
+      }
+
     render() {
         return (
             <View style={{paddingTop: 10, padding: 10}}>
-                <View style={styles.container}>      
-                    <View style={styles.cardStyle}>
+                <View style={styles.container}>    
+                <View style={styles.dateStyle}>
+                    {this.renderDateText()}
+                </View>
+                    <View style={[styles.cardStyle, this.state.active ? styles.cardExpandStyle : styles.cardCollapseStyle]}>
                         <View style={styles.topCardWrapperStyle}>
                             <View style={styles.avatarStyle}>
                                 <Avatar
@@ -56,22 +77,22 @@ class WorkoutCard extends Component {
                                         activeOpacity={0.7}
                                 />                  
                             </View>
-                       
                             <View style={styles.WorkoutNameStyle}>
                                 <Text style={styles.WorkoutNameTextStyle}>
                                 {this.props.session.firstname} {this.props.session.lastname} 
                                 </Text>
                                 <View>{this.renderSubText()}</View>
                             </View>
-
                             <View style={styles.plusSignStyle}>
+                            <View style={{flex:1, flexDirection: 'column',justifyContent: "space-around"}}>
                                 <TouchableOpacity onPress={() => this.setState({ active: !this.state.active })}>
                                     <Icon name={this.getIcon()} color='#00e7b1'/>
                                 </TouchableOpacity>
+                                </View>
                             </View>
                         </View>
                     </View>
-                    <View style={[styles.inputFieldsWrapper, this.state.active ? styles.cardExpandStyle : styles.cardCollapseStyle]}>
+                    <View style={styles.inputFieldsWrapper}>
                         {this.showEachSession()}
                     </View>
                 </View>
@@ -101,8 +122,8 @@ const styles = StyleSheet.create({
   cardStyle: {
       flexDirection: 'column',
       justifyContent:'center',
-      paddingTop: 20,
-      paddingBottom:10
+      paddingTop: 10,
+      paddingBottom:10,
   },
   topCardWrapperStyle: {
       flexDirection:'row',
@@ -116,7 +137,6 @@ const styles = StyleSheet.create({
     plusSignStyle: {
       justifyContent: "flex-end", // main axis
       paddingRight: 10,
-      flex: 0
 
     },
     inputFieldsWrapper: {
@@ -129,13 +149,11 @@ const styles = StyleSheet.create({
   
     },
     cardExpandStyle: {
-      paddingTop: 20,
-      borderTopWidth: 1,
+      borderBottomWidth: 2,
       borderColor: '#ddd',
     },
     cardCollapseStyle: {
-      paddingTop: 0,
-      borderTopWidth: 0,
+  
     },
   inputField: {
       borderRadius: 4,
@@ -158,14 +176,28 @@ const styles = StyleSheet.create({
   },    
   WorkoutNameTextStyle: {
       fontWeight: '200',
-      color: '#636463',
       fontSize: 16,
       fontFamily:'arial', 
   },
   sessionSmallText: {
-      fontSize: 12
+      fontSize: 12,
+      color: '#636463',
   },
   avatarStyle: {
       marginLeft:10
+  },
+  HeaderContainer: {
+    height: "auto",
+    width: "100%",
+    justifyContent: 'flex-end',
+    flexDirection: "row",
+    padding: 5
+  },
+  dateStyle: {
+    justifyContent: 'flex-end',
+    flexDirection: "row",
+    paddingTop: 5,
+    paddingRight:5,
+
   }
 });

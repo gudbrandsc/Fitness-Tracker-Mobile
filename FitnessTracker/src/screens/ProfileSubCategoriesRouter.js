@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { createMaterialTopTabNavigator } from "react-navigation";
 
-import WorkoutHistory from "./Homepage";
+import WorkoutHistory from "./WorkoutHistory";
 import MapSearchPage from "./MapSearchPage";
 import SearchUserPage from "./SearchUserPage";
 
@@ -13,19 +13,18 @@ export default createMaterialTopTabNavigator(
     "GYM Search": {
       screen: MapSearchPage
     },
-    "Calculate Expenses": {
+    "Expenses": {
       screen: SearchUserPage
     }
   },
   {
     tabBarOptions: {
       labelStyle: {
-        fontSize: 13,
+        fontSize: 9,
         fontWeight: "bold",
         color: "#007aff"
       },
       tabStyle: {
-        width: 138,
         height: 50
       },
       indicatorStyle: {

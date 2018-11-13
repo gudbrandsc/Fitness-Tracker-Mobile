@@ -61,8 +61,7 @@ class WorkoutHistory extends Component {
  
   render() {
     return (
-      <View style={{flex:1}}>
-        <Header headerText={"Workout history"} />
+      <View style={{flex:1, backgroundColor: '#f7f6ef'}}>
         <ScrollView>
         <View style={styles.container}>
           {this.showList()}

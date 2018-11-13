@@ -133,7 +133,8 @@ class ProfilePage extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, marginTop: 20 }}>
+      <View style={{flex: 1,backgroundColor: '#f7f6ef'}}>
+      <View style={{ marginTop: 20 }}>
         <View
           style={{
             flexDirection: "column",
@@ -159,15 +160,8 @@ class ProfilePage extends Component {
                 marginLeft: 40
               }}
             >
-              <View style={{ flex: 1, marginRight: 5 }}>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-between",
-                    alignContent: "stretch"
-                  }}
-                >
+              <View style={{ flex: 1, marginRight: 10 }}>
+                <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between", alignContent: "stretch" }}>
                   <View style={{ width: "100%" }}>
                     {this.renderFollowingButton()}
                   </View>
@@ -249,6 +243,7 @@ class ProfilePage extends Component {
           viewHeight={this.state.animationErrorHeight}
           onPress={this.onCloseAnimationBox.bind(this)}
         />
+      </View>
       </View>
     );
   }

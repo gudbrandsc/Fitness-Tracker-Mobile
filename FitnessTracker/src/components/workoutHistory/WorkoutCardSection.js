@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
-import {TouchableOpacity, StyleSheet,  Text, View} from 'react-native';
+import {TouchableOpacity, StyleSheet,  Text, View, FlatList} from 'react-native';
 import { Icon } from 'react-native-elements'
-
+import ExerciseItem from './ExerciseItem'
 
 class WorkoutCardSection extends Component {
   constructor(props) {
@@ -18,29 +18,20 @@ class WorkoutCardSection extends Component {
     return  'add-circle-outline' ;
   }
 
-  renderWorkoutDetails(){
-    if(this.props.exercise.cardio === "true"){
-      return( 
-        <View style={styles.container}>
-          <Text>{this.props.exercise.workoutname}</Text>
-          <Text>Time: {this.props.exercise.noofsets} Distance: {this.props.exercise.noofreps} </Text>
-        </View>
-     );
-    } else{
-      return( 
-        <View style={styles.container}>
-          <Text>{this.props.exercise.workoutname}</Text>
-          <Text>{this.props.exercise.noofsets}. {this.props.exercise.noofreps} x {this.props.exercise.weight} lbs</Text>
-        </View>
-      );
-    }
-  }
-
+  
 
   render() {
     return (
-      <View style={{paddingTop: 10, padding: 10}}>
-        {this.renderWorkoutDetails()}
+      <View style={{flex: 1}}>
+       <ExerciseItem
+            time={"2018-11-05T23:37:36.487Z"}
+            imageurl={"https://res.cloudinary.com/fitnesstracker/image/upload/v1541742154/chest.gif"}
+            workoutName={"Dumbell Press"}
+            category={"Chest"}
+            sets={"1"}
+            reps={"2"}
+            weight={"3"}
+          /> 
       </View>
   );
   }
