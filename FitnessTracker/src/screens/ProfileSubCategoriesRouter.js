@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { createMaterialTopTabNavigator } from "react-navigation";
+import { Dimensions } from "react-native";
 
 import WorkoutHistory from "./WorkoutHistory";
 import MapSearchPage from "./MapSearchPage";
@@ -13,19 +14,20 @@ export default createMaterialTopTabNavigator(
     "GYM Search": {
       screen: MapSearchPage
     },
-    "Expenses": {
+    Expenses: {
       screen: SearchUserPage
     }
   },
   {
     tabBarOptions: {
       labelStyle: {
-        fontSize: 9,
+        fontSize: 0.03 * Dimensions.get("window").width,
         fontWeight: "bold",
         color: "#007aff"
       },
       tabStyle: {
-        height: 50
+        height: 50,
+        width: Dimensions.get("window").width / 3
       },
       indicatorStyle: {
         backgroundColor: "#007aff"

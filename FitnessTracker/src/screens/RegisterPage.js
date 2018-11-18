@@ -27,6 +27,7 @@ class RegisterPage extends Component {
     id: "",
     fname: "",
     lname: "",
+    weight: "",
     street: "",
     city: "",
     _state: "",
@@ -103,6 +104,7 @@ class RegisterPage extends Component {
     var stateMatch = regexName.test(this.state._state);
     var streetMatch = regexStreet.test(this.state.street);
     var zipCodeMatch = regexZipCode.test(this.state.zipcode);
+    var weightMatch = regexZipCode.test(this.state.weight);
     if (this.state.zipcode.length > 5) zipCodeMatch = false;
 
     if (!fnameMatch) {
@@ -115,6 +117,10 @@ class RegisterPage extends Component {
       this.setState({ animationErrorHeight: "auto" });
     } else if (!emailMatch) {
       const error = "Wrong Email Format.";
+      this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
+    } else if (!weightMatch) {
+      const error = "Wrong Weight Format (only numbers).";
       this.setState({ error });
       this.setState({ animationErrorHeight: "auto" });
     } else if (!passwordMatch) {
@@ -165,7 +171,8 @@ class RegisterPage extends Component {
           StreetAddress: this.state.street,
           City: this.state.city,
           State: this.state._state,
-          Zipcode: this.state.zipcode
+          Zipcode: this.state.zipcode,
+          Weight: parseInt(this.state.weight, 10)
         })
       })
         .then(response =>
@@ -211,6 +218,7 @@ class RegisterPage extends Component {
       email: "",
       password: "",
       street: "",
+      weight: "",
       city: "",
       _state: "",
       zipcode: "",
@@ -296,6 +304,14 @@ class RegisterPage extends Component {
               label="Password"
               value={this.state.password}
               onChangeText={password => this.setState({ password })}
+            />
+          </CardSection>
+          <CardSection>
+            <Input
+              placeholder="Weight in lbs"
+              label="Weight"
+              value={this.state.weight}
+              onChangeText={weight => this.setState({ weight })}
             />
           </CardSection>
           <CardSection>

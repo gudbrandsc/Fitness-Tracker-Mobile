@@ -30,6 +30,7 @@ class ProfileDetails extends Component {
     id: "",
     fname: "",
     lname: "",
+    weight: "",
     street: "",
     city: "",
     _state: "",
@@ -50,61 +51,77 @@ class ProfileDetails extends Component {
   };
 
   componentDidMount() {
-    this.retrieveDetails();
+    this.retrieveWeight();
   }
 
-  retrieveDetails = async () => {
+  retrieveWeight = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
       const pw = await AsyncStorage.getItem("pass");
-      this.setState({ id: id, password: pw });
-      fetch("http://localhost:8000/api/user_details/" + id, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(response =>
-          response.json().then(data => ({
-            data: data,
-            status: response.status
-          }))
-        )
-        .then(
-          res => {
-            if (res.status === 200) {
-              console.log("Details retrieved");
-              this.setState({
-                email: res.data.UserName,
-                fname: res.data.FirstName,
-                lname: res.data.LastName,
-                street: res.data.StreetAddress,
-                city: res.data.City,
-                zipcode: res.data.Zipcode,
-                _state: res.data.State,
-                fullName: res.data.FirstName + " " + res.data.LastName,
-                avatarSource: res.data.ImageUrl
-              });
-              this.storeDataIsolatedStorage();
-              this.onSuccess();
-            } else {
-              this.onFailure(
-                "Can't get Data. Please check internet connectivity."
-              );
-            }
-          },
-          error => {
-            console.log(error);
-            this.onFailure(
-              "Can't get Data. Please check internet connectivity."
-            );
+      this.setState({ id, password: pw });
+      axios.get("http://localhost:8000/api/getweight/" + id).then(
+        function(response) {
+          const data = response.data;
+          const weightList = [];
+          for (var i = 0; i < data.length; i++) {
+            weightList.push(data[i].Weight);
           }
-        );
+          var currentWeight = "0";
+          if (weightList.length > 0)
+            currentWeight = weightList[weightList.length - 1] + "";
+          this.retrieveDetails(currentWeight);
+        }.bind(this)
+      );
     } catch (error) {
       this.onFailure("Can't get Data. Please check internet connectivity.");
     }
   };
+
+  retrieveDetails(weight) {
+    const id = this.state.id;
+    fetch("http://localhost:8000/api/user_details/" + id, {
+      method: "GET",
+      headers: {
+        Accept: "application/json",
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response =>
+        response.json().then(data => ({
+          data: data,
+          status: response.status
+        }))
+      )
+      .then(
+        res => {
+          if (res.status === 200) {
+            console.log("Details retrieved");
+            this.setState({
+              email: res.data.UserName,
+              fname: res.data.FirstName,
+              lname: res.data.LastName,
+              street: res.data.StreetAddress,
+              city: res.data.City,
+              zipcode: res.data.Zipcode,
+              _state: res.data.State,
+              fullName: res.data.FirstName + " " + res.data.LastName,
+              avatarSource: res.data.ImageUrl,
+              weight
+            });
+            this.storeDataIsolatedStorage();
+            this.onSuccess();
+          } else {
+            this.onFailure(
+              "Can't get Data. Please check internet connectivity."
+            );
+          }
+        },
+        error => {
+          console.log(error);
+          this.onFailure("Can't get Data. Please check internet connectivity.");
+        }
+      );
+  }
 
   selectImage = () => {
     ImagePicker.showImagePicker(options, response => {
@@ -167,6 +184,7 @@ class ProfileDetails extends Component {
     var stateMatch = regexName.test(this.state._state);
     var streetMatch = regexStreet.test(this.state.street);
     var zipCodeMatch = regexZipCode.test(this.state.zipcode);
+    var weightMatch = regexZipCode.test(this.state.weight);
     if (this.state.zipcode.length > 5) zipCodeMatch = false;
 
     if (!fnameMatch) {
@@ -179,6 +197,10 @@ class ProfileDetails extends Component {
       this.setState({ animationErrorHeight: "auto" });
     } else if (!emailMatch) {
       const error = "Wrong Email Format.";
+      this.setState({ error });
+      this.setState({ animationErrorHeight: "auto" });
+    } else if (!weightMatch) {
+      const error = "Wrong Weight Format (only numbers).";
       this.setState({ error });
       this.setState({ animationErrorHeight: "auto" });
     } else if (!passwordMatch) {
@@ -247,12 +269,53 @@ class ProfileDetails extends Component {
               const fullName = this.state.fname + " " + this.state.lname;
               this.setState({ id, fullName });
               this.storeDataIsolatedStorage();
-              this.onSuccess();
+              this.updateWeight(id);
               const { params } = this.props.navigation.state;
               params.updateInfo(fullName, this.state.avatarSource); // this will update the name and call the updateInfo in the ProfilePage class
             } else {
               this.onFailure("Update failed.");
               console.log("Account update Failed");
+            }
+          },
+          error => {
+            console.log(error);
+            this.onFailure(
+              "Update failed. Please check internet connectivity."
+            );
+          }
+        );
+    } catch (error) {
+      this.onFailure("Update failed. Please check internet connectivity.");
+    }
+  }
+
+  updateWeight(id) {
+    try {
+      fetch("http://localhost:8000/api/updateweight", {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          UserId: id,
+          Weight: parseInt(this.state.weight, 10)
+        })
+      })
+        .then(response =>
+          response.json().then(data => ({
+            data: data,
+            status: response.status
+          }))
+        )
+        .then(
+          res => {
+            if (res.status === 200) {
+              console.log("Weight updated");
+              this.onSuccess();
+            } else {
+              this.onFailure("Update failed. Try again.");
+              console.log("Weight update Failed");
             }
           },
           error => {
@@ -388,6 +451,14 @@ class ProfileDetails extends Component {
               label="Password"
               value={this.state.password}
               onChangeText={password => this.setState({ password })}
+            />
+          </CardSection>
+          <CardSection>
+            <Input
+              placeholder="Weight in lbs"
+              label="Weight"
+              value={this.state.weight}
+              onChangeText={weight => this.setState({ weight })}
             />
           </CardSection>
           <CardSection>
