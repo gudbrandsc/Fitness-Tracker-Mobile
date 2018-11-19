@@ -47,7 +47,6 @@ export default class WorkoutItems extends Component {
         margin: 5,
         flexDirection: "column",
         justifyContent: "space-evenly",
-      
         elevation: 2
       },
       HeaderContainer: {

@@ -41,10 +41,6 @@ export default class JournalItems extends Component {
         margin: 5,
         flexDirection: "column",
         justifyContent: "space-evenly",
-        shadowColor: "blue",
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: 0.8,
-        shadowRadius: 2,
         elevation: 2
       },
       HeaderContainer: {

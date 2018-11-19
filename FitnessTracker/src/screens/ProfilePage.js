@@ -7,7 +7,8 @@ import {
   ScrollView,
   Text,
   TouchableOpacity,
-  Image
+  Image,
+  Alert
 } from "react-native";
 import { Button, Spinner, Header } from "../components/common";
 import FollowersButton from "../components/profilePage/FollowersButton";
@@ -100,6 +101,7 @@ class ProfilePage extends Component {
         .then(
           res => {
             if (res.status === 200) {
+              console.log(res.data);
               const badgeList = res.data;
               this.setState({ badgeList });
             } else {
@@ -138,16 +140,27 @@ class ProfilePage extends Component {
     this.setState({ error: "", animationErrorHeight: "0.5%" });
   }
 
+  showBadgeInfo(title, info) {
+    Alert.alert(title + " Badge", info, [
+      { text: "OK", onPress: () => console.log("OK Pressed") }
+    ]);
+  }
+
   renderBadges() {
     if (this.state.badgeList.length > 0) {
       return (
         <React.Fragment>
           {this.state.badgeList.map(b => (
-            <Image
-              style={{ height: 50, width: 50, margin: 2 }}
+            <TouchableOpacity
               key={b.BadgeId}
-              source={{ uri: b.ImageUrl }}
-            />
+              style={{ height: 50, width: 50, marginRight: 8 }}
+              onPress={() => this.showBadgeInfo(b.BadgeName, b.BadgeInfo)}
+            >
+              <Image
+                style={{ height: 50, width: 50 }}
+                source={{ uri: b.ImageUrl }}
+              />
+            </TouchableOpacity>
           ))}
         </React.Fragment>
       );
@@ -189,13 +202,13 @@ class ProfilePage extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "#f7f6ef" }}>
+      <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
         <View style={{ marginTop: 20 }}>
           <View
             style={{
               flexDirection: "column",
               width: "100%",
-              height: "35%"
+              height: "37%"
             }}
           >
             <View style={{ flexDirection: "row", width: 100 }}>
@@ -286,14 +299,19 @@ class ProfilePage extends Component {
               <Text style={{ fontSize: 20, fontWeight: "bold" }}>
                 {this.state.name}
               </Text>
-              <ScrollView horizontal={true}>{this.renderBadges()}</ScrollView>
+              <ScrollView
+                horizontal={true}
+                style={{ marginTop: 8, marginBottom: 8 }}
+              >
+                {this.renderBadges()}
+              </ScrollView>
             </View>
           </View>
           <View
             style={{
               flexDirection: "column",
               width: "100%",
-              height: "65%"
+              height: "63%"
             }}
           >
             <ProfileSubCategoriesRouter />
