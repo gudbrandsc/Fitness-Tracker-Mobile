@@ -86,7 +86,7 @@ class AnalyticsPage extends Component {
       //axios.get(" http://localhost:8000/api/exerciseanalysis/"+userId+"/"+exercisesID).then(
       //axios.get(" http://localhost:8000/api/exerciseanalysis/36/" + exercisesID)
       axios
-        .get(" http://localhost:8000/api/exerciseanalysis/12/" + exercisesID)
+        .get("http://localhost:8000/api/exerciseanalysis/12/" + exercisesID)
         .then(
           function(response) {
             console.log("Getting exericeses" + response.data);
@@ -105,7 +105,7 @@ class AnalyticsPage extends Component {
     try {
       const userId = this.state.userId;
       //axios.get(" http://localhost:8000/api/getexpense/"+userId).then(
-      axios.get(" http://localhost:8000/api/getexpense/12").then(
+      axios.get("http://localhost:8000/api/getexpense/12").then(
         function(response) {
           this.fillStatistics(response.data.Expenses_Details);
         }.bind(this)
