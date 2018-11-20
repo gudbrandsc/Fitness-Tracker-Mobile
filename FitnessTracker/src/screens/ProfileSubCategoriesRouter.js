@@ -1,10 +1,9 @@
 import React, { Component } from "react";
 import { createMaterialTopTabNavigator } from "react-navigation";
 import { Dimensions } from "react-native";
-
 import WorkoutHistory from "./WorkoutHistory";
 import MapSearchPage from "./MapSearchPage";
-import SearchUserPage from "./SearchUserPage";
+import ExpensesPage from "./ExpensesPage";
 
 export default createMaterialTopTabNavigator(
   {
@@ -14,8 +13,8 @@ export default createMaterialTopTabNavigator(
     "GYM Search": {
       screen: MapSearchPage
     },
-    Expenses: {
-      screen: SearchUserPage
+    "Expenses": {
+      screen: ExpensesPage
     }
   },
   {
