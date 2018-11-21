@@ -14,8 +14,12 @@ class FollowingDetail extends Component {
       follows: true
     };
   }
-
+  componentDidUpdate(){
+    console.log("The last component did update")
+    this.props.resetDetail();
+  }
   onFollowPress = () => {
+
     const requestUrl =
       "http://localhost:8000/api/createfollower/" +
       this.props.userId +
@@ -28,6 +32,7 @@ class FollowingDetail extends Component {
             follows: true,
             loading: false
           });
+
         } else {
           this.setState({
             loading: false,
@@ -55,6 +60,8 @@ class FollowingDetail extends Component {
             follows: false,
             loading: false
           });
+          this.props.resetDetail();
+
         } else {
           this.setState({
             loading: false,

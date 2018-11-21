@@ -21,6 +21,7 @@ const RootStack = createStackNavigator(
   },
   {
     initialRouteName: "mainProfile",
+    
     navigationOptions: {
       headerTitleStyle: {
         flex: 1,

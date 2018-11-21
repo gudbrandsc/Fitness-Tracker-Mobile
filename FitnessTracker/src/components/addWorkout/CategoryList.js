@@ -16,6 +16,7 @@ class CategoryList extends Component {
   /*Method used by child components to add input data to state list*/
 
   onUpdate = (id, value1, value2, value3) => {
+
     const newelement = {
       id: id,
       value1: value1,
@@ -63,6 +64,7 @@ class CategoryList extends Component {
 
   AddWorkout = () => {
     this.setState({ loading: true });
+    console.log(this.state.inputValues)
     axios
       .post("http://localhost:8000/api/newexercise", {
         userid: this.props.userId,

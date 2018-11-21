@@ -1,9 +1,9 @@
 import React, { Component } from "react";
 import { Text, View, TouchableOpacity } from "react-native";
-import { Spinner } from "../common";
+import { Spinner } from "../../components/common";
 import axios from "axios";
 
-class FollowingButton extends Component {
+class VisitFollowingButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,18 +12,8 @@ class FollowingButton extends Component {
     };
   }
 
-
-  //Method to reset the state when a workout is submitted.
-  componentWillReceiveProps(nextProps) {
-    console.log("I want to update the render view")
-    if (this.props.reset !== nextProps.reset) {
-      this.updateData()
-    }
-  }
-
-
-  updateData(){
-    console.log("Hello from following button with id" + this.props.userid);
+  componentDidMount() {
+      console.log(this.props.userid)
     try {
       axios
         .get("http://localhost:8000/api/listfollows/" + this.props.userid)
@@ -36,12 +26,7 @@ class FollowingButton extends Component {
     }
   }
 
-  componentDidMount() {
-    this.updateData()
-  }
-
   renderCount() {
-    console.log("Render in following");
     if (!this.state.loading) {
       return (
         <View>
@@ -56,7 +41,7 @@ class FollowingButton extends Component {
         </View>
       );
     } else {
-      return <Text>Rendering</Text>;
+      return <Spinner />;
     }
   }
 
@@ -67,4 +52,4 @@ class FollowingButton extends Component {
   }
 }
 
-export default FollowingButton;
+export default VisitFollowingButton;

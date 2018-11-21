@@ -30,7 +30,8 @@ class ProfilePage extends Component {
     animationErrorHeight: "0.5%",
     loadFollowers: false,
     loadFollowing: false,
-    badgeList: []
+    badgeList: [],
+    resetComp: "false",
   };
 
   componentDidMount() {
@@ -40,8 +41,7 @@ class ProfilePage extends Component {
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
-      this.setState({ userid: id });
-      console.log("async id : " + this.state.userid);
+      this.setState({ userid: id});
       fetch("http://localhost:8000/api/user_details/" + id, {
         method: "GET",
         headers: {
@@ -173,10 +173,12 @@ class ProfilePage extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate("followers");
+            this.props.navigation.navigate("followers", 
+            {Home: this});
+        
           }}
         >
-          <FollowersButton userid={this.state.userid} />
+          <FollowersButton userid={this.state.userid} reset={this.state.resetComp} />
         </TouchableOpacity>
       );
     } else {
@@ -189,10 +191,10 @@ class ProfilePage extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate("following");
+            this.props.navigation.navigate("following",  {Home: this});
           }}
         >
-          <FollowingButton userid={this.state.userid} />
+          <FollowingButton userid={this.state.userid} reset={this.state.resetComp} />
         </TouchableOpacity>
       );
     } else {
@@ -203,6 +205,7 @@ class ProfilePage extends Component {
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
+
         <View style={{ marginTop: 20 }}>
           <View
             style={{

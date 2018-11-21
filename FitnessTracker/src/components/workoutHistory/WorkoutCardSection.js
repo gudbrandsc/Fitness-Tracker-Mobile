@@ -25,11 +25,11 @@ class WorkoutCardSection extends Component {
       <View style={{flex: 1}}>
        <ExerciseItem
             imageurl={"https://res.cloudinary.com/fitnesstracker/image/upload/v1541742154/chest.gif"}
-            workoutName={"Dumbell Press"}
-            category={"Chest"}
-            sets={"1"}
-            reps={"2"}
-            weight={"3"}
+            workoutName={this.props.exercise.workoutname}
+            cardio={this.props.exercise.cardio}
+            sets={this.props.exercise.noofsets}
+            reps={this.props.exercise.noofreps}
+            weight={this.props.exercise.weight}
           /> 
       </View>
   );

@@ -12,12 +12,15 @@ class FollowingList extends Component {
     }
   }
 
-
+  resetDetail(){
+    console.log("Reset in list")
+    this.props.resetComponent();
+  }
 
   renderUser () {
     console.log(this.props.users)
     return this.props.users.map(user =>
-      <FollowingDetail key={user.FollowingId} user={user} userId={this.props.userId}/>
+      <FollowingDetail key={user.FollowingId} user={user} userId={this.props.userId} resetDetail={this.resetDetail.bind(this)}/>
     );
   }
 

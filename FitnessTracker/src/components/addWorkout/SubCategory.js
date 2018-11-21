@@ -58,7 +58,12 @@ class SubCategory extends Component {
     
     componentDidUpdate(){
         if(this.state.start === false){
+            if(this.props.categoryId === 8){
+                this.props.subUpdate(this.state.id, this.state.value1, this.state.value2, "0")
+
+            }else{
             this.props.subUpdate(this.state.id, this.state.value1, this.state.value2, this.state.value3)
+            }
         }
     }
 

@@ -23,6 +23,7 @@ export default class SearchUserPage extends Component {
   }
 
   componentDidMount() {
+
     if(Platform.OS === 'ios'){
       this.setState({backendIP: 'localhost'}) 
     }else{
@@ -54,7 +55,6 @@ export default class SearchUserPage extends Component {
       })
       .then(this.checkSearchResp.bind(this));
   }
-
   checkSearchResp() {
     if (this.state.users && this.state.users.length > 0) {
       this.setState({ error: "", loading: false });
@@ -82,7 +82,7 @@ export default class SearchUserPage extends Component {
 
     return (
       <View style={{ flex: 1 }}>
-            <SearchBar
+        <SearchBar
           lightTheme
           onChangeText={term => this.onButtonPress(term)}
           icon={{ type: "font-awesome", name: "search" }}

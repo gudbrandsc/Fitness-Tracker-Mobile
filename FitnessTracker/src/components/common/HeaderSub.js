@@ -3,9 +3,11 @@ import React from "react";
 import { Text } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
 import {Button} from './Button'
+
 // Make a component
-const Header = props => {
+const HeaderSub = props => {
   const { textStyle, viewStyle } = styles;
+  const { goBack } = this.props.navigation;
 
   return (
     <LinearGradient
@@ -14,6 +16,9 @@ const Header = props => {
       colors={["#00ccff", "#00e6d3", "#00e7b1"]}
       style={viewStyle}
     >
+      <Button onPress={() => goBack()} title="Go back " />
+
+    {this.text}
       <Text style={textStyle}>{props.headerText}</Text>
     </LinearGradient>
   );
@@ -36,4 +41,4 @@ const styles = {
 };
 
 // Make the component available to other parts of the app
-export { Header };
+export { HeaderSub };

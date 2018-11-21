@@ -20,7 +20,8 @@ export default createMaterialTopTabNavigator(
   {
     tabBarOptions: {
       labelStyle: {
-        fontSize: 0.03 * Dimensions.get("window").width,
+        //fontSize needs to be excactly like this to fit on IOS
+        fontSize: 0.024 * Dimensions.get("window").width,
         fontWeight: "bold",
         color: "#007aff"
       },

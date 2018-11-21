@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View,TouchableOpacity } from "react-native";
 import { Button, Spinner } from "../common";
 import { Avatar } from "react-native-elements";
 import axios from "axios";
@@ -157,22 +157,30 @@ class UserDetail extends Component {
     } = this.props.user;
     return (
       <View style={styles.row}>
+        <TouchableOpacity style={{flex:1,  flexDirection: "row",}} onPress={() => this.goToUserProfile()}>
         <Avatar
           small
           rounded
           source={{
             uri: ImageUrl
           }}
-          onPress={() => this.goToUserProfile()}
+          
           activeOpacity={0.7}
         />
+
         <View style={styles.row_cell_timeplace}>
           <Text style={styles.row_name}>
             {FirstName} {LastName}
           </Text>
           <Text style={styles.row_userName}>{UserName}</Text>
         </View>
-        <View style={styles.row_cell_temp}>{this.renderFollowingButton()}</View>
+        </TouchableOpacity>
+
+
+
+        <View style={styles.row_cell_temp}>
+        {this.renderFollowingButton()}
+        </View>
       </View>
     );
   }
@@ -201,7 +209,8 @@ const styles = StyleSheet.create({
   },
   row_cell_timeplace: {
     flex: 1,
-    flexDirection: "column"
+    flexDirection: "column",
+    paddingTop:2
   },
   row_cell_temp: {
     paddingLeft: 16,

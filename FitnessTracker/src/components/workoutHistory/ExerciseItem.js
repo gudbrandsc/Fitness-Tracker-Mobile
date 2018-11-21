@@ -12,7 +12,7 @@ export default class ExerciseItem extends Component {
   }
 
   renderWorkoutDetails() {
-    if (this.props.category === "Cardio") {
+    if (this.props.cardio === "true") {
       return (
         <View style={styles.SubWorkoutDetails}>
           <Text style={styles.WorkoutText}>Time:</Text>
@@ -21,7 +21,7 @@ export default class ExerciseItem extends Component {
           </Text>
           <Text style={styles.WorkoutText}>Distance:</Text>
           <Text style={{ marginRight: 5, fontSize: 14 }}>
-            {this.props.reps} meters
+            {this.props.reps} miles
           </Text>
         </View>
       );

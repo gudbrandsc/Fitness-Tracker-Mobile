@@ -12,6 +12,7 @@ class App extends Component {
   state = { loggedIn: -1, startApp: 0 };
 
   componentDidMount() {
+    console.disableYellowBox = true;
     setTimeout(() => {
       this.startApplication();
     }, 2000);

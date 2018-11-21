@@ -6,17 +6,31 @@ import {
   View,
   ScrollView,
   Text,
-  TouchableOpacity
+  TouchableOpacity,
+  Image,
+  Alert
 } from "react-native";
 import { Button, Spinner, Header } from "../components/common";
-import FollowersButton from "../components/profilePage/FollowersButton";
-import FollowingButton from "../components/profilePage/FollowingButton";
+import VisitFollowersButton from "./visitProfile/VisitFollowersButton";
+import VisitFollowingButton from "./visitProfile/VisitFollowingButton";
 import { Avatar } from "react-native-elements";
 import axios from "axios";
 
 class VisitProfilePage extends Component {
   static navigationOptions = {
-    headerTitle: "Following"
+    headerTitle: "Profile",
+    headerStyle: {
+      backgroundColor: '#00e6d3',
+      height: 60,
+
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: "600",
+      color: "#fff",
+      fontSize: 22,
+      fontFamily: "arial"
+    },
   };
 
 
@@ -30,21 +44,23 @@ class VisitProfilePage extends Component {
     animationErrorHeight: "0.5%",
     loadFollowers: false,
     loadFollowing: false,
-    imFollowing: false
+    imFollowing: false,
+    badgeList: [],
+
   };
 
   componentDidMount() {
     const { navigation } = this.props;
     const follows = navigation.getParam('follows', 'false');
-    this.setState({imFollowing: follows})
-    this.retrieveDetails();
+    const userid = navigation.getParam('otherUserId');
+
+    this.setState({imFollowing: follows, userid: userid})
+    this.getUserData(userid);
   }
 
-  retrieveDetails = async () => {
+  getUserData(userid){
     try {
-      const id = await AsyncStorage.getItem("login");
-      this.setState({ userid: id });
-      fetch("http://localhost:8000/api/user_details/" + id, {
+      fetch("http://localhost:8000/api/user_details/" + userid, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -65,6 +81,8 @@ class VisitProfilePage extends Component {
               this.setState({ name });
               this.setState({ avatarSource: res.data.ImageUrl });
               this.onSuccess();
+              this.retrieveBadges();
+
             } else {
               this.onFailure(
                 "Can't get Data. Please check internet connectivity."
@@ -81,7 +99,8 @@ class VisitProfilePage extends Component {
     } catch (error) {
       this.onFailure("Can't get Data. Please check internet connectivity.");
     }
-  };
+  }
+
 
   onFailure(err) {
     this.setState({ error: err, loading: false, animationErrorHeight: "auto" });
@@ -108,10 +127,13 @@ class VisitProfilePage extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate("followers");
+            this.props.navigation.navigate("visitFollowersPage", {
+              userid: this.state.userid,
+              updateFollowState: this.updateFollowState
+            });
           }}
         >
-          <FollowersButton userid={this.state.userid} />
+          <VisitFollowersButton userid={this.state.userid} />
         </TouchableOpacity>
       );
     } else {
@@ -120,14 +142,19 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowingButton() {
+    console.log("hello")
     if (this.state.loading === false && this.state.userid !== "") {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate("following");
+            this.props.navigation.navigate("visitFollowingPage", {
+              userid: this.state.userid,
+              updateFollowState: this.updateFollowState
+
+            });
           }}
         >
-          <FollowingButton userid={this.state.userid} />
+          <VisitFollowingButton userid={this.state.userid} />
         </TouchableOpacity>
       );
     } else {
@@ -195,7 +222,8 @@ class VisitProfilePage extends Component {
             imFollowing: false,
             loading: false
           });
-          navigation.state.params.updateFollow(false )
+          
+          navigation.state.params.updateFollow(false)
 
         } else {
           this.setState({
@@ -206,6 +234,66 @@ class VisitProfilePage extends Component {
       }.bind(this)
     );
   };
+
+  retrieveBadges() {
+    try {
+      const id = this.state.userid;
+      fetch("http://localhost:8000/api/getbadges/" + id, {
+        method: "GET",
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json"
+        }
+      })
+        .then(response =>
+          response.json().then(data => ({
+            data: data,
+            status: response.status
+          }))
+        )
+        .then(
+          res => {
+            if (res.status === 200) {
+              console.log(res.data);
+              const badgeList = res.data;
+              this.setState({ badgeList });
+            } else {
+              this.onFailure("Could not retrieve badges for this user.");
+            }
+          },
+          error => {
+            console.log(error);
+            this.onFailure(
+              "Can't get Data. Please check internet connectivity."
+            );
+          }
+        );
+    } catch (error) {
+      this.onFailure("Can't get Data. Please check internet connectivity.");
+    }
+  }
+
+  renderBadges() {
+    if (this.state.badgeList.length > 0) {
+      return (
+        <React.Fragment>
+          {this.state.badgeList.map(b => (
+            <TouchableOpacity
+              key={b.BadgeId}
+              style={{ height: 50, width: 50, marginRight: 8 }}
+              onPress={() => this.showBadgeInfo(b.BadgeName, b.BadgeInfo)}
+            >
+              <Image
+                style={{ height: 50, width: 50 }}
+                source={{ uri: b.ImageUrl }}
+              />
+            </TouchableOpacity>
+          ))}
+        </React.Fragment>
+      );
+    }
+  }
+
 
   render() {
     return (
@@ -269,7 +357,7 @@ class VisitProfilePage extends Component {
               {this.state.name}
             </Text>
             <ScrollView horizontal={true}>
-              <Text style={{ fontSize: 20 }}>Badges</Text>
+                {this.renderBadges()}
             </ScrollView>
           </View>
         </View>

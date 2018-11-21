@@ -1,14 +1,19 @@
 import React, { Component } from "react";
-import { createStackNavigator,HeaderBackButton } from "react-navigation";
+import { createStackNavigator, HeaderBackButton } from "react-navigation";
 import VisitProfilePage from "./VisitProfilePage";
 import SearchUserPage from "./SearchUserPage"
+import VisitFollowersPage from "./visitProfile/VisitFollowersPage"
+import VisitFollowingPage from "./visitProfile/VisitFollowingPage"
+
 
 
 const RootStack = createStackNavigator(
   {
     mainProfile: { screen: SearchUserPage,},
     visitProfilePage: { screen: VisitProfilePage },
-
+    visitFollowingPage: { screen: VisitFollowingPage},
+    visitFollowersPage: { screen: VisitFollowersPage},
+    
   },
   {
     initialRouteName: "mainProfile",
