@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Text, View, AsyncStorage, Platform } from "react-native";
-import { Spinner, Header} from "../components/common";
+import { Spinner, Header } from "../components/common";
 import UserList from "../components/userSearch/UserList";
 import axios from "axios";
 import { SearchBar } from "react-native-elements";
@@ -17,17 +17,16 @@ export default class SearchUserPage extends Component {
       loading: false,
       users: [],
       userId: "",
-      backendIP: ''
+      backendIP: ""
     };
     this.onButtonPress = this.onButtonPress.bind(this);
   }
 
   componentDidMount() {
-
-    if(Platform.OS === 'ios'){
-      this.setState({backendIP: 'localhost'}) 
-    }else{
-      this.setState({backendIP: 'IP FOR android'}) 
+    if (Platform.OS === "ios") {
+      this.setState({ backendIP: "localhost" });
+    } else {
+      this.setState({ backendIP: "10.1.86.4" });
     }
     this.retrieveDetails();
   }
@@ -43,11 +42,16 @@ export default class SearchUserPage extends Component {
 
   onButtonPress(term) {
     this.setState({ error: "", loading: true });
-  
-    console.log('The path to send with is: ' + this.state.backendIP);
+
+    console.log("The path to send with is: " + this.state.backendIP);
     axios
       .get(
-        "http://" + this.state.backendIP + ":8000/api/searchuser/" + term + "/" + this.state.userId
+        "http://" +
+          this.state.backendIP +
+          ":8000/api/searchuser/" +
+          term +
+          "/" +
+          this.state.userId
       )
       .then(response => {
         console.log(response);
@@ -71,11 +75,15 @@ export default class SearchUserPage extends Component {
       return <Spinner size={"small"} />;
     }
     if (users && users.length > 0) {
-      return <UserList navigation={this.props.navigation} users={users} userId={this.state.userId} />;
+      return (
+        <UserList
+          navigation={this.props.navigation}
+          users={users}
+          userId={this.state.userId}
+        />
+      );
     }
   }
-
-
 
   render() {
     const { users, term, loading } = this.state;

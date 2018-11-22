@@ -5,7 +5,7 @@ import {
   FlatList,
   ActivityIndicator,
   AsyncStorage,
-  Dimensions,
+  Dimensions
 } from "react-native";
 import { List } from "react-native-elements";
 import WorkoutItems from "./WorkoutItems";
@@ -34,8 +34,7 @@ class WorkoutNewsFeed extends Component {
       this.setState({ loading: true });
       const id = this.state.userId;
 
-      //fetch("http://localhost:8000/api/getexercisefeed/" + id, {
-      fetch("http://localhost:8000/api/getexercisefeed/11", {
+      fetch("http://localhost:8000/api/getexercisefeed/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -147,7 +146,6 @@ class WorkoutNewsFeed extends Component {
   };
 
   renderItems() {
-    console.log(this.state.emptyList);
     if (this.state.emptyList) {
       return (
         <FlatList
@@ -157,7 +155,7 @@ class WorkoutNewsFeed extends Component {
               style={{
                 backgroundColor: "#fafafa",
                 width: Dimensions.get("window").width - 10,
-                height: Dimensions.get("window").width,
+                height: Dimensions.get("window").height,
                 padding: 10
               }}
             >
@@ -206,13 +204,11 @@ class WorkoutNewsFeed extends Component {
 
   render() {
     return (
-    <View>        
-      
-      <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
-        {this.renderItems()}
-      </List>
+      <View>
+        <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
+          {this.renderItems()}
+        </List>
       </View>
-
     );
   }
 }

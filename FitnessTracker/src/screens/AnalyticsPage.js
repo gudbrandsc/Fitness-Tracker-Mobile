@@ -59,8 +59,7 @@ class AnalyticsPage extends Component {
 
   retrieveWeight(userId) {
     try {
-      //axios.get("http://localhost:8000/api/getweight/"+userId).then(
-      axios.get("http://localhost:8000/api/getweight/56").then(
+      axios.get("http://localhost:8000/api/getweight/" + userId).then(
         function(response) {
           const data = response.data;
           const weightList = [];
@@ -83,10 +82,16 @@ class AnalyticsPage extends Component {
     try {
       console.log("Inside exercises stats" + exercisesID);
       const userId = this.state.userId;
-      //axios.get(" http://localhost:8000/api/exerciseanalysis/"+userId+"/"+exercisesID).then(
       //axios.get(" http://localhost:8000/api/exerciseanalysis/36/" + exercisesID)
+      //axios.get("http://localhost:8000/api/exerciseanalysis/12/" + exercisesID)
       axios
-        .get("http://localhost:8000/api/exerciseanalysis/12/" + exercisesID)
+        .get(
+          " http://localhost:8000/api/exerciseanalysis/" +
+            userId +
+            "/" +
+            exercisesID
+        )
+
         .then(
           function(response) {
             console.log("Getting exericeses" + response.data);
@@ -104,8 +109,7 @@ class AnalyticsPage extends Component {
   retrieveExpenses() {
     try {
       const userId = this.state.userId;
-      //axios.get(" http://localhost:8000/api/getexpense/"+userId).then(
-      axios.get("http://localhost:8000/api/getexpense/12").then(
+      axios.get(" http://localhost:8000/api/getexpense/" + userId).then(
         function(response) {
           this.fillStatistics(response.data.Expenses_Details);
         }.bind(this)
@@ -328,17 +332,32 @@ class AnalyticsPage extends Component {
         };
         PiData.push(subPi);
       }
-      return (
-        <View
-          style={{
-            flex: 1,
-            height: 500,
-            alignItems: "center"
-          }}
-        >
-          <ExpensesPiChart data={PiData} />
-        </View>
-      );
+      if (PiData.length > 0) {
+        return (
+          <View
+            style={{
+              flex: 1,
+              height: 500,
+              alignItems: "center"
+            }}
+          >
+            <ExpensesPiChart data={PiData} />
+          </View>
+        );
+      } else {
+        return (
+          <View
+            style={{
+              flex: 1,
+              height: 500,
+              alignItems: "center",
+              justifyContent: "center"
+            }}
+          >
+            <Text>No Expenses to analyze</Text>
+          </View>
+        );
+      }
     } else if (workoutName === "Weight") {
       const data = this.state.weightList;
       const originalWeight = data[0];

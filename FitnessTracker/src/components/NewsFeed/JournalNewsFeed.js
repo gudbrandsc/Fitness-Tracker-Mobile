@@ -34,8 +34,7 @@ class JournalNewsFeed extends Component {
       this.setState({ loading: true });
       const id = this.state.userId;
 
-      //fetch("http://localhost:8000/api/getnewsfeed/" + id, {
-      fetch("http://localhost:8000/api/getnewsfeed/11", {
+      fetch("http://localhost:8000/api/getnewsfeed/" + id, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -144,7 +143,6 @@ class JournalNewsFeed extends Component {
   };
 
   renderItems() {
-    console.log(this.state.emptyList);
     if (this.state.emptyList) {
       return (
         <FlatList
@@ -154,7 +152,7 @@ class JournalNewsFeed extends Component {
               style={{
                 backgroundColor: "#fafafa",
                 width: Dimensions.get("window").width - 10,
-                height: Dimensions.get("window").width,
+                height: Dimensions.get("window").height,
                 padding: 10
               }}
             >

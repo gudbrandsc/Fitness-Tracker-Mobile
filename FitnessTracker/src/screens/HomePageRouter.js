@@ -1,12 +1,61 @@
 import React, { Component } from "react";
-import { createBottomTabNavigator } from "react-navigation";
+import {
+  createBottomTabNavigator,
+  createStackNavigator
+} from "react-navigation";
 import Icon from "react-native-vector-icons/Ionicons";
 import Homepage from "./Homepage";
-import ProfilePage from "./ProfilePageRouter";
 import AnalyticsPage from "./AnalyticsPage";
 import AddWorkoutPage from "./AddWorkoutPage";
 import SearchUserPage from "./SearchUserRouter";
-import WorkoutHistory from "./WorkoutHistory"
+import ProfilePage from "./ProfilePage";
+import ProfileDetails from "./ProfileDetails";
+import FollowingPage from "./FollowingPage";
+import FollowersPage from "./FollowersPage";
+import TopAuthPageRouter from "./TopAuthPageRouter";
+import Journal from "./Journal";
+
+const ProfilePageStack = createStackNavigator(
+  {
+    mainProfile: { screen: ProfilePage },
+    details: { screen: ProfileDetails },
+    following: { screen: FollowingPage },
+    followers: { screen: FollowersPage },
+
+    topAuthPage: {
+      screen: TopAuthPageRouter
+    },
+    search: { screen: SearchUserPage },
+    journal: { screen: Journal }
+  },
+  {
+    initialRouteName: "mainProfile",
+
+    navigationOptions: {
+      headerTitleStyle: {
+        flex: 1,
+        fontSize: 22,
+        alignItems: "center",
+        justifyContent: "center",
+        textAlign: "center",
+        color: "#646464",
+        fontFamily: "HelveticaNeue"
+      }
+    }
+  }
+);
+
+ProfilePageStack.navigationOptions = ({ navigation }) => {
+  let { routeName } = navigation.state.routes[navigation.state.index];
+  let navigationOptions = {};
+  console.log("I am here" + routeName);
+
+  if (routeName === "details" || routeName === "topAuthPage") {
+    navigationOptions.tabBarVisible = false;
+  }
+
+  return navigationOptions;
+};
 
 const RootStack = createBottomTabNavigator(
   {
@@ -23,8 +72,8 @@ const RootStack = createBottomTabNavigator(
       screen: AnalyticsPage
     },
     Profile: {
-      screen: ProfilePage
-    },
+      screen: ProfilePageStack
+    }
   },
   {
     navigationOptions: ({ navigation }) => ({
@@ -41,7 +90,7 @@ const RootStack = createBottomTabNavigator(
           iconName = `md-contact`;
         } else if (routeName === "SearchUser") {
           iconName = `md-search`;
-        }else if (routeName === "WorkoutHistory") {
+        } else if (routeName === "WorkoutHistory") {
           iconName = `md-search`;
         }
 

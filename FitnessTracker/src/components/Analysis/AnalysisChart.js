@@ -88,7 +88,7 @@ class AnalysisChart extends Component {
               }
             ]
           }}
-          width={Dimensions.get("screen").width + 18}
+          width={Dimensions.get("screen").width + 13}
           height={300}
           chartConfig={{
             backgroundColor: "white",
