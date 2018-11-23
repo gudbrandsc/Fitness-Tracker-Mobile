@@ -59,11 +59,11 @@ class WorkoutNewsFeed extends Component {
             );
             const seconds = dateDiff / 1000;
             var date = "";
-            if (seconds / 86400 !== 0)
+            if (seconds / 86400 >= 1)
               date = Math.round(seconds / 86400) + "d ago";
-            else if (seconds / 3600 !== 0)
+            else if (seconds / 3600 >= 1)
               date = Math.round(seconds / 3600) + "hr ago";
-            else if (seconds / 60 !== 0)
+            else if (seconds / 60 >= 1)
               date = Math.round(seconds / 60) + "min ago";
             else date = Math.round(seconds) + "sec ago";
             const workoutName = results[i].workoutname;

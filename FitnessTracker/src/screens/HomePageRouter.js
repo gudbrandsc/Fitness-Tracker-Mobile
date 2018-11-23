@@ -48,7 +48,7 @@ const ProfilePageStack = createStackNavigator(
 ProfilePageStack.navigationOptions = ({ navigation }) => {
   let { routeName } = navigation.state.routes[navigation.state.index];
   let navigationOptions = {};
-  console.log("I am here" + routeName);
+  console.log("I am here " + routeName);
 
   if (routeName === "details" || routeName === "topAuthPage") {
     navigationOptions.tabBarVisible = false;

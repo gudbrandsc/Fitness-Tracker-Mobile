@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { ScrollView, View, StyleSheet, AsyncStorage } from "react-native";
-import { Header, Spinner } from "../components/common";
-import WorkoutCard from "../components/workoutHistory/WorkoutCard";
+import { Header, Spinner } from "../../components/common";
+import WorkoutCard from "../../components/workoutHistory/WorkoutCard";
 import axios from "axios";
 
-class WorkoutHistory extends Component {
+class VisitWorkoutHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,24 +16,19 @@ class WorkoutHistory extends Component {
   }
 
   componentDidMount() {
-    this.retrieveDetails();
-  }
-
-  retrieveDetails = async () => {
     try {
-      const id = await AsyncStorage.getItem("login");
+      const id = this.props.screenProps.profileID;
+      console.log("Inside Visit workout history " + id);
       this.setState({ userId: id });
-      console.log(id);
       this.fetchData(id);
     } catch (error) {
       this.setState({
         error: "Can't get Data. Please check internet connectivity."
       });
     }
-  };
+  }
 
   fetchData(id) {
-    console.log("Fetch data");
     axios
       .get("http://localhost:8000/api/newexercisehistory/" + id)
       .then(response =>
@@ -69,7 +64,7 @@ class WorkoutHistory extends Component {
   }
 }
 
-export default WorkoutHistory;
+export default VisitWorkoutHistory;
 
 const styles = StyleSheet.create({
   container: {

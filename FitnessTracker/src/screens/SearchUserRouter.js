@@ -1,22 +1,19 @@
 import React, { Component } from "react";
 import { createStackNavigator, HeaderBackButton } from "react-navigation";
 import VisitProfilePage from "./VisitProfilePage";
-import SearchUserPage from "./SearchUserPage"
-import VisitFollowersPage from "./visitProfile/VisitFollowersPage"
-import VisitFollowingPage from "./visitProfile/VisitFollowingPage"
-
-
+import SearchUserPage from "./SearchUserPage";
+import VisitFollowersPage from "./visitProfile/VisitFollowersPage";
+import VisitFollowingPage from "./visitProfile/VisitFollowingPage";
 
 const RootStack = createStackNavigator(
   {
-    mainProfile: { screen: SearchUserPage,},
+    mainSearch: { screen: SearchUserPage },
     visitProfilePage: { screen: VisitProfilePage },
-    visitFollowingPage: { screen: VisitFollowingPage},
-    visitFollowersPage: { screen: VisitFollowersPage},
-    
+    visitFollowingPage: { screen: VisitFollowingPage },
+    visitFollowersPage: { screen: VisitFollowersPage }
   },
   {
-    initialRouteName: "mainProfile",
+    initialRouteName: "mainSearch",
     navigationOptions: {
       headerTitleStyle: {
         flex: 1,
@@ -25,7 +22,7 @@ const RootStack = createStackNavigator(
         justifyContent: "center",
         textAlign: "center",
         color: "#646464",
-        fontFamily: "HelveticaNeue",
+        fontFamily: "HelveticaNeue"
       }
     }
   }

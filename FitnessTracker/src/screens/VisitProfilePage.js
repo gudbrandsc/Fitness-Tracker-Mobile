@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
-import ProfileSubCategoriesRouter from "./ProfileSubCategoriesRouter";
+import VisitProfileSubCategoriesRouter from "./visitProfile/VisitProfileSubCategoriesRouter";
 import {
   AsyncStorage,
   View,
@@ -20,19 +20,17 @@ class VisitProfilePage extends Component {
   static navigationOptions = {
     headerTitle: "Profile",
     headerStyle: {
-      backgroundColor: '#00e6d3',
-      height: 60,
-
+      backgroundColor: "#00e6d3",
+      height: 60
     },
-    headerTintColor: '#fff',
+    headerTintColor: "#fff",
     headerTitleStyle: {
       fontWeight: "600",
       color: "#fff",
       fontSize: 22,
       fontFamily: "arial"
-    },
+    }
   };
-
 
   state = {
     userid: "",
@@ -45,21 +43,20 @@ class VisitProfilePage extends Component {
     loadFollowers: false,
     loadFollowing: false,
     imFollowing: false,
-    badgeList: [],
-
+    badgeList: []
   };
 
   componentDidMount() {
     const { navigation } = this.props;
-    const follows = navigation.getParam('follows', 'false');
-    const userid = navigation.getParam('otherUserId');
-
-    this.setState({imFollowing: follows, userid: userid})
+    const follows = navigation.getParam("follows", "false");
+    const userid = navigation.getParam("otherUserId");
+    this.setState({ imFollowing: follows, userid });
     this.getUserData(userid);
   }
 
-  getUserData(userid){
+  getUserData(userid) {
     try {
+      console.log("The visit profile " + userid);
       fetch("http://localhost:8000/api/user_details/" + userid, {
         method: "GET",
         headers: {
@@ -82,7 +79,6 @@ class VisitProfilePage extends Component {
               this.setState({ avatarSource: res.data.ImageUrl });
               this.onSuccess();
               this.retrieveBadges();
-
             } else {
               this.onFailure(
                 "Can't get Data. Please check internet connectivity."
@@ -100,7 +96,6 @@ class VisitProfilePage extends Component {
       this.onFailure("Can't get Data. Please check internet connectivity.");
     }
   }
-
 
   onFailure(err) {
     this.setState({ error: err, loading: false, animationErrorHeight: "auto" });
@@ -142,7 +137,6 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowingButton() {
-    console.log("hello")
     if (this.state.loading === false && this.state.userid !== "") {
       return (
         <TouchableOpacity
@@ -150,7 +144,6 @@ class VisitProfilePage extends Component {
             this.props.navigation.navigate("visitFollowingPage", {
               userid: this.state.userid,
               updateFollowState: this.updateFollowState
-
             });
           }}
         >
@@ -162,25 +155,31 @@ class VisitProfilePage extends Component {
     }
   }
 
-  renderFollowUnfollowButton(){
-    if(this.state.imFollowing === true){
-      return <Button  
-      onPress={this.onUnfollowPress}
-      type={"danger"}
-      size={"large"}
-      children={"Unfollow"} />
+  renderFollowUnfollowButton() {
+    if (this.state.imFollowing === true) {
+      return (
+        <Button
+          onPress={this.onUnfollowPress}
+          type={"danger"}
+          size={"large"}
+          children={"Unfollow"}
+        />
+      );
     }
-    return <Button  
-    onPress={this.onFollowPress}
-    type={"primary"}
-    size={"large"}
-    children={"Follow"} />
+    return (
+      <Button
+        onPress={this.onFollowPress}
+        type={"primary"}
+        size={"large"}
+        children={"Follow"}
+      />
+    );
   }
 
   onFollowPress = () => {
     const { navigation } = this.props;
-    const myUserId = navigation.getParam('myUserId');
-    const otherUserId = navigation.getParam('otherUserId');
+    const myUserId = navigation.getParam("myUserId");
+    const otherUserId = navigation.getParam("otherUserId");
 
     const requestUrl =
       "http://localhost:8000/api/createfollower/" +
@@ -194,7 +193,7 @@ class VisitProfilePage extends Component {
             imFollowing: true,
             loading: false
           });
-          navigation.state.params.updateFollow(true)
+          navigation.state.params.updateFollow(true);
         } else {
           this.setState({
             loading: false,
@@ -207,14 +206,14 @@ class VisitProfilePage extends Component {
 
   onUnfollowPress = () => {
     const { navigation } = this.props;
-    const myUserId = navigation.getParam('myUserId');
-    const otherUserId = navigation.getParam('otherUserId');
+    const myUserId = navigation.getParam("myUserId");
+    const otherUserId = navigation.getParam("otherUserId");
 
     const requestUrl =
       "http://localhost:8000/api/removefollower/" +
       myUserId +
       "/" +
-      otherUserId
+      otherUserId;
     axios.get(requestUrl).then(
       function(response) {
         if (response.status === 200) {
@@ -222,9 +221,8 @@ class VisitProfilePage extends Component {
             imFollowing: false,
             loading: false
           });
-          
-          navigation.state.params.updateFollow(false)
 
+          navigation.state.params.updateFollow(false);
         } else {
           this.setState({
             loading: false,
@@ -273,6 +271,12 @@ class VisitProfilePage extends Component {
     }
   }
 
+  showBadgeInfo(title, info) {
+    Alert.alert(title + " Badge", info, [
+      { text: "OK", onPress: () => console.log("OK Pressed") }
+    ]);
+  }
+
   renderBadges() {
     if (this.state.badgeList.length > 0) {
       return (
@@ -294,10 +298,9 @@ class VisitProfilePage extends Component {
     }
   }
 
-
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: '#f7f6ef' }}>
+      <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
         <View style={{ marginTop: 20 }}>
           <View
             style={{
@@ -306,76 +309,83 @@ class VisitProfilePage extends Component {
               height: "35%"
             }}
           >
-          <View style={{ flexDirection: "row", width: 100 }}>
-            <View style={styles.profileImgContainer}>
-              <Avatar
-                large
-                rounded
-                source={{
-                  uri: this.state.avatarSource
+            <View style={{ flexDirection: "row", width: 100 }}>
+              <View style={styles.profileImgContainer}>
+                <Avatar
+                  large
+                  rounded
+                  source={{
+                    uri: this.state.avatarSource
+                  }}
+                />
+              </View>
+              <View
+                style={{
+                  height: "auto",
+                  width: "auto",
+                  justifyContent: "center",
+                  marginLeft: 40
                 }}
-              />
+              >
+                <View style={{ flex: 0.8, marginRight: 10 }}>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "space-between"
+                    }}
+                  >
+                    <View style={{ width: "100%" }}>
+                      {this.renderFollowingButton()}
+                    </View>
+                    <View style={{ width: "100%", marginLeft: 15 }}>
+                      {this.renderFollowersButton()}
+                    </View>
+                  </View>
+                </View>
+
+                <View style={{ flex: 1, flexDirection: "row", marginTop: 15 }}>
+                  <View style={{ width: "190%", paddingTop: 10 }}>
+                    {this.renderFollowUnfollowButton()}
+                  </View>
+                </View>
+              </View>
             </View>
+
             <View
               style={{
                 height: "auto",
                 width: "auto",
-                justifyContent: "center",
-                marginLeft: 40
+                flexDirection: "column",
+                marginLeft: 20,
+                marginTop: 20
               }}
             >
-              <View style={{ flex: 0.8, marginRight: 10 }}>
-                <View style={{ flex: 1, flexDirection: "row", justifyContent: "space-between" }}>
-                  <View style={{ width: "100%" }}>
-                    {this.renderFollowingButton()}
-                  </View>
-                  <View style={{ width: "100%", marginLeft: 15 }}>
-                    {this.renderFollowersButton()}
-                  </View>
-                </View>
-              </View>
-
-            <View style={{flex:1, flexDirection:'row'}}>
-              <View style={{ width:'190%', paddingTop:10}}>
-              {this.renderFollowUnfollowButton()}
-              
-                  </View>
-              </View>
+              <Text
+                style={{ fontSize: 20, fontWeight: "bold", marginBottom: 5 }}
+              >
+                {this.state.name}
+              </Text>
+              <ScrollView horizontal={true}>{this.renderBadges()}</ScrollView>
             </View>
           </View>
-       
           <View
             style={{
-              height: "auto",
-              width: "auto",
               flexDirection: "column",
-              marginLeft: 20,
-              marginTop: 20
+              width: "100%",
+              height: "65%"
             }}
           >
-            <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-              {this.state.name}
-            </Text>
-            <ScrollView horizontal={true}>
-                {this.renderBadges()}
-            </ScrollView>
+            <VisitProfileSubCategoriesRouter
+              profileID={this.props.navigation.getParam("otherUserId")}
+            />
           </View>
+          <AnimationErrorBox
+            errorMsg={this.state.error}
+            viewHeight={this.state.animationErrorHeight}
+            onPress={this.onCloseAnimationBox.bind(this)}
+          />
         </View>
-        <View
-          style={{
-            flexDirection: "column",
-            width: "100%",
-            height: "65%"
-          }}
-        >
-          <ProfileSubCategoriesRouter />
-        </View>
-        <AnimationErrorBox
-          errorMsg={this.state.error}
-          viewHeight={this.state.animationErrorHeight}
-          onPress={this.onCloseAnimationBox.bind(this)}
-        />
-      </View>
       </View>
     );
   }

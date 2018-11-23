@@ -208,7 +208,7 @@ class ProfilePage extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "#fafafa" }}>
+      <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
         <View style={{ marginTop: 20 }}>
           <View
             style={{

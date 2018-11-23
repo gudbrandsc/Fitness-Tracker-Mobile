@@ -29,9 +29,7 @@ class MapSearchPage extends Component {
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       position => {
-        console.log(
-          position.coords.latitude + " and " + position.coords.longitude
-        );
+        //console.log(position.coords.latitude + " and " + position.coords.longitude);
         const region = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -126,7 +124,7 @@ class MapSearchPage extends Component {
             }
             const refresh = this.state.refresh + 1;
             this.setState({ markers, refresh });
-            console.log(markers);
+            //console.log(markers);
           },
           error => {
             console.log(error);
@@ -156,7 +154,7 @@ class MapSearchPage extends Component {
         }
       ).then(
         response => {
-          console.log(response);
+          //console.log(response);
           var img =
             "https://res.cloudinary.com/fitnesstracker/image/upload/v1541359522/noimg.jpg";
           if (response.status == 200) {
@@ -188,7 +186,7 @@ class MapSearchPage extends Component {
   }
   openDetailsView(id) {
     const photo_reference = this.state.markers[id - 1].photoReference;
-    console.log("id is " + (id - 1) + " and reference is " + photo_reference);
+    //console.log("id is " + (id - 1) + " and reference is " + photo_reference);
     this.setState({
       markerDetailsViewOpacity: 1,
       markerDetailsViewPress: "auto",

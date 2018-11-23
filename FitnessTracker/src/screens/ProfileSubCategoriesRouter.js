@@ -13,7 +13,7 @@ export default createMaterialTopTabNavigator(
     "GYM Search": {
       screen: MapSearchPage
     },
-    "Expenses": {
+    Expenses: {
       screen: ExpensesPage
     }
   },
@@ -23,19 +23,19 @@ export default createMaterialTopTabNavigator(
         //fontSize needs to be excactly like this to fit on IOS
         fontSize: 0.024 * Dimensions.get("window").width,
         fontWeight: "bold",
-        color: "#007aff"
+        color: "#00aeff"
       },
       tabStyle: {
         height: 50,
         width: Dimensions.get("window").width / 3
       },
       indicatorStyle: {
-        backgroundColor: "#007aff"
+        backgroundColor: "#00aeff" // 00b4ff
       },
       style: {
         borderWidth: 0.5,
         borderColor: "#747474",
-        backgroundColor: "#e1e1e1"
+        backgroundColor: "white"
       }
     }
   }
