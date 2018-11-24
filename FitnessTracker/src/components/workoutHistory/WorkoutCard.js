@@ -59,26 +59,20 @@ class WorkoutCard extends Component {
     return "add-circle-outline";
   }
 
-    renderDateText(){
-        const dateDiff = Math.abs(
-            new Date() - new Date(this.props.session.createddate)
-        );
+  renderDateText() {
+    const dateDiff = Math.abs(
+      new Date() - new Date(this.props.session.createddate)
+    );
+    const seconds = dateDiff / 1000;
+    var date = "";
+    console.log(seconds);
 
-        const seconds = dateDiff / 1000;
-        console.log("Calculate seconds "  + seconds/ 86400)
+    if (seconds / 86400 >= 1) date = Math.round(seconds / 86400) + "d ago";
+    else if (seconds / 3600 >= 1) date = Math.round(seconds / 3600) + "hr ago";
+    else if (seconds / 60 >= 1) date = Math.round(seconds / 60) + "min ago";
+    else date = Math.round(seconds) + "sec ago";
 
-        var date = "";
-        if (Math.round(seconds / 86400) !== 0)
-          date = Math.round(seconds / 86400) + "d ago";
-
-        else if (Math.round(seconds / 3600) !== 0)
-          date = Math.round(seconds / 3600) + "hr ago";
-
-        else if (Math.round(seconds / 60) !== 0)
-          date = Math.round(seconds / 60) + "min ago";
-
-        else date = Math.round(seconds) + "sec ago";
-        return <Text style={{ fontSize: 12, color: '#636463' }}>{date}</Text>
+    return <Text style={{ fontSize: 12, color: "#636463" }}>{date}</Text>;
   }
 
   render() {
