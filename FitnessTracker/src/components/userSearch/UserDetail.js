@@ -130,7 +130,6 @@ class UserDetail extends Component {
 
 
   updateFollow = data => {
-    console.log("Updating follows in parent")
     this.setState({follows: data});
     this.forceUpdate()
   };

@@ -23,8 +23,7 @@ class WorkoutHistory extends Component {
     try {
       const id = await AsyncStorage.getItem("login");
       this.setState({ userId: id });
-      console.log(id);
-      this.fetchData(id);
+      this.fetchData(id)
     } catch (error) {
       this.setState({
         error: "Can't get Data. Please check internet connectivity."
@@ -33,7 +32,6 @@ class WorkoutHistory extends Component {
   };
 
   fetchData(id) {
-    console.log("Fetch data");
     axios
       .get("http://localhost:8000/api/newexercisehistory/" + id)
       .then(response =>
@@ -47,12 +45,14 @@ class WorkoutHistory extends Component {
     }
   }
 
-  showList() {
-    if (this.state.loading === false) {
-      console.log(this.state.history);
-      return this.state.history.map(session => (
+  showList(){
+    if(this.state.loading === false){
+      this.state.history.sort ( function (a, b){
+        return new Date(b.createddate) - new Date(a.createddate);
+      });
+      return this.state.history.map(session =>
         <WorkoutCard key={session.sessionid} session={session} />
-      ));
+      );
     } else {
       return <Spinner />;
     }

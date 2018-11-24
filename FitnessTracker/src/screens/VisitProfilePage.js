@@ -155,16 +155,23 @@ class VisitProfilePage extends Component {
     }
   }
 
-  renderFollowUnfollowButton() {
-    if (this.state.imFollowing === true) {
+  renderSubCategoryList() {
+    if (this.state.loading === false && this.state.userid !== "") {
       return (
-        <Button
-          onPress={this.onUnfollowPress}
-          type={"danger"}
-          size={"large"}
-          children={"Unfollow"}
-        />
+        <VisitProfileSubCategoriesRouter screenProps={{ userid: this.state.userid}} />
       );
+    } else {
+      return <Spinner />;
+    }
+  }
+
+  renderFollowUnfollowButton(){
+    if(this.state.imFollowing === true){
+      return <Button  
+      onPress={this.onUnfollowPress}
+      type={"danger"}
+      size={"large"}
+      children={"Unfollow"} />
     }
     return (
       <Button
@@ -252,7 +259,6 @@ class VisitProfilePage extends Component {
         .then(
           res => {
             if (res.status === 200) {
-              console.log(res.data);
               const badgeList = res.data;
               this.setState({ badgeList });
             } else {
@@ -260,7 +266,6 @@ class VisitProfilePage extends Component {
             }
           },
           error => {
-            console.log(error);
             this.onFailure(
               "Can't get Data. Please check internet connectivity."
             );
@@ -386,6 +391,20 @@ class VisitProfilePage extends Component {
             onPress={this.onCloseAnimationBox.bind(this)}
           />
         </View>
+        <View
+          style={{
+            flexDirection: "column",
+            width: "100%",
+            height: "65%"
+          }}
+        >
+        {this.renderSubCategoryList()}
+        </View>
+        <AnimationErrorBox
+          errorMsg={this.state.error}
+          viewHeight={this.state.animationErrorHeight}
+          onPress={this.onCloseAnimationBox.bind(this)}
+        />
       </View>
     );
   }

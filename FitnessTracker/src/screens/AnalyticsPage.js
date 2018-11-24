@@ -33,7 +33,6 @@ class AnalyticsPage extends Component {
       axios.get("http://localhost:8000/api/workoutcategories").then(
         function(response) {
           const allData = response.data;
-          console.log(allData);
           const workout = [];
           for (var i = 0; i < allData.length; i++) {
             workout.push(allData[i].CategoryName);
@@ -80,7 +79,6 @@ class AnalyticsPage extends Component {
 
   getExerciseStatistics(exercisesID) {
     try {
-      console.log("Inside exercises stats" + exercisesID);
       const userId = this.state.userId;
       //axios.get(" http://localhost:8000/api/exerciseanalysis/36/" + exercisesID)
       //axios.get("http://localhost:8000/api/exerciseanalysis/12/" + exercisesID)
@@ -94,7 +92,6 @@ class AnalyticsPage extends Component {
 
         .then(
           function(response) {
-            console.log("Getting exericeses" + response.data);
             this.fillStatistics(response.data);
           }.bind(this)
         );
@@ -138,7 +135,6 @@ class AnalyticsPage extends Component {
       const statisticsData = this.state.weightList;
       this.setState({ statisticsData, workoutName });
     } else {
-      console.log(data);
       const weightArray = [];
       const setArray = [];
       const repArray = [];
@@ -190,7 +186,6 @@ class AnalyticsPage extends Component {
       dropdownData,
       exercisesDropDown: exercises
     });
-    console.log(workoutName);
     if (workoutName === "Expenses") {
       this.retrieveExpenses();
     } else if (workoutName === "Weight") {

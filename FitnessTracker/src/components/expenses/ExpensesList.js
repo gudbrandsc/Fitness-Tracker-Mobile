@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
-import FollowingDetail from './FollowingDetail'
+import ExpenseDetail from './ExpenseDetail'
+import { Button } from 'react-native-elements';
 
 
-class FollowingList extends Component {
+class ExpensesList extends Component {
 
   constructor(props) {
     super(props);
@@ -12,13 +13,9 @@ class FollowingList extends Component {
     }
   }
 
-  resetDetail(){
-    this.props.resetComponent();
-  }
-
-  renderUser () {
-    return this.props.users.map(user =>
-      <FollowingDetail key={user.FollowerId} user={user} userId={this.props.userId} resetDetail={this.resetDetail.bind(this)}/>
+  renderExpenses () {
+    return this.props.expenses.map(expense =>
+      <ExpenseDetail  key={expense.id} expense={expense} />
     );
   }
 
@@ -26,7 +23,7 @@ class FollowingList extends Component {
     return (
       <View style={styles.v_container}>
       <ScrollView style={styles.container}>
-        { this.renderUser() }
+        { this.renderExpenses() }
       </ScrollView>
       </View>
     );
@@ -46,4 +43,4 @@ const styles = StyleSheet.create({
 });
 
 
-export default FollowingList;
+export default ExpensesList;

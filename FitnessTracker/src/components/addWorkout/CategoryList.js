@@ -64,7 +64,6 @@ class CategoryList extends Component {
 
   AddWorkout = () => {
     this.setState({ loading: true });
-    console.log(this.state.inputValues)
     axios
       .post("http://localhost:8000/api/newexercise", {
         userid: this.props.userId,

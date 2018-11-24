@@ -48,7 +48,6 @@ class FollowingPage extends Component {
   };
 
   fetchData(id) {
-    console.log(id + " this is the userid in fetch data");
     axios
       .get("http://localhost:8000/api/listfollows/" + id)
       .then(response => this.setState({ users: response.data }))
@@ -80,6 +79,7 @@ class FollowingPage extends Component {
       return <Spinner size={"small"} />;
     }
     if (users && users.length > 0) {
+      console.log(users)
       return <FollowingList users={users} userId={this.state.userId} resetComponent={this.resetComponent.bind(this)}/>;
     }
   }

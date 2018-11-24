@@ -60,7 +60,6 @@ class SubCategory extends Component {
         if(this.state.start === false){
             if(this.props.categoryId === 8){
                 this.props.subUpdate(this.state.id, this.state.value1, this.state.value2, "0")
-
             }else{
             this.props.subUpdate(this.state.id, this.state.value1, this.state.value2, this.state.value3)
             }
@@ -165,7 +164,6 @@ class SubCategory extends Component {
     }
 
     render() {
-        console.log('Render from sub category')
             return (
                 <View style={{paddingTop: 10, padding: 10}}>
                     <View style={styles.container}>                        

@@ -11,25 +11,24 @@ class FollowingDetail extends Component {
       statusCode: "",
       error: "",
       loading: false,
-      follows: true
+      follows: this.props.user.FollowingFollower
     };
   }
   componentDidUpdate(){
-    console.log("The last component did update")
     this.props.resetDetail();
   }
-  onFollowPress = () => {
 
+  onFollowPress = () => {
     const requestUrl =
       "http://localhost:8000/api/createfollower/" +
       this.props.userId +
       "/" +
-      this.props.user.FollowingId;
+      this.props.user.FollowerId;
     axios.get(requestUrl).then(
       function(response) {
         if (response.status === 200) {
           this.setState({
-            follows: true,
+            follows: "true",
             loading: false
           });
 
@@ -44,20 +43,16 @@ class FollowingDetail extends Component {
   };
 
   onUnfollowPress = () => {
-    console.log("Send unfollow request");
     const requestUrl =
       "http://localhost:8000/api/removefollower/" +
       this.props.userId +
       "/" +
-      this.props.user.FollowingId;
-    console.log(requestUrl);
+      this.props.user.FollowerId;
     axios.get(requestUrl).then(
       function(response) {
-        console.log("Check response");
         if (response.status === 200) {
-          console.log("unFollow ok 200");
           this.setState({
-            follows: false,
+            follows: "false",
             loading: false
           });
           this.props.resetDetail();
@@ -73,8 +68,7 @@ class FollowingDetail extends Component {
   };
 
   renderFollowingButton() {
-    console.log("rendering button");
-    if (this.state.follows) {
+    if (this.state.follows === "true") {
       return (
         <Button
           onPress={this.onUnfollowPress}

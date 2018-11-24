@@ -47,7 +47,6 @@ class LoginPage extends Component {
    * Otherwise, show error message.
    */
   handleLogin() {
-    console.log("handle login");
     const { email, password } = this.state;
 
     this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
@@ -73,18 +72,15 @@ class LoginPage extends Component {
         .then(
           res => {
             if (res.status === 200) {
-              console.log("Login Successful");
               const userToken = res.data.token;
               const id = res.data.userId;
               this.setState({ userToken, id });
               this.storeDataIsolatedStorage();
             } else {
               this.onLoginFail("Password or username doesn't match.");
-              console.log("Login Failed");
             }
           },
           error => {
-            console.log(error);
             this.onLoginFail(
               "Login failed. Please check internet connectivity."
             );

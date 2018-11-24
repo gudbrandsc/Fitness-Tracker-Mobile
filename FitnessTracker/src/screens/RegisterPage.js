@@ -45,9 +45,9 @@ class RegisterPage extends Component {
 
   selectImage = () => {
     ImagePicker.showImagePicker(options, response => {
-      console.log("Response = ", response);
 
       if (response.didCancel) {
+        //TODO fix this 
         console.log("User cancelled image picker");
       } else if (response.error) {
         console.log("Image Picker Error: ", response.error);
@@ -67,7 +67,6 @@ class RegisterPage extends Component {
     bodyFormData.append("filename", this.state.picName);
     bodyFormData.append("name", "image");
 
-    console.log("Uploading.. \n" + bodyFormData);
     axios({
       method: "post",
       url: "http://localhost:8000/api/uploadfile",
@@ -77,12 +76,10 @@ class RegisterPage extends Component {
       .then(
         function(response) {
           this.setState({ avatarSource: response.data });
-          console.log(response);
           this.handleRegister();
         }.bind(this)
       )
       .catch(function(response) {
-        console.log(response);
         this.handleRegister();
       });
   }
@@ -184,17 +181,14 @@ class RegisterPage extends Component {
         .then(
           res => {
             if (res.status === 201) {
-              console.log("Account creation Successful");
               const id = res.data.id;
               this.setState({ id });
               this.onRegisterSuccess();
             } else {
               this.onRegisterFail("Registration failed.");
-              console.log("Account creation Failed");
             }
           },
           error => {
-            console.log(error);
             this.onRegisterFail(
               "Registration failed. Please check internet connectivity."
             );

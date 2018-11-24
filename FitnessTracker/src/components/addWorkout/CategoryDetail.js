@@ -20,7 +20,6 @@ class CategoryDetail extends Component {
 
   componentWillReceiveProps(nextProps) {
     if(this.props.reset !== nextProps.reset){
-            console.log('reset from chil component detail')
            this.setState({active: false})
     }
 } 
@@ -51,18 +50,18 @@ class CategoryDetail extends Component {
   render() {
     return (
       <View>
-      <TouchableWithoutFeedback onPress={() => this.setState({ active: !this.state.active })}>
-        <View>
+        <TouchableWithoutFeedback onPress={() => this.setState({ active: !this.state.active })}>
           <View style={styles.categoryTouchAbleStyle  }>
             <Text style={styles.CategoryNameStyle}>
             {this.props.workout.CategoryName}
             </Text>
           </View>
+          </TouchableWithoutFeedback>
+
           <View style={{ backgroundColor: "#f7f6ef", justifyContent: "center", flexDirection: "column"}}>
+          
           {this.renderDescription()}
           </View>
-        </View>
-      </TouchableWithoutFeedback>
       </View>
     );
   }

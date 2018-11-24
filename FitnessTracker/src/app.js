@@ -35,11 +35,8 @@ class App extends Component {
     try {
       const userToken = await AsyncStorage.getItem("Usertoken");
       const pw = await AsyncStorage.getItem("pass");
-      console.log("token", userToken);
-      console.log("pass", pw);
       var loggedIn = 0;
       if (userToken !== null && pw !== null) loggedIn = 1;
-      console.log("retrieving data");
       this.setState({ loggedIn });
     } catch (error) {
       const loggedIn = 0;

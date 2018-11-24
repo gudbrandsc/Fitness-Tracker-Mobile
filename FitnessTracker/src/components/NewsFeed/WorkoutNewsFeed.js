@@ -54,6 +54,8 @@ class WorkoutNewsFeed extends Component {
             const workoutId = results[i].id + "";
             const email = results[i].username;
             const FullName = results[i].firstname + " " + results[i].lastname;
+
+            
             const dateDiff = Math.abs(
               new Date() - new Date(results[i].createddate)
             );
@@ -66,6 +68,8 @@ class WorkoutNewsFeed extends Component {
             else if (seconds / 60 >= 1)
               date = Math.round(seconds / 60) + "min ago";
             else date = Math.round(seconds) + "sec ago";
+
+
             const workoutName = results[i].workoutname;
             const category = results[i].categoryname;
             const imageurl = results[i].categoryurl;

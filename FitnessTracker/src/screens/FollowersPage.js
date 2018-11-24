@@ -49,7 +49,6 @@ class FollowersPage extends Component {
 
 
   fetchData(id) {
-    console.log(id + " this is the userid in fetch data");
     axios
       .get("http://localhost:8000/api/listfollowers/" + id)
       .then(response => this.setState({ users: response.data }))

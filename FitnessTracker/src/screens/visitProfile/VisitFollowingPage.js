@@ -20,6 +20,7 @@ class VisitFollowingPage extends Component {
       fontFamily: "arial"
     },
   };
+  
   constructor(props) {
     super(props);
     this.state = {

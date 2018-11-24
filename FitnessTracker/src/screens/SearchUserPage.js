@@ -42,8 +42,7 @@ export default class SearchUserPage extends Component {
 
   onButtonPress(term) {
     this.setState({ error: "", loading: true });
-
-    console.log("The path to send with is: " + this.state.backendIP);
+  
     axios
       .get(
         "http://" +
@@ -54,7 +53,6 @@ export default class SearchUserPage extends Component {
           this.state.userId
       )
       .then(response => {
-        console.log(response);
         this.setState({ users: response.data });
       })
       .then(this.checkSearchResp.bind(this));

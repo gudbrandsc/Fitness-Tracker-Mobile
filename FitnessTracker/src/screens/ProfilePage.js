@@ -71,7 +71,6 @@ class ProfilePage extends Component {
             }
           },
           error => {
-            console.log(error);
             this.onFailure(
               "Can't get Data. Please check internet connectivity."
             );
@@ -101,7 +100,6 @@ class ProfilePage extends Component {
         .then(
           res => {
             if (res.status === 200) {
-              console.log(res.data);
               const badgeList = res.data;
               this.setState({ badgeList });
             } else {
@@ -109,7 +107,6 @@ class ProfilePage extends Component {
             }
           },
           error => {
-            console.log(error);
             this.onFailure(
               "Can't get Data. Please check internet connectivity."
             );
@@ -169,7 +166,6 @@ class ProfilePage extends Component {
 
   renderFollowersButton() {
     if (this.state.loading === false && this.state.userid !== "") {
-      console.log("profile page render button with id: " + this.state.userid);
       return (
         <TouchableOpacity
           onPress={() => {

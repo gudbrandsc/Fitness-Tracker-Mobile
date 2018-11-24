@@ -15,7 +15,6 @@ class FollowingButton extends Component {
 
   //Method to reset the state when a workout is submitted.
   componentWillReceiveProps(nextProps) {
-    console.log("I want to update the render view")
     if (this.props.reset !== nextProps.reset) {
       this.updateData()
     }
@@ -23,7 +22,6 @@ class FollowingButton extends Component {
 
 
   updateData(){
-    console.log("Hello from following button with id" + this.props.userid);
     try {
       axios
         .get("http://localhost:8000/api/listfollows/" + this.props.userid)
@@ -41,7 +39,6 @@ class FollowingButton extends Component {
   }
 
   renderCount() {
-    console.log("Render in following");
     if (!this.state.loading) {
       return (
         <View>

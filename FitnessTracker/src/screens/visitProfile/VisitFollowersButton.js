@@ -10,7 +10,6 @@ class VisitFollowingButton extends Component {
   }
 
   componentDidMount() {
-      console.log("Zup")
     fetch("http://localhost:8000/api/getnooffollowers/" + this.props.userid, {
       method: "GET",
       headers: {

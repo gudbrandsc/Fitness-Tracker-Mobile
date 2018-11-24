@@ -2,7 +2,6 @@
 import React from "react";
 import { Text } from "react-native";
 import LinearGradient from "react-native-linear-gradient";
-import {Button} from './Button'
 // Make a component
 const Header = props => {
   const { textStyle, viewStyle } = styles;

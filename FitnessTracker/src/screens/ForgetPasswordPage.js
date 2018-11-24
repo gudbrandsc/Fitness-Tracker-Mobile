@@ -60,7 +60,6 @@ class ForgetPassword extends Component {
         )
         .then(
           res => {
-            console.log(res);
             if (res.status === 200) {
               this.setState({
                 successMsg: "Password was successfully reset. Check your email."

@@ -21,8 +21,21 @@ const options = {
 
 class Journal extends Component {
   static navigationOptions = {
-    headerTitle: "Journal"
+    headerTitle: "Journal",
+    headerStyle: {
+      backgroundColor: '#00e6d3',
+      height: 60,
+
+    },
+    headerTintColor: '#fff',
+    headerTitleStyle: {
+      fontWeight: "600",
+      color: "#fff",
+      fontSize: 22,
+      fontFamily: "arial"
+    },
   };
+
 
   state = {
     id: "",

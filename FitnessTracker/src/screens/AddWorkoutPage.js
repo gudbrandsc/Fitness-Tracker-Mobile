@@ -83,7 +83,6 @@ export default class AddWorkoutPage extends Component {
   };
 
   render() {
-    console.log("Call render from page class");
     return (
       <View style={{ flex: 1 }}>
         <Header headerText={"Add Workout"} />
