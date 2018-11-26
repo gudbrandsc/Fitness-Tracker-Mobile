@@ -52,8 +52,10 @@ class WorkoutNewsFeed extends Component {
 
 
   showList(){
-    console.log(this.state.history)
     if(this.state.loading === false){
+      this.state.history.sort ( function (a, b){
+        return new Date(b.createddate) - new Date(a.createddate);
+      });
       return this.state.history.map(session =>
         <WorkoutCard key={session.sessionid} session={session} />
       );
