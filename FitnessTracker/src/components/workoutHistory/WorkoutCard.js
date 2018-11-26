@@ -82,6 +82,7 @@ class WorkoutCard extends Component {
   }
 
   render() {
+    console.log(this.props.session.userimage)
     return (
       <View style={{ paddingTop: 10, padding: 10 }}>
         <View style={styles.container}>
@@ -100,8 +101,7 @@ class WorkoutCard extends Component {
                   small
                   rounded
                   source={{
-                    uri:
-                      "https://s3.amazonaws.com/uifaces/faces/twitter/ladylexy/128.jpg"
+                    uri: this.props.session.userimage
                   }}
                   activeOpacity={0.7}
                 />

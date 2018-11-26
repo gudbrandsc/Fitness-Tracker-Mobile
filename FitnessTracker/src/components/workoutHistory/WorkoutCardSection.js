@@ -21,10 +21,11 @@ class WorkoutCardSection extends Component {
   
 
   render() {
+    console.log(this.props.exercise.categoryurl)
     return (
       <View style={{flex: 1}}>
        <ExerciseItem
-            imageurl={"https://res.cloudinary.com/fitnesstracker/image/upload/v1541742154/chest.gif"}
+            imageurl={this.props.exercise.categoryurl}
             workoutName={this.props.exercise.workoutname}
             cardio={this.props.exercise.cardio}
             sets={this.props.exercise.noofsets}
