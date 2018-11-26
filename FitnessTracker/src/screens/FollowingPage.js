@@ -80,7 +80,7 @@ class FollowingPage extends Component {
     }
     if (users && users.length > 0) {
       console.log(users)
-      return <FollowingList users={users} userId={this.state.userId} resetComponent={this.resetComponent.bind(this)}/>;
+      return <FollowingList users={users} userId={this.state.userId} followingRequest={true}  resetComponent={this.resetComponent.bind(this)}/>;
     }
   }
 

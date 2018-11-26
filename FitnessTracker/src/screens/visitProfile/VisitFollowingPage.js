@@ -44,6 +44,7 @@ class VisitFollowingPage extends Component {
   }
 
   fetchData(id) {
+    console.log("listfollows/"+ id)
     axios
       .get("http://localhost:8000/api/listfollows/" + id)
       .then(response => this.setState({ users: response.data }))
@@ -60,13 +61,16 @@ class VisitFollowingPage extends Component {
       });
     }
   }
+  resetComponent = () => {
+    console.log("lol")
+  } 
 
   checkResponse(users, loading) {
     if (loading) {
       return <Spinner size={"small"} />;
     }
     if (users && users.length > 0) {
-      return <FollowingList users={users} userId={this.state.userId} />;
+      return <FollowingList users={users} userId={this.state.userId} followingRequest={true} resetComponent={this.resetComponent.bind(this)}/>;
     }
   }
 

@@ -59,13 +59,19 @@ class WorkoutCard extends Component {
     return "add-circle-outline";
   }
 
-  renderDateText() {
-    const dateDiff = Math.abs(
-      new Date() - new Date(this.props.session.createddate)
-    );
-    const seconds = dateDiff / 1000;
-    var date = "";
-    console.log(seconds);
+    renderDateText(){
+        const dateDiff = Math.abs(
+            new Date() - new Date(this.props.session.createddate)
+        );
+
+        const seconds = dateDiff / 1000;
+
+        var date = "";
+        if (Math.round(seconds / 86400) !== 0)
+          date = Math.round(seconds / 86400) + "d ago";
+
+        else if (Math.round(seconds / 3600) !== 0)
+          date = Math.round(seconds / 3600) + "hr ago";
 
     if (seconds / 86400 >= 1) date = Math.round(seconds / 86400) + "d ago";
     else if (seconds / 3600 >= 1) date = Math.round(seconds / 3600) + "hr ago";

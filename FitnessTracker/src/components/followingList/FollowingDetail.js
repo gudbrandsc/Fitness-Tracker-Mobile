@@ -11,19 +11,34 @@ class FollowingDetail extends Component {
       statusCode: "",
       error: "",
       loading: false,
-      follows: this.props.user.FollowingFollower
+      follows: this.props.user.FollowingFollower,
+      userId: "",
+      otherUserId: ""
     };
   }
+
   componentDidUpdate(){
     this.props.resetDetail();
   }
 
+  componentDidMount(){
+    this.setState({loading:true})
+    var otherID = this.props.user.FollowerId;
+    if(this.props.followingRequest){
+      otherID = this.props.user.FollowingId;
+    } 
+    this.setState({loading:false, userId: this.props.userId, otherUserId: otherID })
+
+  }
+
   onFollowPress = () => {
+    this.setState({loading:true})
+
     const requestUrl =
       "http://localhost:8000/api/createfollower/" +
       this.props.userId +
       "/" +
-      this.props.user.FollowerId;
+      this.state.otherUserId;
     axios.get(requestUrl).then(
       function(response) {
         if (response.status === 200) {
@@ -43,11 +58,12 @@ class FollowingDetail extends Component {
   };
 
   onUnfollowPress = () => {
+    this.setState({loading:true})
     const requestUrl =
       "http://localhost:8000/api/removefollower/" +
       this.props.userId +
       "/" +
-      this.props.user.FollowerId;
+      this.state.otherUserId;
     axios.get(requestUrl).then(
       function(response) {
         if (response.status === 200) {
@@ -68,24 +84,34 @@ class FollowingDetail extends Component {
   };
 
   renderFollowingButton() {
-    if (this.state.follows === "true") {
-      return (
-        <Button
-          onPress={this.onUnfollowPress}
-          type={"danger"}
-          size={"small"}
-          children={"Unfollow"}
-        />
-      );
+
+    if(!this.state.loading){
+      if(parseInt(this.props.userId) !==  parseInt(this.state.otherUserId)){
+        if (this.state.follows === "true") {
+          return (
+            <Button
+              onPress={this.onUnfollowPress}
+              type={"danger"}
+              size={"small"}
+              children={"Unfollow"}
+            />
+          );
+        } else {
+          return (
+            <Button
+              onPress={this.onFollowPress}
+              type={"primary"}
+              size={"small"}
+              children={"Follow"}
+            />
+          );
+        }
+      }
     } else {
-      return (
-        <Button
-          onPress={this.onFollowPress}
-          type={"primary"}
-          size={"small"}
-          children={"Follow"}
-        />
-      );
+      return( 
+      <View style={{marginRight:25}}>
+        <Spinner size={"small"}/> 
+      </View>);
     }
   }
 
@@ -94,7 +120,6 @@ class FollowingDetail extends Component {
     const {
       FirstName,
       LastName,
-      follows,
       UserName,
       ImageUrl
     } = this.props.user;

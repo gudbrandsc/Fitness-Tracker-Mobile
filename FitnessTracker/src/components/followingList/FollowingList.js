@@ -17,9 +17,15 @@ class FollowingList extends Component {
   }
 
   renderUser () {
-    return this.props.users.map(user =>
-      <FollowingDetail key={user.FollowerId} user={user} userId={this.props.userId} resetDetail={this.resetDetail.bind(this)}/>
-    );
+    if(this.props.followingRequest){
+      return this.props.users.map(user =>
+        <FollowingDetail key={user.FollowingId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.resetDetail.bind(this)}/>
+      );
+      } else {
+        return this.props.users.map(user =>
+          <FollowingDetail key={user.FollowerId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.resetDetail.bind(this)}/>
+      );
+    }
   }
 
   render(){

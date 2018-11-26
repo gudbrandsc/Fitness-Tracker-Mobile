@@ -118,12 +118,13 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowersButton() {
+    const { navigation } = this.props;
     if (this.state.loading === false && this.state.userid !== "") {
       return (
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("visitFollowersPage", {
-              userid: this.state.userid,
+              userid: navigation.getParam("myUserId"),
               updateFollowState: this.updateFollowState
             });
           }}
@@ -137,12 +138,13 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowingButton() {
+    const { navigation } = this.props;
     if (this.state.loading === false && this.state.userid !== "") {
       return (
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("visitFollowingPage", {
-              userid: this.state.userid,
+              userid: navigation.getParam("myUserId"),
               updateFollowState: this.updateFollowState
             });
           }}
