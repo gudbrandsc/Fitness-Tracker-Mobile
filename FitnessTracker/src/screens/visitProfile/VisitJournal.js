@@ -22,67 +22,68 @@ class VisitJournal extends Component {
   };
 
   componentDidMount() {
-    try {
-      const id = this.props.screenProps.profileID;
-      console.log("Inside visit journal " + id);
-      this.setState({ id });
-      fetch("http://localhost:8000/api/getjournalentries/" + id, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(response =>
-          response.json().then(data => ({
-            data: data,
-            status: response.status
-          }))
-        )
-        .then(
-          res => {
-            if (res.status === 200) {
-              const journalsAllData = res.data.Journals;
-              var dropdownData = [[]];
-              for (var i = 0; i < journalsAllData.length; i++) {
-                const journalHeader =
-                  journalsAllData[i].Journal.substring(0, 25) + "...";
-                const journalDate = new Date(journalsAllData[i].createdAt);
-                dropdownData[0].push(
-                  journalHeader + " " + journalDate.toDateString()
+    if (this.props.screenProps.profileID !== undefined){
+      try {
+        const id = this.props.screenProps.profileID;
+        this.setState({ id });
+        fetch("http://localhost:8000/api/getjournalentries/" + id, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
+          }
+        })
+          .then(response =>
+            response.json().then(data => ({
+              data: data,
+              status: response.status
+            }))
+          )
+          .then(
+            res => {
+              if (res.status === 200) {
+                const journalsAllData = res.data.Journals;
+                var dropdownData = [[]];
+                for (var i = 0; i < journalsAllData.length; i++) {
+                  const journalHeader =
+                    journalsAllData[i].Journal.substring(0, 25) + "...";
+                  const journalDate = new Date(journalsAllData[i].createdAt);
+                  dropdownData[0].push(
+                    journalHeader + " " + journalDate.toDateString()
+                  );
+                }
+
+                if (journalsAllData.length > 0) {
+                  this.setState({
+                    journalsAllData,
+                    dropdownData,
+                    journalText: journalsAllData[0].Journal,
+                    journalImgSource: journalsAllData[0].imageurl
+                  });
+                } else {
+                  this.setState({
+                    journalsAllData,
+                    dropdownData,
+                    journalText: "No Journals to show"
+                  });
+                }
+                this.onSuccess();
+              } else {
+                this.onFailure(
+                  "Can't get Data. Please check internet connectivity."
                 );
               }
-
-              if (journalsAllData.length > 0) {
-                this.setState({
-                  journalsAllData,
-                  dropdownData,
-                  journalText: journalsAllData[0].Journal,
-                  journalImgSource: journalsAllData[0].imageurl
-                });
-              } else {
-                this.setState({
-                  journalsAllData,
-                  dropdownData,
-                  journalText: "No Journals to show"
-                });
-              }
-              this.onSuccess();
-            } else {
+            },
+            error => {
+              console.log(error);
               this.onFailure(
                 "Can't get Data. Please check internet connectivity."
               );
             }
-          },
-          error => {
-            console.log(error);
-            this.onFailure(
-              "Can't get Data. Please check internet connectivity."
-            );
-          }
-        );
-    } catch (error) {
-      this.onFailure("Can't get Data. Please check internet connectivity.");
+          );
+      } catch (error) {
+        this.onFailure("Can't get Data. Please check internet connectivity.");
+      }
     }
   }
 

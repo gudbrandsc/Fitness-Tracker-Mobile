@@ -16,15 +16,17 @@ class VisitWorkoutHistory extends Component {
   }
 
   componentDidMount() {
-    try {
-      const id = this.props.screenProps.profileID;
-      console.log("Inside Visit workout history " + id);
-      this.setState({ userId: id });
-      this.fetchData(id);
-    } catch (error) {
-      this.setState({
-        error: "Can't get Data. Please check internet connectivity."
-      });
+    if (this.props.screenProps.profileID !== undefined){
+
+      try {
+        const id = this.props.screenProps.profileID;
+        this.setState({ userId: id });
+        this.fetchData(id);
+      } catch (error) {
+        this.setState({
+          error: "Can't get Data. Please check internet connectivity."
+        });
+      }
     }
   }
 

@@ -42,7 +42,7 @@ export default class SearchUserPage extends Component {
 
   onButtonPress(term) {
     this.setState({ error: "", loading: true });
-  
+    console.log("search: " + term + "userid: " + this.state.userId  )
     axios
       .get(
         "http://" +

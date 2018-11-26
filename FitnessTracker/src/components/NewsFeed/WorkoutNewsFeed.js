@@ -2,22 +2,27 @@ import React, { Component } from "react";
 import {
   View,
   Text,
-  FlatList,
-  ActivityIndicator,
+  StyleSheet,
   AsyncStorage,
-  Dimensions
+  ScrollView
 } from "react-native";
 import { List } from "react-native-elements";
 import WorkoutItems from "./WorkoutItems";
+import { Header, Spinner } from "../common";
+import WorkoutCard from '../workoutHistory/WorkoutCard'
+import axios from "axios";
+
 
 class WorkoutNewsFeed extends Component {
-  state = {
-    loading: false,
-    data: [],
-    refreshing: false,
-    userId: "",
-    emptyList: true
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      term: "",
+      history: [],
+      loading: true,
+      userId: ""
+    };
+  }
 
   componentDidMount() {
     this.getID();
@@ -26,194 +31,53 @@ class WorkoutNewsFeed extends Component {
   getID = async () => {
     const id = await AsyncStorage.getItem("login");
     this.setState({ userId: id });
-    this.retrieveDetails();
+    this.retrieveDetails(id);
   };
 
-  retrieveDetails() {
-    try {
-      this.setState({ loading: true });
-      const id = this.state.userId;
-
-      fetch("http://localhost:8000/api/getexercisefeed/" + id, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(response =>
-          response.json().then(data => ({
-            data: data,
-            status: response.status
-          }))
-        )
-        .then(res => {
-          const results = res.data;
-          const data = [];
-          for (var i = 0; i < results.length; i++) {
-            const workoutId = results[i].id + "";
-            const email = results[i].username;
-            const FullName = results[i].firstname + " " + results[i].lastname;
-
-            
-            const dateDiff = Math.abs(
-              new Date() - new Date(results[i].createddate)
-            );
-            const seconds = dateDiff / 1000;
-            var date = "";
-            if (seconds / 86400 >= 1)
-              date = Math.round(seconds / 86400) + "d ago";
-            else if (seconds / 3600 >= 1)
-              date = Math.round(seconds / 3600) + "hr ago";
-            else if (seconds / 60 >= 1)
-              date = Math.round(seconds / 60) + "min ago";
-            else date = Math.round(seconds) + "sec ago";
 
 
-            const workoutName = results[i].workoutname;
-            const category = results[i].categoryname;
-            const imageurl = results[i].categoryurl;
-            const sets = results[i].noofsets;
-            const reps = results[i].noofreps;
-            const weight = results[i].weight + "lbs";
-            const dataFormat = {
-              workoutId,
-              FullName,
-              date,
-              email,
-              imageurl,
-              workoutName,
-              category,
-              sets,
-              reps,
-              weight
-            };
-            data.push(dataFormat);
-          }
-
-          var emptyList = false;
-          if (data.length === 0) {
-            emptyList = true;
-            const t = {
-              text:
-                "Empty news feed.\n\nPlease follow some people to see their workout.",
-              id: "1"
-            };
-            data.push(t);
-          }
-
-          this.setState({
-            data,
-            loading: false,
-            refreshing: false,
-            emptyList
-          });
-        })
-        .catch(error => {
-          this.onFailure(error);
-        });
-    } catch (error) {
-      this.onFailure("Check internet connectivity.");
-    }
-  }
-
-  onFailure(err) {
-    alert(err);
-    this.setState({ loading: false });
-  }
-
-  onSuccess() {
-    this.setState({ loading: false });
-  }
-
-  handleRefresh = () => {
-    this.setState(
-      {
-        refreshing: true
-      },
-      () => {
-        this.retrieveDetails();
-      }
-    );
-  };
-
-  renderSeparator = () => {
-    return (
-      <View
-        style={{
-          height: 1,
-          width: "100%",
-          backgroundColor: "#CED0CE"
-        }}
-      />
-    );
-  };
-
-  renderItems() {
-    if (this.state.emptyList) {
-      return (
-        <FlatList
-          data={this.state.data}
-          renderItem={({ item }) => (
-            <View
-              style={{
-                backgroundColor: "#fafafa",
-                width: Dimensions.get("window").width - 10,
-                height: Dimensions.get("window").height,
-                padding: 10
-              }}
-            >
-              <Text
-                style={{
-                  fontSize: 20,
-                  fontWeight: "bold",
-                  height: "100%",
-                  width: "100%"
-                }}
-              >
-                {item.text}
-              </Text>
-            </View>
-          )}
-          keyExtractor={item => item.id}
-          ItemSeparatorComponent={this.renderSeparator}
-          onRefresh={this.handleRefresh}
-          refreshing={this.state.refreshing}
-        />
+  retrieveDetails(id) {
+    axios
+      .get("http://localhost:8000/api/getnewexercisefeed/" + id)
+      .then(response =>
+        this.setState({ history: response.data, loading: false })
       );
+  }
+
+  getHistory() {
+    if (this.state.userId !== "") {
+      console.log("send get" + this.state.userId);
     }
-    return (
-      <FlatList
-        data={this.state.data}
-        renderItem={({ item }) => (
-          <WorkoutItems
-            fullName={item.FullName}
-            email={item.email}
-            time={item.date}
-            imageurl={item.imageurl}
-            workoutName={item.workoutName}
-            category={item.category}
-            sets={item.sets}
-            reps={item.reps}
-            weight={item.weight}
-          />
-        )}
-        keyExtractor={item => item.workoutId}
-        ItemSeparatorComponent={this.renderSeparator}
-        onRefresh={this.handleRefresh}
-        refreshing={this.state.refreshing}
-      />
-    );
+  }
+
+
+  showList(){
+    console.log(this.state.history)
+    if(this.state.loading === false){
+      return this.state.history.map(session =>
+        <WorkoutCard key={session.sessionid} session={session} />
+      );
+    } else {
+      return <Spinner />;
+    }
   }
 
   render() {
     return (
-      <View>
-        <List containerStyle={{ borderTopWidth: 0, borderBottomWidth: 0 }}>
-          {this.renderItems()}
-        </List>
+      <View style={{ flex: 1, paddingTop: 15, backgroundColor: "#f4f4f4" }}>
+        <ScrollView>
+          <View style={styles.container}>{this.showList()}</View>
+        </ScrollView>
       </View>
     );
   }
 }
 export default WorkoutNewsFeed;
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    flexDirection: "column", // main axis
+    justifyContent: "center" // main axis
+  }
+});

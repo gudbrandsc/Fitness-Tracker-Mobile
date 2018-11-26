@@ -13,6 +13,7 @@ class VisitFollowingButton extends Component {
   }
 
   componentDidMount() {
+    console.log("VisitFollowingButton for id: " + this.props.userid)
     try {
       axios
         .get("http://localhost:8000/api/listfollows/" + this.props.userid)

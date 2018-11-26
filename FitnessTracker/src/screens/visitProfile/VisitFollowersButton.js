@@ -10,6 +10,7 @@ class VisitFollowingButton extends Component {
   }
 
   componentDidMount() {
+    console.log("VisitFollowingButton for id: " + this.props.userid)
     fetch("http://localhost:8000/api/getnooffollowers/" + this.props.userid, {
       method: "GET",
       headers: {

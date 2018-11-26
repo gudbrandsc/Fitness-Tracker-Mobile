@@ -39,7 +39,6 @@ const RootStack = createMaterialTopTabNavigator(
 class VisitProfileSubCategoriesRouter extends Component {
   constructor(props) {
     super(props);
-    console.log("Inside visit top tab router " + this.props.profileID);
   }
 
   render() {

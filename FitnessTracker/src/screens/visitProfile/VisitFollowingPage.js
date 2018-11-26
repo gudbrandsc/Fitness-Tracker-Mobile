@@ -28,7 +28,8 @@ class VisitFollowingPage extends Component {
       error: "",
       loading: true,
       users: [],
-      userId: ""
+      userId: "",
+      otherUserId:""
     };
   }
 
@@ -38,8 +39,9 @@ class VisitFollowingPage extends Component {
 
   getFollowingList(){
     const { navigation } = this.props;
-    const id = navigation.getParam('userid');
-    this.setState({ userId: id });
+    const id = navigation.getParam('otherUserId');
+    const userId = navigation.getParam('userid');
+    this.setState({ otherUserId: id, userId: userId });
     this.fetchData(id);
   }
 

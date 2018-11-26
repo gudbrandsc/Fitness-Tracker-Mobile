@@ -34,6 +34,7 @@ class VisitProfilePage extends Component {
 
   state = {
     userid: "",
+    otherUserId: "",
     name: "",
     error: "",
     loading: true,
@@ -49,15 +50,17 @@ class VisitProfilePage extends Component {
   componentDidMount() {
     const { navigation } = this.props;
     const follows = navigation.getParam("follows", "false");
-    const userid = navigation.getParam("otherUserId");
-    this.setState({ imFollowing: follows, userid });
-    this.getUserData(userid);
+    const otherId = navigation.getParam("otherUserId");
+    const thisuserid = navigation.getParam("myUserId");
+    
+    this.setState({ imFollowing: follows, otherUserId: otherId, userid: thisuserid, loading: false});
+    this.getUserData(otherId);
   }
 
-  getUserData(userid) {
+  getUserData(otherUserId) {
     try {
-      console.log("The visit profile " + userid);
-      fetch("http://localhost:8000/api/user_details/" + userid, {
+      console.log("The visit profile " + otherUserId);
+      fetch("http://localhost:8000/api/user_details/" + otherUserId, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -118,52 +121,55 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowersButton() {
-    const { navigation } = this.props;
-    if (this.state.loading === false && this.state.userid !== "") {
+
+    if (this.state.loading === false && this.state.otherUserId !== "") {
       return (
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("visitFollowersPage", {
-              userid: navigation.getParam("myUserId"),
+              userid: this.state.userid,
+              otherUserId: this.state.otherUserId,
               updateFollowState: this.updateFollowState
             });
           }}
         >
-          <VisitFollowersButton userid={this.state.userid} />
+          <VisitFollowersButton userid={this.state.otherUserId} />
         </TouchableOpacity>
       );
     } else {
-      return <Spinner />;
+      return <Spinner size={"small"}/>;
     }
   }
 
   renderFollowingButton() {
-    const { navigation } = this.props;
-    if (this.state.loading === false && this.state.userid !== "") {
+
+    if (this.state.loading === false && this.state.otherUserId !== "") {
       return (
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("visitFollowingPage", {
-              userid: navigation.getParam("myUserId"),
+              userid: this.state.userid,
+              otherUserId: this.state.otherUserId,
               updateFollowState: this.updateFollowState
             });
           }}
         >
-          <VisitFollowingButton userid={this.state.userid} />
+          <VisitFollowingButton userid={this.state.otherUserId} />
         </TouchableOpacity>
       );
     } else {
-      return <Spinner />;
+      return <Spinner size={"small"} />;
     }
   }
 
   renderSubCategoryList() {
-    if (this.state.loading === false && this.state.userid !== "") {
+    if (this.state.loading === false) {
+      console.log("return profile router : " + this.state.otherUserId)
       return (
-        <VisitProfileSubCategoriesRouter screenProps={{ userid: this.state.userid}} />
+        <VisitProfileSubCategoriesRouter screenProps={{ profileID: this.state.otherUserId}} />
       );
     } else {
-      return <Spinner />;
+      return <Spinner size={"small"}/>;
     }
   }
 
@@ -187,14 +193,13 @@ class VisitProfilePage extends Component {
 
   onFollowPress = () => {
     const { navigation } = this.props;
-    const myUserId = navigation.getParam("myUserId");
-    const otherUserId = navigation.getParam("otherUserId");
-
+    //TODO Add loading 
     const requestUrl =
       "http://localhost:8000/api/createfollower/" +
-      myUserId +
+      this.state.userid +
       "/" +
-      otherUserId;
+      this.state.otherUserId;
+      console.log(requestUrl)
     axios.get(requestUrl).then(
       function(response) {
         if (response.status === 200) {
@@ -215,14 +220,15 @@ class VisitProfilePage extends Component {
 
   onUnfollowPress = () => {
     const { navigation } = this.props;
-    const myUserId = navigation.getParam("myUserId");
-    const otherUserId = navigation.getParam("otherUserId");
+
 
     const requestUrl =
       "http://localhost:8000/api/removefollower/" +
-      myUserId +
+      this.state.userid +
       "/" +
-      otherUserId;
+      this.state.otherUserId;
+      console.log(requestUrl)
+
     axios.get(requestUrl).then(
       function(response) {
         if (response.status === 200) {
@@ -243,39 +249,41 @@ class VisitProfilePage extends Component {
   };
 
   retrieveBadges() {
-    try {
-      const id = this.state.userid;
-      fetch("http://localhost:8000/api/getbadges/" + id, {
-        method: "GET",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        }
-      })
-        .then(response =>
-          response.json().then(data => ({
-            data: data,
-            status: response.status
-          }))
-        )
-        .then(
-          res => {
-            if (res.status === 200) {
-              const badgeList = res.data;
-              this.setState({ badgeList });
-            } else {
-              this.onFailure("Could not retrieve badges for this user.");
-            }
-          },
-          error => {
-            this.onFailure(
-              "Can't get Data. Please check internet connectivity."
-            );
+    if(!this.state.loading){
+      try {
+        const id = this.state.userid;
+        fetch("http://localhost:8000/api/getbadges/" + id, {
+          method: "GET",
+          headers: {
+            Accept: "application/json",
+            "Content-Type": "application/json"
           }
-        );
-    } catch (error) {
-      this.onFailure("Can't get Data. Please check internet connectivity.");
-    }
+        })
+          .then(response =>
+            response.json().then(data => ({
+              data: data,
+              status: response.status
+            }))
+          )
+          .then(
+            res => {
+              if (res.status === 200) {
+                const badgeList = res.data;
+                this.setState({ badgeList });
+              } else {
+                this.onFailure("Could not retrieve badges for this user.");
+              }
+            },
+            error => {
+              this.onFailure(
+                "Can't get Data. Please check internet connectivity."
+              );
+            }
+          );
+      } catch (error) {
+        this.onFailure("Can't get Data. Please check internet connectivity.");
+      }
+    } 
   }
 
   showBadgeInfo(title, info) {
