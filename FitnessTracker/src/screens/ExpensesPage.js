@@ -118,14 +118,9 @@ class ExpensesPage extends Component {
       return true;
     }
 
-    addExpense()
-    {
-      if(!this.isInt(this.state.expenseAmount.trim()))
-      {
-        alert('Amount should be integer');
-      }
-      else
-      {
+    addExpense() {
+
+      if(this.state.expenseAmount !== "" && this.state.expenseText !== ""){
         try{
             const id = this.state.id;
             this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
@@ -183,8 +178,9 @@ class ExpensesPage extends Component {
               "Request failed. Please check internet connectivity."
             );
         }
+      }else{
+        alert("Please enter both amount and description")
       }
-
     }
 
     onLoginFail(err) {
