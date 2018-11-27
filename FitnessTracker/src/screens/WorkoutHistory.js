@@ -1,8 +1,10 @@
 import React, { Component } from "react";
-import { ScrollView, View, StyleSheet, AsyncStorage } from "react-native";
+import { ScrollView, View, StyleSheet, AsyncStorage, Text } from "react-native";
 import { Header, Spinner } from "../components/common";
 import WorkoutCard from "../components/workoutHistory/WorkoutCard";
 import axios from "axios";
+
+let _this = null;
 
 class WorkoutHistory extends Component {
   constructor(props) {
@@ -15,7 +17,18 @@ class WorkoutHistory extends Component {
     };
   }
 
+  static navigationOptions = ({ navigation }) => {
+    return {
+      tabBarOnPress({ navigation, defaultHandler }) {
+        console.log("Focus Navigation");
+        _this.fetchData(_this.state.userId);
+        defaultHandler();
+      }
+    };
+  };
+
   componentDidMount() {
+    _this = this;
     this.retrieveDetails();
   }
 
@@ -23,7 +36,7 @@ class WorkoutHistory extends Component {
     try {
       const id = await AsyncStorage.getItem("login");
       this.setState({ userId: id });
-      this.fetchData(id)
+      this.fetchData(id);
     } catch (error) {
       this.setState({
         error: "Can't get Data. Please check internet connectivity."
@@ -32,6 +45,7 @@ class WorkoutHistory extends Component {
   };
 
   fetchData(id) {
+    this.setState({ loading: true });
     axios
       .get("http://localhost:8000/api/newexercisehistory/" + id)
       .then(response =>
@@ -45,14 +59,16 @@ class WorkoutHistory extends Component {
     }
   }
 
-  showList(){
-    if(this.state.loading === false){
-      this.state.history.sort ( function (a, b){
+  showList() {
+    console.log("Inside here");
+    if (this.state.loading === false) {
+      var history = this.state.history;
+      history.sort(function(a, b) {
         return new Date(b.createddate) - new Date(a.createddate);
       });
-      return this.state.history.map(session =>
+      return history.map(session => (
         <WorkoutCard key={session.sessionid} session={session} />
-      );
+      ));
     } else {
       return <Spinner />;
     }

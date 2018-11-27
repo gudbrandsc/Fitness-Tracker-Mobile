@@ -1,17 +1,10 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  AsyncStorage,
-  ScrollView
-} from "react-native";
+import { View, Text, StyleSheet, AsyncStorage, ScrollView } from "react-native";
 import { List } from "react-native-elements";
 import WorkoutItems from "./WorkoutItems";
 import { Header, Spinner } from "../common";
-import WorkoutCard from '../workoutHistory/WorkoutCard'
+import WorkoutCard from "../workoutHistory/WorkoutCard";
 import axios from "axios";
-
 
 class WorkoutNewsFeed extends Component {
   constructor(props) {
@@ -34,8 +27,6 @@ class WorkoutNewsFeed extends Component {
     this.retrieveDetails(id);
   };
 
-
-
   retrieveDetails(id) {
     axios
       .get("http://localhost:8000/api/getnewexercisefeed/" + id)
@@ -50,15 +41,15 @@ class WorkoutNewsFeed extends Component {
     }
   }
 
-
-  showList(){
-    if(this.state.loading === false){
-      this.state.history.sort ( function (a, b){
+  showList() {
+    if (this.state.loading === false) {
+      var history = this.state.history;
+      history.sort(function(a, b) {
         return new Date(b.createddate) - new Date(a.createddate);
       });
-      return this.state.history.map(session =>
+      return history.map(session => (
         <WorkoutCard key={session.sessionid} session={session} />
-      );
+      ));
     } else {
       return <Spinner />;
     }

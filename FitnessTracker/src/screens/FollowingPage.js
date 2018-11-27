@@ -8,17 +8,16 @@ class FollowingPage extends Component {
   static navigationOptions = {
     headerTitle: "Following",
     headerStyle: {
-      backgroundColor: '#00e6d3',
-      height: 60,
-
+      backgroundColor: "#00e6d3",
+      height: 60
     },
-    headerTintColor: '#fff',
+    headerTintColor: "#fff",
     headerTitleStyle: {
       fontWeight: "600",
       color: "#fff",
       fontSize: 22,
       fontFamily: "arial"
-    },
+    }
   };
 
   constructor(props) {
@@ -28,7 +27,7 @@ class FollowingPage extends Component {
       error: "",
       loading: true,
       users: [],
-      userId: "",
+      userId: ""
     };
   }
 
@@ -66,20 +65,26 @@ class FollowingPage extends Component {
   }
 
   resetComponent = () => {
-    if(this.props.navigation.state.params.Home.state.resetComp  === 'false'){
-      this.props.navigation.state.params.Home.setState({'resetComp': "true"});
-    }else{
-      this.props.navigation.state.params.Home.setState({'resetComp': "false"});
-
+    if (this.props.navigation.state.params.Home.state.resetComp === "false") {
+      this.props.navigation.state.params.Home.setState({ resetComp: "true" });
+    } else {
+      this.props.navigation.state.params.Home.setState({ resetComp: "false" });
     }
-  } 
+  };
 
   checkResponse(users, loading) {
     if (loading) {
       return <Spinner size={"small"} />;
     }
     if (users && users.length > 0) {
-      return <FollowingList users={users} userId={this.state.userId} followingRequest={true}  resetComponent={this.resetComponent.bind(this)}/>;
+      return (
+        <FollowingList
+          users={users}
+          userId={this.state.userId}
+          followingRequest={true}
+          resetComponent={this.resetComponent.bind(this)}
+        />
+      );
     }
   }
 

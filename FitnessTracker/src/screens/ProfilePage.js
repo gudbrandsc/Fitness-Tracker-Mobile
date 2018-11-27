@@ -201,7 +201,6 @@ class ProfilePage extends Component {
       return <Spinner />;
     }
   }
-  
 
   render() {
     return (

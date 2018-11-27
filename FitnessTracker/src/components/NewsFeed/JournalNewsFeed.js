@@ -50,6 +50,9 @@ class JournalNewsFeed extends Component {
         .then(res => {
           const results = res.data;
           const data = [];
+          results.sort(function(a, b) {
+            return new Date(b.createdAt) - new Date(a.createdAt);
+          });
           for (var i = 0; i < results.length; i++) {
             const journalId = results[i].id + "";
             const email = results[i].User_Detail.UserName;
