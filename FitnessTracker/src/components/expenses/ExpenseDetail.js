@@ -30,12 +30,14 @@ class ExpenseDetail extends Component {
 
  
   render() {
+    var formatter = new Intl.NumberFormat("de-DE");
+    var value = formatter.format(this.props.expense.AmountSpent);
 
     return (
       <View style={styles.topContainer}>
         <View style={styles.container}>
           <Text style={styles.expenseNameStyle}>{this.props.expense.ExpenseType} </Text>
-          <Text style={styles.amountStyle}>${this.props.expense.AmountSpent} </Text>
+          <Text style={styles.amountStyle}>${value} </Text>
         </View>
 
         <View style={styles.buttonViewContainer}>

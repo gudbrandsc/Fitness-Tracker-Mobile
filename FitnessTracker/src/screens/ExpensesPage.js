@@ -220,6 +220,16 @@ class ExpensesPage extends Component {
   } 
 
 
+  handleAmountInput = (text) => {
+    if (/^\d+$/.test(text) || text === '') {
+      this.setState({expenseAmount: text })
+    }else{
+        alert("Please enter numbers only"); 
+    }
+}
+
+
+
     getListOfExpenses(){
       if(this.state.activeExpenseList === true){
         return (
@@ -246,7 +256,7 @@ class ExpensesPage extends Component {
                 style={styles.inputStyle}
                 editable={true}
                 value={this.state.expenseAmount}
-                onChangeText={expenseAmount => this.setState({ expenseAmount })}
+                onChangeText={this.handleAmountInput}
               />
             </View>
             {this.renderButton()}
