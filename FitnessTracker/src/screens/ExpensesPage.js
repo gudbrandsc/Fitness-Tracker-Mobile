@@ -18,8 +18,8 @@ class ExpensesPage extends Component {
         error: "",
         dropdownData: [["Expense entries"]],
         expenseAllData: [],
-        activeExpenseList: false
-        
+        activeExpenseList: false,
+        resetState: false
       };
 
       componentDidMount() {
@@ -207,6 +207,8 @@ class ExpensesPage extends Component {
       console.log(this.state.expenseAllData)
       var objIndex = this.state.expenseAllData.findIndex(obj => obj.id == id);
       this.state.expenseAllData.splice(objIndex, 1);
+      this.setState({ resetState: !this.state.resetState });
+
     }
 
     componentWillReceiveProps(nextProps) {
@@ -218,11 +220,21 @@ class ExpensesPage extends Component {
   } 
 
 
+  handleAmountInput = (text) => {
+    if (/^\d+$/.test(text) || text === '') {
+      this.setState({expenseAmount: text })
+    }else{
+        alert("Please enter numbers only"); 
+    }
+}
+
+
+
     getListOfExpenses(){
       if(this.state.activeExpenseList === true){
         return (
           <ScrollView style={styles.scrollViewStyle}>
-          <ExpensesList expenses={this.state.expenseAllData} deleteExpense={this.deleteExpense.bind(this)} />
+          <ExpensesList expenses={this.state.expenseAllData} deleteExpense={this.deleteExpense.bind(this)} reset={this.state.resetState} />
           </ScrollView>
         );
       }else{
@@ -244,7 +256,7 @@ class ExpensesPage extends Component {
                 style={styles.inputStyle}
                 editable={true}
                 value={this.state.expenseAmount}
-                onChangeText={expenseAmount => this.setState({ expenseAmount })}
+                onChangeText={this.handleAmountInput}
               />
             </View>
             {this.renderButton()}
