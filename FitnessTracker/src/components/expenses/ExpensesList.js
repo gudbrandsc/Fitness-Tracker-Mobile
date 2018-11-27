@@ -10,9 +10,18 @@ class ExpensesList extends Component {
     super(props);
     this.state = {
       error: '',
-      rerender: true
+      rerender: true,
+
     }
   }
+
+
+  componentWillReceiveProps(nextProps) {
+    if (this.props.reset !== nextProps.reset) {
+      this.forceUpdate();
+    }
+  }
+
 
   renderExpenses () {
     return this.props.expenses.map(expense =>
