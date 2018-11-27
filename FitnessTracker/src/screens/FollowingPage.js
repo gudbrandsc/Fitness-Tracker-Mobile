@@ -79,7 +79,6 @@ class FollowingPage extends Component {
       return <Spinner size={"small"} />;
     }
     if (users && users.length > 0) {
-      console.log(users)
       return <FollowingList users={users} userId={this.state.userId} followingRequest={true}  resetComponent={this.resetComponent.bind(this)}/>;
     }
   }

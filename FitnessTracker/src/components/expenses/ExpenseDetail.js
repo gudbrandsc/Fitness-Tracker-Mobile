@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import { Text, View, StyleSheet } from "react-native";
-
+import { Button } from "../common";
+import axios from "axios";
 
 class ExpenseDetail extends Component {
   constructor(props) {
@@ -9,44 +10,87 @@ class ExpenseDetail extends Component {
     };
   }
 
+  onDelete = () => {
+    const requestUrl =
+    "http://localhost:8000/api/removeexpense/" + this.props.expense.id;
+    console.log(requestUrl)
+    axios.get(requestUrl).then(
+      function(response) {
+        if (response.status === 200) {
+          this.props.deleteExpense(this.props.expense.id)
+        } else {
+          this.setState({
+            loading: false,
+            error: "Unable to unfollow.."
+          });
+        }
+      }.bind(this)
+    );
+  };
 
+ 
   render() {
 
     return (
-      <View style={styles.container}>
-        <Text style={styles.expenseNameStyle}>{this.props.expense.ExpenseType} </Text>
-        <Text style={styles.amountStyle}>${this.props.expense.AmountSpent} </Text>
+      <View style={styles.topContainer}>
+        <View style={styles.container}>
+          <Text style={styles.expenseNameStyle}>{this.props.expense.ExpenseType} </Text>
+          <Text style={styles.amountStyle}>${this.props.expense.AmountSpent} </Text>
+        </View>
 
+        <View style={styles.buttonViewContainer}>
+          <Button
+          size={"medium"}
+          type={"danger"}
+          onPress={this.onDelete}
+          >
+          Delete 
+          </Button>   
+        </View>   
       </View>
     );
   }
-}
+}            
+
 
 
 const styles = StyleSheet.create({
     container: {
       flex: 1,
       padding: 15   ,
-      margin:10, 
-      flexDirection: 'row',
-      shadowColor: '#000000',
-      shadowOffset: {
-        width: 0,
-        height: 3
-      },
-      shadowRadius: 5,
-      shadowOpacity: 0.3,
+      flexDirection: 'column',
+      borderBottomWidth: 1,
+      borderBottomColor: 'lightgray',
       backgroundColor: '#fff'
     },
     expenseNameStyle: {
-        fontSize: 22,
-        color:'gray',
+        fontSize: 18,
         justifyContent: 'flex-start'
     },
     amountStyle: {
+        fontSize: 13,
+        fontWeight: '200',
+        fontWeight: 'bold',
         color:'gray',
+        marginTop:5,
         justifyContent: 'flex-end'
     },
+    topContainer: {
+      flex: 1,
+      flexDirection: 'row',
+      backgroundColor: '#fff'
+
+    },
+    buttonViewContainer: {
+      flex: 0.5,
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      paddingTop: 25,
+      borderBottomWidth: 1,
+      borderBottomColor: 'lightgray',
+      paddingRight: 10
+    }
 
   });
   

@@ -30,6 +30,7 @@ class ExpensesPage extends Component {
         try {
           const id = await AsyncStorage.getItem("login");
           this.setState({ id });
+          console.log("http://localhost:8000/api/getexpense/" + id)
           fetch("http://localhost:8000/api/getexpense/" + id, {
             method: "GET",
             headers: {
@@ -202,11 +203,26 @@ class ExpensesPage extends Component {
       });
     }
 
+    deleteExpense(id){
+      console.log(this.state.expenseAllData)
+      var objIndex = this.state.expenseAllData.findIndex(obj => obj.id == id);
+      this.state.expenseAllData.splice(objIndex, 1);
+    }
+
+    componentWillReceiveProps(nextProps) {
+      console.log(this.props.expenseAllData)
+      console.log(nextProps.expenseAllData)
+      if(this.props.expenseAllData !== nextProps.expenseAllData){
+        this.forceUpdate();
+      }
+  } 
+
+
     getListOfExpenses(){
       if(this.state.activeExpenseList === true){
         return (
           <ScrollView style={styles.scrollViewStyle}>
-          <ExpensesList expenses={this.state.expenseAllData} />
+          <ExpensesList expenses={this.state.expenseAllData} deleteExpense={this.deleteExpense.bind(this)} />
           </ScrollView>
         );
       }else{
@@ -299,7 +315,7 @@ const styles = StyleSheet.create({
     borderBottomColor: 'lightgray',
   
     borderBottomWidth:1,
-    marginBottom: 10,
+    marginBottom: 5,
     shadowColor: 'gray',
     shadowOffset: {
       width: 0,
@@ -312,7 +328,7 @@ const styles = StyleSheet.create({
 
   },
   scrollViewStyle: {
-    paddingTop: 15
+    paddingTop: 0
   }
 });
 

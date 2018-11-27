@@ -44,6 +44,7 @@ class WorkoutCard extends Component {
       }
     }
   }
+  
   showEachSession() {
     if (this.state.active === true) {
       return this.props.session.jsonArray.map(exercise => (

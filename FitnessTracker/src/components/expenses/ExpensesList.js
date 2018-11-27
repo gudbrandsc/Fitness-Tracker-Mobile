@@ -10,12 +10,13 @@ class ExpensesList extends Component {
     super(props);
     this.state = {
       error: '',
+      rerender: true
     }
   }
 
   renderExpenses () {
     return this.props.expenses.map(expense =>
-      <ExpenseDetail  key={expense.id} expense={expense} />
+      <ExpenseDetail  key={expense.id} expense={expense} deleteExpense={this.props.deleteExpense}/>
     );
   }
 
