@@ -84,7 +84,7 @@ class AnalyticsPage extends Component {
       //axios.get("http://localhost:8000/api/exerciseanalysis/12/" + exercisesID)
       axios
         .get(
-          " http://localhost:8000/api/exerciseanalysis/" +
+          "http://localhost:8000/api/exerciseanalysis/" +
             userId +
             "/" +
             exercisesID
@@ -106,7 +106,7 @@ class AnalyticsPage extends Component {
   retrieveExpenses() {
     try {
       const userId = this.state.userId;
-      axios.get(" http://localhost:8000/api/getexpense/" + userId).then(
+      axios.get("http://localhost:8000/api/getexpense/" + userId).then(
         function(response) {
           this.fillStatistics(response.data.Expenses_Details);
         }.bind(this)

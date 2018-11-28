@@ -37,6 +37,8 @@ const RootStack = createStackNavigator(
 );
 
 class ProfilePageRouter extends Component {
+
+
   render() {
     return <RootStack />;
   }

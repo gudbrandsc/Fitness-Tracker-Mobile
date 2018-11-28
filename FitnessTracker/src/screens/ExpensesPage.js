@@ -59,6 +59,7 @@ class ExpensesPage extends Component {
                   }
                   this.setState({ dropdownData });
                   this.setState({loading: false});
+                  
                 } else {
                   this.onLoginFail(
                     "Can't get Data. Please check internet connectivity."
@@ -118,14 +119,9 @@ class ExpensesPage extends Component {
       return true;
     }
 
-    addExpense()
-    {
-      if(!this.isInt(this.state.expenseAmount.trim()))
-      {
-        alert('Amount should be integer');
-      }
-      else
-      {
+    addExpense() {
+      this.props.screenProps.showAlert("success", "Test from sub") 
+      if(this.state.expenseAmount !== "" && this.state.expenseText !== ""){
         try{
             const id = this.state.id;
             this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
@@ -183,8 +179,9 @@ class ExpensesPage extends Component {
               "Request failed. Please check internet connectivity."
             );
         }
+      }else{
+        alert("Please enter both amount and description")
       }
-
     }
 
     onLoginFail(err) {

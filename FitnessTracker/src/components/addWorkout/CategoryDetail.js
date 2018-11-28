@@ -15,12 +15,17 @@ class CategoryDetail extends Component {
       active: false,
       workoutTable: this.props.workout.Workout_tables,
       fieldVal: '',
+      activeMissingfield: false
     };
   }
 
   componentWillReceiveProps(nextProps) {
     if(this.props.reset !== nextProps.reset){
-           this.setState({active: false})
+      this.setState({active: false})
+    }
+
+    if(this.props.missingField !== nextProps.missingField){
+      this.setState({activeMissingfield: true})
     }
 } 
 
@@ -33,7 +38,7 @@ class CategoryDetail extends Component {
   renderDescription(){
     if(this.state.active === true){
       return this.state.workoutTable.map(type =>
-        <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} categoryId={this.props.workout.id} inputValues={this.props.inputValues} >
+        <SubCategory subUpdate={this.subUpdate.bind(this)} key={type.id} type={type} categoryId={this.props.workout.id} inputValues={this.props.inputValues} missingField={this.props.missingField} >
 
         </SubCategory>
       );

@@ -9,7 +9,8 @@ class CategoryList extends Component {
     super(props);
     this.state = {
       inputValues: [],
-      loading: false
+      loading: false,
+      missingField: false
     };
   }
 
@@ -56,13 +57,22 @@ class CategoryList extends Component {
   renderCategoryDetail () {
     if(this.state.loading !== true){
       return this.props.workouts.map(workout =>
-        <CategoryDetail onUpdate={this.onUpdate.bind(this)} key={workout.id} workout={workout} inputValues={this.state.inputValues} reset={this.props.reset} />
+        <CategoryDetail onUpdate={this.onUpdate.bind(this)} key={workout.id} workout={workout} inputValues={this.state.inputValues} reset={this.props.reset} missingField={this.state.missingField}/>
       );
     }
     return <Spinner size={"small"} />;
   }
 
   AddWorkout = () => {
+    var allFieldsEntered = true;
+    for(var i in this.state.inputValues) {
+      if(this.state.inputValues[1].value1 === "" || this.state.inputValues[1].value2 === "" || this.state.inputValues[1].value3 === ""  ){
+        allFieldsEntered = false;
+      }
+    }
+
+
+    if(allFieldsEntered){
     this.setState({ loading: true });
     axios
       .post("http://localhost:8000/api/newexercise", {
@@ -77,6 +87,10 @@ class CategoryList extends Component {
       .catch(error => {
         this.props.showAlert(false, error);
       });
+    } else {
+      this.setState({ missingField: !this.state.missingField });
+      alert("Please enter value all inputs for you exercises ")
+    }
   };
 
   render() {

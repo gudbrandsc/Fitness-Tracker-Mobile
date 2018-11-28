@@ -15,6 +15,10 @@ class SubCategory extends Component {
             valueLable1: '',
             valueLable2: '',
             valueLable3: '',
+            placeholder1: '',
+            placeholder2: '',
+            placeholder3: '',
+
             missingField1: false,
             missingField2: false,
             missingField3: false,
@@ -22,36 +26,76 @@ class SubCategory extends Component {
             active: false
         };
     }
+
+    componentWillReceiveProps(nextProps) {
+        if(this.props.missingField !== nextProps.missingField){
+            console.log(this.state.value1 + " and " + this.state.value2 + " and " + this.state.value3)
+            if((this.state.value1 === "") && (this.state.value2 !== "" || this.state.value3 !== "")){
+                this.setState({missingField1: true})
+            }
+
+            if((this.state.value2 === "") && (this.state.value1 !== "" || this.state.value3 !== "")){
+                this.setState({missingField2: true})
+            }
+
+            if((this.state.value3 === "") && (this.state.value2 !== "" || this.state.value1 !== "")){
+                this.setState({missingField3: true})
+            }
+
+            this.forceUpdate();
+        }
+    } 
     
     componentDidMount(){
         const id = this.state.id;
         var exist = this.props.inputValues.find(function(element) {
             return element.id === id ;
         });
-        if(exist !== undefined){
+        console.log(this.props.inputValues)
+        console.log("exist: " + exist)
+
+
+        if(exist !== undefined && this.props.categoryId !== 8){
             this.setState({
                 value1: exist.value1,
                 value2: exist.value2,
                 value3: exist.value3,
                 start: false,      
                 active: true         
-            })
+        })
+
+
+        }else if(exist !== undefined && this.props.categoryId === 8 && (exist.value1 !== "" || exist.value2 !== "")){
+            this.setState({
+                value1: exist.value1,
+                value2: exist.value2,
+                value3: exist.value3,
+                start: false,      
+                active: true         
+        })
+
         } else {
             this.setState({
                 start: false
             })
         }
+
         if(this.props.categoryId === 8 ){
             this.setState({
-                valueLable1: 'Time',
-                valueLable2: 'Distance'
+                valueLable1: 'Total Min',
+                valueLable2: 'Total Miles',
+                placeholder1: 'Enter Min...',
+                placeholder2: 'Enter Miles...',
+
             })
         }else{
             this.setState({
-                valueLable1: 'Sets',
-                valueLable2: 'Reps',
-                valueLable3: 'Weight'
-
+                valueLable1: 'Num sets',
+                valueLable2: 'Num reps',
+                valueLable3: 'Weight',
+                placeholder1: 'Enter sets...',
+                placeholder2: 'Enter reps...',
+                placeholder3: 'Enter Weight...'
             })
         }
     }
@@ -107,8 +151,7 @@ class SubCategory extends Component {
                         <NumericInput  
                             value={this.state.value1} 
                             onChangeText={this.handleValue1Change} 
-                            placeholder={'Enter stuff'} 
-                            missingField={this.state.missingField2} 
+                            placeholder={this.state.placeholder1} 
                             maxLength={3} 
                         />
                     </View>
@@ -126,8 +169,7 @@ class SubCategory extends Component {
                         <NumericInput  
                             value={this.state.value2} 
                             onChangeText={this.handleValue2Change} 
-                            placeholder={'Enter reps...'} 
-                            missingField={this.state.missingField1} 
+                            placeholder={this.state.placeholder2} 
                             maxLength={3} 
                         />
                     </View>
@@ -142,12 +184,11 @@ class SubCategory extends Component {
                 return (
                     <View>        
                         <Text style={styles.labelStyle}>{this.state.valueLable3}</Text>
-                        <View style={[styles.inputField, this.state.missingField2 ? styles.missingFieldColor :  styles.normalFieldColor]}>
+                        <View style={[styles.inputField, this.state.missingField3 ? styles.missingFieldColor :  styles.normalFieldColor]}>
                             <NumericInput  
                                 value={this.state.value3} 
                                 onChangeText={this.handleValue3Change} 
-                                placeholder={'Weight...'} 
-                                missingField={this.state.missingField3} 
+                                placeholder={this.state.placeholder3} 
                                 maxLength={3} 
                             />
                         </View>

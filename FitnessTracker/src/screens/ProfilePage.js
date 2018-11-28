@@ -8,18 +8,18 @@ import {
   Text,
   TouchableOpacity,
   Image,
-  Alert,
-  FlatList,
-  Dimensions
+  Alert
 } from "react-native";
 import { Button, Spinner, Header } from "../components/common";
 import FollowersButton from "../components/profilePage/FollowersButton";
 import FollowingButton from "../components/profilePage/FollowingButton";
 import { Avatar } from "react-native-elements";
+import FlashMessage from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 
 class ProfilePage extends Component {
   static navigationOptions = {
-    header: <Header headerText={"Profile Page"} />
+    header:  <Header headerText={"Profile Page"} /> 
   };
 
   state = {
@@ -30,12 +30,10 @@ class ProfilePage extends Component {
     avatarSource:
       "https://res.cloudinary.com/fitnesstracker/image/upload/v1540766575/blank-profile-picture.png",
     animationErrorHeight: "0.5%",
+    loadFollowers: false,
+    loadFollowing: false,
     badgeList: [],
-    resetComp: "false",
-    flatListData: [0],
-    refreshing: false,
-    followingIdentifier: 0,
-    followerIdentifier: 0
+    resetComp: "false"
   };
 
   componentDidMount() {
@@ -61,14 +59,11 @@ class ProfilePage extends Component {
         )
         .then(
           res => {
+            this.setState({ loadFollowers: true, loadFollowing: true });
             if (res.status === 200) {
               const name = res.data.FirstName + " " + res.data.LastName;
-              const flatListData = [1];
-              this.setState({
-                avatarSource: res.data.ImageUrl,
-                name,
-                flatListData
-              });
+              this.setState({ name });
+              this.setState({ avatarSource: res.data.ImageUrl });
               this.onSuccess();
               this.retrieveBadges();
             } else {
@@ -86,20 +81,6 @@ class ProfilePage extends Component {
     } catch (error) {
       this.onFailure("Can't get Data. Please check internet connectivity.");
     }
-  };
-
-  handleRefresh = () => {
-    this.setState(
-      {
-        refreshing: true
-      },
-      () => {
-        const followerIdentifier = this.state.followerIdentifier + 1;
-        const followingIdentifier = this.state.followingIdentifier + 1;
-        this.setState({ followerIdentifier, followingIdentifier });
-        this.retrieveDetails();
-      }
-    );
   };
 
   retrieveBadges() {
@@ -122,8 +103,7 @@ class ProfilePage extends Component {
           res => {
             if (res.status === 200) {
               const badgeList = res.data;
-              const flatListData = [2];
-              this.setState({ badgeList, flatListData });
+              this.setState({ badgeList });
             } else {
               this.onFailure("Could not retrieve badges for this user.");
             }
@@ -140,22 +120,11 @@ class ProfilePage extends Component {
   }
 
   onFailure(err) {
-    this.setState({
-      error: err,
-      loading: false,
-      animationErrorHeight: "auto",
-      refreshing: false
-    });
+    this.setState({ error: err, loading: false, animationErrorHeight: "auto" });
   }
 
   onSuccess() {
-    console.log("Success");
-    this.setState({
-      loading: false,
-      error: "",
-      animationErrorHeight: "0.5%",
-      refreshing: false
-    });
+    this.setState({ loading: false, error: "", animationErrorHeight: "0.5%" });
   }
 
   updateInfo(name, picUrl) {
@@ -202,18 +171,17 @@ class ProfilePage extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate("followers", { Home: this });
+            this.props.navigation.navigate("followers", { Home: this, showAlert: this.showAlert });
           }}
         >
           <FollowersButton
             userid={this.state.userid}
             reset={this.state.resetComp}
-            identifier={this.state.followingIdentifier}
           />
         </TouchableOpacity>
       );
     } else {
-      return <Spinner size="small" />;
+      return <Spinner />;
     }
   }
 
@@ -226,159 +194,155 @@ class ProfilePage extends Component {
           }}
         >
           <FollowingButton
-            userId={this.state.userid}
+            userid={this.state.userid}
             reset={this.state.resetComp}
-            identifier={this.state.followingIdentifier}
-            loggedInUserID={this.state.userid}
           />
         </TouchableOpacity>
       );
     } else {
-      return <Spinner size="small" />;
+      return <Spinner />;
     }
   }
 
+  showAlert = (type, message) => {
+    showMessage({
+      message: message,
+      type: type
+    });
+  };
+
   render() {
     return (
-      <FlatList
-        data={this.state.flatListData}
-        renderItem={({ item }) => (
+      <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
+        <FlashMessage
+          style={{ height: 80 }}
+          ref={ref => (this.dropdown = ref)}
+        />
+         <FlashMessage
+          style={{ height: 80 }}
+          ref={ref => (this.dropdown = ref)}
+        />
+        <View style={{ marginTop: 20 }}>
           <View
             style={{
-              flex: 1,
-              backgroundColor: "#f4f4f4",
-              width: Dimensions.get("window").width,
-              height: Dimensions.get("window").height - 150
+              flexDirection: "column",
+              width: "100%",
+              height: "37%"
             }}
           >
-            <View style={{ marginTop: 20 }}>
+            <View style={{ flexDirection: "row", width: 100 }}>
+              <View style={styles.profileImgContainer}>
+                <Avatar
+                  large
+                  rounded
+                  source={{
+                    uri: this.state.avatarSource
+                  }}
+                />
+              </View>
               <View
                 style={{
-                  flexDirection: "column",
-                  width: "100%",
-                  height: "auto"
+                  height: "auto",
+                  width: "auto",
+                  justifyContent: "center",
+                  marginLeft: 40
                 }}
               >
-                <View style={{ flexDirection: "row", width: 100 }}>
-                  <View style={styles.profileImgContainer}>
-                    <Avatar
-                      large
-                      rounded
-                      source={{
-                        uri: this.state.avatarSource
-                      }}
-                    />
-                  </View>
+                <View style={{ flex: 0.8, marginRight: 10 }}>
                   <View
                     style={{
-                      height: "auto",
-                      width: "auto",
-                      justifyContent: "center",
-                      marginLeft: 40
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "space-between"
                     }}
                   >
-                    <View style={{ flex: 0.8, marginRight: 10 }}>
-                      <View
-                        style={{
-                          flex: 1,
-                          flexDirection: "row",
-                          justifyContent: "space-between"
-                        }}
-                      >
-                        <View style={{ width: "100%" }}>
-                          {this.renderFollowingButton()}
-                        </View>
-                        <View style={{ width: "100%", marginLeft: 15 }}>
-                          {this.renderFollowersButton()}
-                        </View>
-                      </View>
+                    <View style={{ width: "100%" }}>
+                      {this.renderFollowingButton()}
+                    </View>
+                    <View style={{ width: "100%", marginLeft: 15 }}>
+                      {this.renderFollowersButton()}
+                    </View>
+                  </View>
 
-                      <View
-                        style={{
-                          flex: 1,
-                          flexDirection: "row",
-                          justifyContent: "space-between"
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "space-between"
+                    }}
+                  >
+                    <View style={{ height: 32, marginTop: 15, width: "100%" }}>
+                      <Button
+                        size={"large"}
+                        type={"secondary"}
+                        onPress={() => {
+                          this.props.navigation.navigate("details", {
+                            updateInfo: this.updateInfo.bind(this)
+                          });
                         }}
                       >
-                        <View
-                          style={{ height: 32, marginTop: 15, width: "100%" }}
-                        >
-                          <Button
-                            size={"large"}
-                            type={"secondary"}
-                            onPress={() => {
-                              this.props.navigation.navigate("details", {
-                                updateInfo: this.updateInfo.bind(this)
-                              });
-                            }}
-                          >
-                            Edit Profile
-                          </Button>
-                        </View>
-                        <View
-                          style={{
-                            height: 32,
-                            width: "100%",
-                            marginTop: 15,
-                            marginLeft: 15
-                          }}
-                        >
-                          <Button
-                            size={"large"}
-                            type={"success"}
-                            onPress={() => {
-                              this.props.navigation.navigate("journal");
-                            }}
-                          >
-                            Add Journal
-                          </Button>
-                        </View>
-                      </View>
+                        Edit Profile
+                      </Button>
+                    </View>
+                    <View
+                      style={{
+                        height: 32,
+                        width: "100%",
+                        marginTop: 15,
+                        marginLeft: 15
+                      }}
+                    >
+                      <Button
+                        size={"large"}
+                        type={"success"}
+                        onPress={() => {
+                          this.props.navigation.navigate("journal");
+                        }}
+                      >
+                        Add Journal
+                      </Button>
                     </View>
                   </View>
                 </View>
-                <View
-                  style={{
-                    height: "auto",
-                    width: "auto",
-                    flexDirection: "column",
-                    marginLeft: 20,
-                    marginTop: 20
-                  }}
-                >
-                  <Text style={{ fontSize: 20, fontWeight: "bold" }}>
-                    {this.state.name}
-                  </Text>
-                  <ScrollView
-                    horizontal={true}
-                    style={{ marginTop: 8, marginBottom: 8 }}
-                  >
-                    {this.renderBadges()}
-                  </ScrollView>
-                </View>
               </View>
-              <View
-                style={{
-                  flexDirection: "column",
-                  width: "100%",
-                  height: "63%"
-                }}
+            </View>
+            <View
+              style={{
+                height: "auto",
+                width: "auto",
+                flexDirection: "column",
+                marginLeft: 20,
+                marginTop: 20
+              }}
+            >
+              <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+                {this.state.name}
+              </Text>
+              <ScrollView
+                horizontal={true}
+                style={{ marginTop: 8, marginBottom: 8 }}
               >
-                <ProfileSubCategoriesRouter />
-              </View>
-              <AnimationErrorBox
-                errorMsg={this.state.error}
-                viewHeight={this.state.animationErrorHeight}
-                onPress={this.onCloseAnimationBox.bind(this)}
-              />
+                {this.renderBadges()}
+              </ScrollView>
             </View>
           </View>
-        )}
-        scrollEnabled={false}
-        keyExtractor={item => "1"}
-        onRefresh={this.handleRefresh}
-        refreshing={this.state.refreshing}
-      />
+          <View
+            style={{
+              flexDirection: "column",
+              width: "100%",
+              height: "63%"
+            }}
+          >
+            <ProfileSubCategoriesRouter
+              screenProps={{ showAlert: this.showAlert }} />
+          </View>
+          <AnimationErrorBox
+            errorMsg={this.state.error}
+            viewHeight={this.state.animationErrorHeight}
+            onPress={this.onCloseAnimationBox.bind(this)}
+          />
+        </View>
+      </View>
     );
   }
 }

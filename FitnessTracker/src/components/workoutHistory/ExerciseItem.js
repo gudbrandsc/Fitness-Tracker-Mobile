@@ -72,18 +72,17 @@ const styles = StyleSheet.create({
     },
 
     WorkoutContainer: {
-        flex:1,
       height: "auto",
       flexDirection: "row",
+      width:'80%',
     },
     WorkoutDetailsMain: {
       flexDirection: "column",
       justifyContent: "space-evenly",
-      paddingLeft: 20
+      paddingLeft: 5
     },
     SubWorkoutDetails: {
       flexDirection: "row",
-      justifyContent: "space-between",
       paddingRight: 5
     },
     WorkoutText: {
