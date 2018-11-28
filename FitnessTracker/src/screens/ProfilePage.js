@@ -14,10 +14,12 @@ import { Button, Spinner, Header } from "../components/common";
 import FollowersButton from "../components/profilePage/FollowersButton";
 import FollowingButton from "../components/profilePage/FollowingButton";
 import { Avatar } from "react-native-elements";
+import FlashMessage from "react-native-flash-message";
+import { showMessage } from "react-native-flash-message";
 
 class ProfilePage extends Component {
   static navigationOptions = {
-    header: <Header headerText={"Profile Page"} />
+    header:  <Header headerText={"Profile Page"} /> 
   };
 
   state = {
@@ -169,7 +171,7 @@ class ProfilePage extends Component {
       return (
         <TouchableOpacity
           onPress={() => {
-            this.props.navigation.navigate("followers", { Home: this });
+            this.props.navigation.navigate("followers", { Home: this, showAlert: this.showAlert });
           }}
         >
           <FollowersButton
@@ -202,9 +204,24 @@ class ProfilePage extends Component {
     }
   }
 
+  showAlert = (type, message) => {
+    showMessage({
+      message: message,
+      type: type
+    });
+  };
+
   render() {
     return (
       <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
+        <FlashMessage
+          style={{ height: 80 }}
+          ref={ref => (this.dropdown = ref)}
+        />
+         <FlashMessage
+          style={{ height: 80 }}
+          ref={ref => (this.dropdown = ref)}
+        />
         <View style={{ marginTop: 20 }}>
           <View
             style={{
@@ -316,7 +333,8 @@ class ProfilePage extends Component {
               height: "63%"
             }}
           >
-            <ProfileSubCategoriesRouter />
+            <ProfileSubCategoriesRouter
+              screenProps={{ showAlert: this.showAlert }} />
           </View>
           <AnimationErrorBox
             errorMsg={this.state.error}

@@ -59,6 +59,7 @@ class ExpensesPage extends Component {
                   }
                   this.setState({ dropdownData });
                   this.setState({loading: false});
+                  
                 } else {
                   this.onLoginFail(
                     "Can't get Data. Please check internet connectivity."
@@ -119,7 +120,7 @@ class ExpensesPage extends Component {
     }
 
     addExpense() {
-
+      this.props.screenProps.showAlert("success", "Test from sub") 
       if(this.state.expenseAmount !== "" && this.state.expenseText !== ""){
         try{
             const id = this.state.id;
