@@ -1,12 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  Text,
-  FlatList,
-  ActivityIndicator,
-  AsyncStorage,
-  Dimensions
-} from "react-native";
+import { View, Text, FlatList, AsyncStorage, Dimensions } from "react-native";
 import { List } from "react-native-elements";
 import JournalItems from "./JournalItems";
 

@@ -13,15 +13,38 @@ class VisitFollowingButton extends Component {
   }
 
   componentDidMount() {
-    console.log("VisitFollowingButton for id: " + this.props.userid)
+    this.retrieveData();
+  }
+
+  retrieveData() {
     try {
+      this.setState({ loading: true });
       axios
-        .get("http://localhost:8000/api/listfollows/" + this.props.userid)
-        .then(response =>
-          this.setState({ followingCount: response.data.length })
+        .get(
+          "http://localhost:8000/api/listfollows/" +
+            this.props.loggedInUserID +
+            "/" +
+            this.props.userId
+        )
+        .then(
+          function(response) {
+            console.log("Response for following is" + response.data.message);
+            if (response.status == 200) {
+              this.setState({
+                followingCount: response.data.length
+              });
+            }
+            this.setState({ loading: false });
+          }.bind(this)
+        )
+        .catch(
+          function(error) {
+            console.log("Couldn't load following");
+            this.setState({ loading: false });
+          }.bind(this)
         );
-      this.setState({ loading: false });
     } catch (error) {
+      this.setState({ loading: false });
       console.log("Unable to fetch data");
     }
   }
@@ -41,7 +64,7 @@ class VisitFollowingButton extends Component {
         </View>
       );
     } else {
-      return <Spinner />;
+      return <Spinner size="small" />;
     }
   }
 

@@ -53,12 +53,13 @@ export default class JournalItems extends Component {
       detailsMain: {
         alignSelf: "flex-start",
         flexDirection: "row",
-        justifyContent: "space-around",
-        width: "60%"
+        justifyContent: "flex-start",
+        width: "auto"
       },
       userDetails: {
         flexDirection: "column",
-        justifyContent: "space-evenly"
+        justifyContent: "space-evenly",
+        marginLeft: 20
       },
       journalText: {
         height: "auto",

@@ -52,8 +52,13 @@ class VisitProfilePage extends Component {
     const follows = navigation.getParam("follows", "false");
     const otherId = navigation.getParam("otherUserId");
     const thisuserid = navigation.getParam("myUserId");
-    
-    this.setState({ imFollowing: follows, otherUserId: otherId, userid: thisuserid, loading: false});
+
+    this.setState({
+      imFollowing: follows,
+      otherUserId: otherId,
+      userid: thisuserid,
+      loading: false
+    });
     this.getUserData(otherId);
   }
 
@@ -121,14 +126,13 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowersButton() {
-
     if (this.state.loading === false && this.state.otherUserId !== "") {
       return (
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("visitFollowersPage", {
-              userid: this.state.userid,
-              otherUserId: this.state.otherUserId,
+              userId: this.state.otherUserId,
+              loggedInUserID: this.state.userid,
               updateFollowState: this.updateFollowState
             });
           }}
@@ -137,12 +141,11 @@ class VisitProfilePage extends Component {
         </TouchableOpacity>
       );
     } else {
-      return <Spinner size={"small"}/>;
+      return <Spinner size={"small"} />;
     }
   }
 
   renderFollowingButton() {
-
     if (this.state.loading === false && this.state.otherUserId !== "") {
       return (
         <TouchableOpacity
@@ -154,7 +157,10 @@ class VisitProfilePage extends Component {
             });
           }}
         >
-          <VisitFollowingButton userid={this.state.otherUserId} />
+          <VisitFollowingButton
+            userId={this.state.otherUserId}
+            loggedInUserID={this.state.userid}
+          />
         </TouchableOpacity>
       );
     } else {
@@ -164,22 +170,27 @@ class VisitProfilePage extends Component {
 
   renderSubCategoryList() {
     if (this.state.loading === false) {
-      console.log("return profile router : " + this.state.otherUserId)
+      console.log("return profile router : " + this.state.otherUserId);
       return (
-        <VisitProfileSubCategoriesRouter screenProps={{ profileID: this.state.otherUserId}} />
+        <VisitProfileSubCategoriesRouter
+          screenProps={{ profileID: this.state.otherUserId }}
+        />
       );
     } else {
-      return <Spinner size={"small"}/>;
+      return <Spinner size={"small"} />;
     }
   }
 
-  renderFollowUnfollowButton(){
-    if(this.state.imFollowing === true){
-      return <Button  
-      onPress={this.onUnfollowPress}
-      type={"danger"}
-      size={"large"}
-      children={"Unfollow"} />
+  renderFollowUnfollowButton() {
+    if (this.state.imFollowing === true) {
+      return (
+        <Button
+          onPress={this.onUnfollowPress}
+          type={"danger"}
+          size={"large"}
+          children={"Unfollow"}
+        />
+      );
     }
     return (
       <Button
@@ -193,13 +204,13 @@ class VisitProfilePage extends Component {
 
   onFollowPress = () => {
     const { navigation } = this.props;
-    //TODO Add loading 
+    //TODO Add loading
     const requestUrl =
       "http://localhost:8000/api/createfollower/" +
       this.state.userid +
       "/" +
       this.state.otherUserId;
-      console.log(requestUrl)
+    console.log(requestUrl);
     axios.get(requestUrl).then(
       function(response) {
         if (response.status === 200) {
@@ -221,13 +232,12 @@ class VisitProfilePage extends Component {
   onUnfollowPress = () => {
     const { navigation } = this.props;
 
-
     const requestUrl =
       "http://localhost:8000/api/removefollower/" +
       this.state.userid +
       "/" +
       this.state.otherUserId;
-      console.log(requestUrl)
+    console.log(requestUrl);
 
     axios.get(requestUrl).then(
       function(response) {
@@ -249,7 +259,7 @@ class VisitProfilePage extends Component {
   };
 
   retrieveBadges() {
-    if(!this.state.loading){
+    if (!this.state.loading) {
       try {
         const id = this.state.userid;
         fetch("http://localhost:8000/api/getbadges/" + id, {
@@ -283,7 +293,7 @@ class VisitProfilePage extends Component {
       } catch (error) {
         this.onFailure("Can't get Data. Please check internet connectivity.");
       }
-    } 
+    }
   }
 
   showBadgeInfo(title, info) {
@@ -408,7 +418,7 @@ class VisitProfilePage extends Component {
             height: "65%"
           }}
         >
-        {this.renderSubCategoryList()}
+          {this.renderSubCategoryList()}
         </View>
         <AnimationErrorBox
           errorMsg={this.state.error}

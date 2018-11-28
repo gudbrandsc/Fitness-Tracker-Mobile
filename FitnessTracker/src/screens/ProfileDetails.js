@@ -49,17 +49,16 @@ class ProfileDetails extends Component {
   static navigationOptions = {
     headerTitle: "Details",
     headerStyle: {
-      backgroundColor: '#00e6d3',
-      height: 60,
-
+      backgroundColor: "#00e6d3",
+      height: 60
     },
-    headerTintColor: '#fff',
+    headerTintColor: "#fff",
     headerTitleStyle: {
       fontWeight: "600",
       color: "#fff",
       fontSize: 22,
       fontFamily: "arial"
-    },
+    }
   };
 
   componentDidMount() {

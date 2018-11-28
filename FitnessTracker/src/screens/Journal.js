@@ -1,11 +1,5 @@
 import React, { Component } from "react";
-import {
-  View,
-  TextInput,
-  AsyncStorage,
-  TouchableOpacity,
-  Text
-} from "react-native";
+import { View, TextInput, AsyncStorage } from "react-native";
 import { Button, Spinner } from "../components/common";
 import DropdownMenu from "react-native-dropdown-menu";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
@@ -23,19 +17,17 @@ class Journal extends Component {
   static navigationOptions = {
     headerTitle: "Journal",
     headerStyle: {
-      backgroundColor: '#00e6d3',
-      height: 60,
-
+      backgroundColor: "#00e6d3",
+      height: 60
     },
-    headerTintColor: '#fff',
+    headerTintColor: "#fff",
     headerTitleStyle: {
       fontWeight: "600",
       color: "#fff",
       fontSize: 22,
       fontFamily: "arial"
-    },
+    }
   };
-
 
   state = {
     id: "",
@@ -134,7 +126,12 @@ class Journal extends Component {
       loading: true,
       animationErrorHeight: "0.5%"
     });
-    if (this.state.picName !== "") {
+    const journalText = this.state.journalText.trim();
+    if (
+      this.state.picName !== "" &&
+      journalText &&
+      journalText !== "[Deleted]"
+    ) {
       var bodyFormData = new FormData();
       bodyFormData.append("data", this.state.picData);
       bodyFormData.append("filename", this.state.picName);
@@ -150,24 +147,24 @@ class Journal extends Component {
         .then(
           function(response) {
             this.setState({ avatarSource: response.data, picName: "" });
-            console.log(response.data);
             if (mode === 0) this.addJournal();
             else if (mode === 1) this.updateJournal();
-            else this.readdJournal();
+            else this.reAddJournal();
           }.bind(this)
         )
-        .catch(function(response) {
-          this.setState({
-            avatarSource:
-              "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg"
-          });
-          this.onFailure("Couldn't upload the picture.");
-          console.log(response);
-        });
+        .catch(
+          function(error) {
+            this.setState({
+              avatarSource:
+                "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg"
+            });
+            this.onFailure("Couldn't upload the picture.");
+          }.bind(this)
+        );
     } else {
       if (mode === 0) this.addJournal();
       else if (mode === 1) this.updateJournal();
-      else this.readdJournal();
+      else this.reAddJournal();
     }
   }
 
@@ -214,7 +211,12 @@ class Journal extends Component {
       if (journalText && journalText !== "[Deleted]") {
         const id = this.state.id;
         const journalText = this.state.journalText.trim();
-        const avatarSource = this.state.avatarSource;
+        var avatarSource = this.state.avatarSource;
+        if (
+          avatarSource ===
+          "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg"
+        )
+          avatarSource = null;
         fetch("http://localhost:8000/api/appendjournal", {
           method: "POST",
           headers: {
@@ -276,13 +278,18 @@ class Journal extends Component {
     }
   }
 
-  readdJournal() {
+  reAddJournal() {
     try {
       const journalText = this.state.journalText.trim();
       if (journalText && journalText !== "[Deleted]") {
         const id = this.state.id;
         const journalText = this.state.journalText.trim();
-        const avatarSource = this.state.avatarSource;
+        var avatarSource = this.state.avatarSource;
+        if (
+          avatarSource ===
+          "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg"
+        )
+          avatarSource = null;
         fetch("http://localhost:8000/api/appendjournal", {
           method: "POST",
           headers: {
@@ -344,7 +351,12 @@ class Journal extends Component {
       if (journalText && journalText !== "[Deleted]") {
         const index = this.state.dropDownIndex - 1;
         const allJournals = this.state.journalsAllData;
-        const avatarSource = this.state.avatarSource;
+        var avatarSource = this.state.avatarSource;
+        if (
+          avatarSource ===
+          "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg"
+        )
+          avatarSource = null;
         console.log(allJournals[index]);
         const journalId = allJournals[index].id;
         const journalText = this.state.journalText.trim();

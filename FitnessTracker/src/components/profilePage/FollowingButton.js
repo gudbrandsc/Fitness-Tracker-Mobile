@@ -12,30 +12,48 @@ class FollowingButton extends Component {
     };
   }
 
+  componentDidMount() {
+    this.retrieveData();
+  }
 
-  //Method to reset the state when a workout is submitted.
-  componentWillReceiveProps(nextProps) {
-    if (this.props.reset !== nextProps.reset) {
-      this.updateData()
+  componentDidUpdate(prevProps) {
+    console.log(prevProps);
+    if (prevProps.identifier !== this.props.identifier) {
+      this.retrieveData();
     }
   }
 
-
-  updateData(){
+  retrieveData() {
     try {
+      this.setState({ loading: true });
       axios
-        .get("http://localhost:8000/api/listfollows/" + this.props.userid)
-        .then(response =>
-          this.setState({ followingCount: response.data.length })
+        .get(
+          "http://localhost:8000/api/listfollows/" +
+            this.props.loggedInUserID +
+            "/" +
+            this.props.userId
+        )
+        .then(
+          function(response) {
+            console.log("Response for following is" + response.data.message);
+            if (response.status == 200) {
+              this.setState({
+                followingCount: response.data.length
+              });
+            }
+            this.setState({ loading: false });
+          }.bind(this)
+        )
+        .catch(
+          function(error) {
+            this.setState({ loading: false });
+            console.log("Couldn't load following");
+          }.bind(this)
         );
-      this.setState({ loading: false });
     } catch (error) {
+      this.setState({ loading: false });
       console.log("Unable to fetch data");
     }
-  }
-
-  componentDidMount() {
-    this.updateData()
   }
 
   renderCount() {
@@ -53,7 +71,7 @@ class FollowingButton extends Component {
         </View>
       );
     } else {
-      return <Text>Rendering</Text>;
+      return <Spinner size="small" />;
     }
   }
 
