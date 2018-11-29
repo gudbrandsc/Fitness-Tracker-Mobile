@@ -120,7 +120,6 @@ class ExpensesPage extends Component {
     }
 
     addExpense() {
-      this.props.screenProps.showAlert("success", "Test from sub") 
       if(this.state.expenseAmount !== "" && this.state.expenseText !== ""){
         try{
             const id = this.state.id;
@@ -229,11 +228,20 @@ class ExpensesPage extends Component {
 
     getListOfExpenses(){
       if(this.state.activeExpenseList === true){
-        return (
-          <ScrollView style={styles.scrollViewStyle}>
-          <ExpensesList expenses={this.state.expenseAllData} deleteExpense={this.deleteExpense.bind(this)} reset={this.state.resetState} />
-          </ScrollView>
-        );
+        if(this.state.expenseAllData && this.state.expenseAllData.length > 0){
+          return (
+            <ScrollView style={styles.scrollViewStyle}>
+            <ExpensesList expenses={this.state.expenseAllData} deleteExpense={this.deleteExpense.bind(this)} reset={this.state.resetState} />
+            </ScrollView>
+          );
+        } else {
+          return (
+
+          <View style={{paddingTop:10}}>
+            <Text style={{textAlign: 'center'}}>You dont have any saved expenses yet</Text>
+          </View>
+          );
+        }
       }else{
         return(
           <View>
@@ -307,7 +315,7 @@ const styles = StyleSheet.create({
   },
   containerStyle: {
     backgroundColor: '#f7f6ef',
-    flex:1
+    flex:1,
   },
   touchViewStyle:{
     flex: 1, 

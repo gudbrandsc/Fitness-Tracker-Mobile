@@ -10,7 +10,7 @@ class WorkoutHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      term: "",
+      error: "",
       history: [],
       loading: true,
       userId: ""
@@ -20,7 +20,6 @@ class WorkoutHistory extends Component {
   static navigationOptions = ({ navigation }) => {
     return {
       tabBarOnPress({ navigation, defaultHandler }) {
-        console.log("Focus Navigation");
         _this.fetchData(_this.state.userId);
         defaultHandler();
       }
@@ -49,18 +48,23 @@ class WorkoutHistory extends Component {
     axios
       .get("http://localhost:8000/api/newexercisehistory/" + id)
       .then(response =>
-        this.setState({ history: response.data, loading: false })
-      );
+        this.setState({ history: response.data}))
+      .then(this.checkSearchResp.bind(this));
+
   }
 
-  getHistory() {
-    if (this.state.userId !== "") {
-      console.log("send get" + this.state.userId);
+  checkSearchResp() {
+    if (this.state.history && this.state.history.length > 0) {
+      this.setState({ error: "", loading: false });
+    } else {
+      this.setState({
+        error: "No workout history",
+        loading: false
+      });
     }
   }
 
   showList() {
-    console.log("Inside here");
     if (this.state.loading === false) {
       var history = this.state.history;
       history.sort(function(a, b) {
@@ -76,7 +80,8 @@ class WorkoutHistory extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, paddingTop: 15, backgroundColor: "#f4f4f4" }}>
+      <View style={{ flex: 1, backgroundColor: "#f7f6ef" }}>
+        <Text style={{textAlign:'center'}}>{this.state.error}</Text>
         <ScrollView>
           <View style={styles.container}>{this.showList()}</View>
         </ScrollView>

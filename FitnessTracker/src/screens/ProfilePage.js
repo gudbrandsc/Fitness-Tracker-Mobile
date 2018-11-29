@@ -357,15 +357,15 @@ class ProfilePage extends Component {
                   </ScrollView>
                 </View>
               </View>
-              <View
-                style={{
-                  flexDirection: "column",
-                  width: "100%",
-                  height: "63%"
-                }}
-              >
-                <ProfileSubCategoriesRouter />
-              </View>
+                <View
+                  style={{
+                    flexDirection: "column",
+                    width: "100%",
+                    height: "66%"
+                  }}
+                >
+                  <ProfileSubCategoriesRouter />
+                </View>
               <AnimationErrorBox
                 errorMsg={this.state.error}
                 viewHeight={this.state.animationErrorHeight}

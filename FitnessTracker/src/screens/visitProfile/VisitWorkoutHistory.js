@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { ScrollView, View, StyleSheet, AsyncStorage } from "react-native";
-import { Header, Spinner } from "../../components/common";
+import { ScrollView, View, StyleSheet, Text } from "react-native";
+import { Spinner } from "../../components/common";
 import WorkoutCard from "../../components/workoutHistory/WorkoutCard";
 import axios from "axios";
 
@@ -8,7 +8,7 @@ class VisitWorkoutHistory extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      term: "",
+      error: "",
       history: [],
       loading: true,
       visitedUserId: ""
@@ -34,16 +34,31 @@ class VisitWorkoutHistory extends Component {
     axios
       .get("http://localhost:8000/api/newexercisehistory/" + visitedUserId)
       .then(response =>
-        this.setState({ history: response.data, loading: false })
-      );
+        this.setState({ history: response.data}))
+      .then(this.checkSearchResp.bind(this));
+
   }
+
+  checkSearchResp() {
+    if (this.state.history && this.state.history.length > 0) {
+      this.setState({ error: "", loading: false });
+    } else {
+      this.setState({
+        error: "No workout history",
+        loading: false
+      });
+    }
+  }
+
+
 
   showList() {
     if (this.state.loading === false) {
-      console.log(this.state.history);
+      if(this.state.history && this.state.history.length > 0 ){
       return this.state.history.map(session => (
         <WorkoutCard key={session.sessionid} session={session} />
       ));
+      } 
     } else {
       return <Spinner />;
     }
@@ -51,7 +66,8 @@ class VisitWorkoutHistory extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, paddingTop: 15, backgroundColor: "#f4f4f4" }}>
+      <View style={{ flex: 1, paddingTop: 1, backgroundColor: "#f7f6ef" }}>
+        <Text style={{textAlign:'center'}}>{this.state.error}</Text>
         <ScrollView>
           <View style={styles.container}>{this.showList()}</View>
         </ScrollView>

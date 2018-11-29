@@ -174,7 +174,7 @@ class VisitJournal extends Component {
   }
 
   render() {
-    return <View style={{ flex: 1 }}>{this.renderWholePage()}</View>;
+    return <View style={{ flex: 1, backgroundColor: '#f7f6ef' }}>{this.renderWholePage()}</View>;
   }
   styles = {
     journalTextContainer: {
