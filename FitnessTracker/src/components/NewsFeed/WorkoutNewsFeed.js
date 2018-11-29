@@ -57,7 +57,7 @@ class WorkoutNewsFeed extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, paddingTop: 15, backgroundColor: "#f4f4f4" }}>
+      <View style={{ flex: 1, paddingTop: 15, backgroundColor: "#f7f6ef" }}>
         <ScrollView>
           <View style={styles.container}>{this.showList()}</View>
         </ScrollView>

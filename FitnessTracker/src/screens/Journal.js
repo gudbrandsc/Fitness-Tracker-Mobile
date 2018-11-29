@@ -606,7 +606,7 @@ class Journal extends Component {
       }
     };
     return (
-      <View style={{ flex: 1 }}>
+      <View style={{ flex: 1, backgroundColor: '#f7f6ef' }}>
         <DropdownMenu
           style={{ flex: 1, height: "100%" }}
           bgColor={"white"}

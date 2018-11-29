@@ -94,7 +94,7 @@ export default class SearchUserPage extends Component {
           icon={{ type: "font-awesome", name: "search" }}
           placeholder="Search..."
         />
-        <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
+        <View style={{ flex: 1, backgroundColor: "#f7f6ef" }}>
           {this.checkResponse(users, loading)}
           <Text>{this.state.error}</Text>
         </View>
