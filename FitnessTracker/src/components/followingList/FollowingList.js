@@ -13,17 +13,18 @@ class FollowingList extends Component {
     this.state = {
       error: '',
     }
-  }
+  }  
+  
 
   /** Render a user detail component for each user object */
   renderUser () {
     if(this.props.followingRequest){
       return this.props.users.map(user =>
-        <FollowingDetail key={user.FollowingId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.props.resetComponent}/>
+        <FollowingDetail key={user.FollowingId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.props.resetComponent} navigation={this.props.navigation}/>
       );
       } else {
         return this.props.users.map(user =>
-          <FollowingDetail key={user.FollowerId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.props.resetComponent}/>
+          <FollowingDetail key={user.FollowerId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.props.resetComponent} navigation={this.props.navigation}/>
       );
     }
   }

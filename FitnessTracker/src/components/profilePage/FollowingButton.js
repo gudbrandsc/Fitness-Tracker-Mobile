@@ -17,7 +17,6 @@ class FollowingButton extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log(prevProps);
     if (prevProps.identifier !== this.props.identifier) {
       this.retrieveData();
     }
@@ -35,7 +34,6 @@ class FollowingButton extends Component {
         )
         .then(
           function(response) {
-            console.log("Response for following is" + response.data.message);
             if (response.status == 200) {
               this.setState({
                 followingCount: response.data.length
@@ -47,12 +45,10 @@ class FollowingButton extends Component {
         .catch(
           function(error) {
             this.setState({ loading: false });
-            console.log("Couldn't load following");
           }.bind(this)
         );
     } catch (error) {
       this.setState({ loading: false });
-      console.log("Unable to fetch data");
     }
   }
 

@@ -64,10 +64,12 @@ class FollowersPage extends Component {
   }
 
   resetComponent = () => {
+    console.log("Follow was clicked reset in homepage")
     if (this.props.navigation.state.params.Home.state.resetComp === "false") {
       this.props.navigation.state.params.Home.setState({ resetComp: "true" });
     } else {
       this.props.navigation.state.params.Home.setState({ resetComp: "false" });
+      this.props.navigation.state.params.Home.handleRefresh();
     }
   };
 
