@@ -1,10 +1,15 @@
 import React, { Component } from "react";
-import { AsyncStorage, View, Text } from "react-native";
-import { Spinner, Header } from "../../components/common";
+import { View, Text } from "react-native";
+import { Spinner } from "../../components/common";
 import axios from "axios";
 import FollowingList from "../../components/followingList/FollowingList";
 
+/**
+ * Page component that renders the entire followers page for a visited profile. 
+ */
 class VisitFollowersPage extends Component {
+
+  /** Load top header */
   static navigationOptions = {
     headerTitle: "Followers",
     headerStyle: {
@@ -21,37 +26,39 @@ class VisitFollowersPage extends Component {
     },
   };
 
+  /** Constructor */
   constructor(props) {
     super(props);
     this.state = {
-      term: "",
       error: "",
       loading: true,
       users: [],
-      userId: "",
-      otherUserId: ""
+      loggedInUserID: "",
+      visitedUserId: ""
     };
   }
 
   componentDidMount() {
     this.getFollowingList();
   }
-
+  
   getFollowingList(){
     const { navigation } = this.props;
-    const id = navigation.getParam('otherUserId');
-    const userId = navigation.getParam('userid');
-    this.setState({ otherUserId: id, userId: userId });
-    this.fetchData(id);
+    const visitedUserId = navigation.getParam('visitedUserId');
+    const loggedInUserID = navigation.getParam('loggedInUserID');
+    this.setState({ visitedUserId: visitedUserId, loggedInUserID: loggedInUserID });
+    this.fetchData(loggedInUserID, visitedUserId);
   }
 
-  fetchData(id) {
+  /** Get a list of all the users following the visiting user */
+  fetchData(loggedInUserID, visitedUserId) {
     axios
-      .get("http://localhost:8000/api/listfollowers/" + id)
+      .get("http://localhost:8000/api/listfollowers/" + loggedInUserID + "/" + visitedUserId)
       .then(response => this.setState({ users: response.data }))
       .then(this.checkSearchResp.bind(this));
   }
 
+  /** Check the respons to see if the user has any followers */
   checkSearchResp() {
     if (this.state.users && this.state.users.length > 0) {
       this.setState({ error: "", loading: false });
@@ -67,12 +74,13 @@ class VisitFollowersPage extends Component {
     console.log("lol")
   } 
 
-  checkResponse(users, loading) {
+  /** Waits for backend to respond with a list of followers, and returns spinning wheel until data is loaded. */
+  renderFollowingList(users, loading) {
     if (loading) {
       return <Spinner size={"small"} />;
     }
     if (users && users.length > 0) {
-      return <FollowingList users={users} userId={this.state.userId} followingRequest={false} resetComponent={this.resetComponent.bind(this)}/>;
+      return <FollowingList users={users} loggedInUserID={this.state.loggedInUserID} followingRequest={false} resetComponent={this.resetComponent.bind(this)}/>;
     }
   }
 
@@ -81,7 +89,7 @@ class VisitFollowersPage extends Component {
 
     return (
       <View style={{ flex: 1, backgroundColor:'#f7f6ef' }}>
-        {this.checkResponse(users, loading)}
+        {this.renderFollowingList(users, loading)}
         <Text>{this.state.error}</Text>
       </View>
     );

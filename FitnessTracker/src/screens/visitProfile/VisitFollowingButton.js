@@ -19,12 +19,16 @@ class VisitFollowingButton extends Component {
   retrieveData() {
     try {
       this.setState({ loading: true });
+      console.log("http://localhost:8000/api/listfollows/" +
+      this.props.loggedInUserID +
+      "/" +
+      this.props.visitedUserId)
       axios
         .get(
           "http://localhost:8000/api/listfollows/" +
             this.props.loggedInUserID +
             "/" +
-            this.props.userId
+            this.props.visitedUserId
         )
         .then(
           function(response) {

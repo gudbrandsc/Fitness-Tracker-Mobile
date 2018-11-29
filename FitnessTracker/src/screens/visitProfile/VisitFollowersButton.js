@@ -16,10 +16,11 @@ class VisitFollowingButton extends Component {
   }
 
   retrieveData() {
+    console.log("http://localhost:8000/api/getnooffollowers/" + this.props.visitedUserId)
     try {
       this.setState({ loading: true });
-      console.log("VisitFollowingButton for id: " + this.props.userid);
-      fetch("http://localhost:8000/api/getnooffollowers/" + this.props.userid, {
+      console.log("VisitFollowingButton for id: " + this.props.visitedUserId);
+      fetch("http://localhost:8000/api/getnooffollowers/" + this.props.visitedUserId, {
         method: "GET",
         headers: {
           Accept: "application/json",

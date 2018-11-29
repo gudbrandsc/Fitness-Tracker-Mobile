@@ -9,7 +9,7 @@ class VisitJournal extends Component {
   };
 
   state = {
-    id: "",
+    visitedUserId: "",
     error: "",
     loading: false,
     animationErrorHeight: "0.5%",
@@ -22,11 +22,11 @@ class VisitJournal extends Component {
   };
 
   componentDidMount() {
-    if (this.props.screenProps.profileID !== undefined){
+    if (this.props.screenProps.visitedUserId !== undefined){
       try {
-        const id = this.props.screenProps.profileID;
-        this.setState({ id });
-        fetch("http://localhost:8000/api/getjournalentries/" + id, {
+        const visitedUserId = this.props.screenProps.visitedUserId;
+        this.setState({ visitedUserId });
+        fetch("http://localhost:8000/api/getjournalentries/" + visitedUserId, {
           method: "GET",
           headers: {
             Accept: "application/json",

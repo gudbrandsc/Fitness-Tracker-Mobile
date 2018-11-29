@@ -11,17 +11,17 @@ class VisitWorkoutHistory extends Component {
       term: "",
       history: [],
       loading: true,
-      userId: ""
+      visitedUserId: ""
     };
   }
 
   componentDidMount() {
-    if (this.props.screenProps.profileID !== undefined){
-
+    if (this.props.screenProps.visitedUserId !== undefined){
+      console.log(this.props.screenProps.visitedUserId  + "hisotry")
       try {
-        const id = this.props.screenProps.profileID;
-        this.setState({ userId: id });
-        this.fetchData(id);
+        const visitedUserId = this.props.screenProps.visitedUserId;
+        this.setState({ visitedUserId: visitedUserId });
+        this.fetchData(visitedUserId);
       } catch (error) {
         this.setState({
           error: "Can't get Data. Please check internet connectivity."
@@ -29,19 +29,13 @@ class VisitWorkoutHistory extends Component {
       }
     }
   }
-
-  fetchData(id) {
+  //TODO if user do not have workout display text about it 
+  fetchData(visitedUserId) {
     axios
-      .get("http://localhost:8000/api/newexercisehistory/" + id)
+      .get("http://localhost:8000/api/newexercisehistory/" + visitedUserId)
       .then(response =>
         this.setState({ history: response.data, loading: false })
       );
-  }
-
-  getHistory() {
-    if (this.state.userId !== "") {
-      console.log("send get" + this.state.userId);
-    }
   }
 
   showList() {

@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
 import VisitProfileSubCategoriesRouter from "./visitProfile/VisitProfileSubCategoriesRouter";
 import {
-  AsyncStorage,
   View,
   ScrollView,
   Text,
@@ -10,7 +9,7 @@ import {
   Image,
   Alert
 } from "react-native";
-import { Button, Spinner, Header } from "../components/common";
+import { Button, Spinner } from "../components/common";
 import VisitFollowersButton from "./visitProfile/VisitFollowersButton";
 import VisitFollowingButton from "./visitProfile/VisitFollowingButton";
 import { Avatar } from "react-native-elements";
@@ -33,8 +32,8 @@ class VisitProfilePage extends Component {
   };
 
   state = {
-    userid: "",
-    otherUserId: "",
+    loggedInUserID: "",
+    visitedUserId: "",
     name: "",
     error: "",
     loading: true,
@@ -50,22 +49,23 @@ class VisitProfilePage extends Component {
   componentDidMount() {
     const { navigation } = this.props;
     const follows = navigation.getParam("follows", "false");
-    const otherId = navigation.getParam("otherUserId");
-    const thisuserid = navigation.getParam("myUserId");
+    const visitedUserId = navigation.getParam("visitedUserId");
+    const loggedInUserID = navigation.getParam("loggedInUserID");
+    console.log("Visit profile ids: " + visitedUserId + " and loggedin: " + loggedInUserID )
 
     this.setState({
       imFollowing: follows,
-      otherUserId: otherId,
-      userid: thisuserid,
+      visitedUserId: visitedUserId,
+      loggedInUserID: loggedInUserID,
       loading: false
     });
-    this.getUserData(otherId);
+    this.getUserData(visitedUserId);
   }
 
-  getUserData(otherUserId) {
+  getUserData(visitedUserId) {
     try {
-      console.log("The visit profile " + otherUserId);
-      fetch("http://localhost:8000/api/user_details/" + otherUserId, {
+      console.log("The visit profile " + visitedUserId);
+      fetch("http://localhost:8000/api/user_details/" + visitedUserId, {
         method: "GET",
         headers: {
           Accept: "application/json",
@@ -126,18 +126,18 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowersButton() {
-    if (this.state.loading === false && this.state.otherUserId !== "") {
+    if (this.state.loading === false && this.state.visitedUserId !== "") {
       return (
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("visitFollowersPage", {
-              userId: this.state.otherUserId,
-              loggedInUserID: this.state.userid,
+              visitedUserId: this.state.visitedUserId,
+              loggedInUserID: this.state.loggedInUserID,
               updateFollowState: this.updateFollowState
             });
           }}
         >
-          <VisitFollowersButton userid={this.state.otherUserId} />
+          <VisitFollowersButton visitedUserId={this.state.visitedUserId} />
         </TouchableOpacity>
       );
     } else {
@@ -146,20 +146,20 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowingButton() {
-    if (this.state.loading === false && this.state.otherUserId !== "") {
+    if (this.state.loading === false && this.state.visitedUserId !== "") {
       return (
         <TouchableOpacity
           onPress={() => {
             this.props.navigation.navigate("visitFollowingPage", {
-              userid: this.state.userid,
-              otherUserId: this.state.otherUserId,
+              visitedUserId: this.state.visitedUserId,
+              loggedInUserID: this.state.loggedInUserID,
               updateFollowState: this.updateFollowState
             });
           }}
         >
           <VisitFollowingButton
-            userId={this.state.otherUserId}
-            loggedInUserID={this.state.userid}
+            visitedUserId={this.state.visitedUserId}
+            loggedInUserID={this.state.loggedInUserID}
           />
         </TouchableOpacity>
       );
@@ -170,10 +170,10 @@ class VisitProfilePage extends Component {
 
   renderSubCategoryList() {
     if (this.state.loading === false) {
-      console.log("return profile router : " + this.state.otherUserId);
+      console.log("return profile router : " + this.state.visitedUserId);
       return (
         <VisitProfileSubCategoriesRouter
-          screenProps={{ profileID: this.state.otherUserId }}
+          screenProps={{ visitedUserId: this.state.visitedUserId }}
         />
       );
     } else {
@@ -207,9 +207,9 @@ class VisitProfilePage extends Component {
     //TODO Add loading
     const requestUrl =
       "http://localhost:8000/api/createfollower/" +
-      this.state.userid +
+      this.state.loggedInUserID +
       "/" +
-      this.state.otherUserId;
+      this.state.visitedUserId;
     console.log(requestUrl);
     axios.get(requestUrl).then(
       function(response) {
@@ -234,9 +234,9 @@ class VisitProfilePage extends Component {
 
     const requestUrl =
       "http://localhost:8000/api/removefollower/" +
-      this.state.userid +
+      this.state.loggedInUserID +
       "/" +
-      this.state.otherUserId;
+      this.state.visitedUserId;
     console.log(requestUrl);
 
     axios.get(requestUrl).then(
@@ -261,8 +261,7 @@ class VisitProfilePage extends Component {
   retrieveBadges() {
     if (!this.state.loading) {
       try {
-        const id = this.state.userid;
-        fetch("http://localhost:8000/api/getbadges/" + id, {
+        fetch("http://localhost:8000/api/getbadges/" + this.state.visitedUserId, {
           method: "GET",
           headers: {
             Accept: "application/json",
@@ -402,7 +401,7 @@ class VisitProfilePage extends Component {
             }}
           >
             <VisitProfileSubCategoriesRouter
-              profileID={this.props.navigation.getParam("otherUserId")}
+              visitedUserId={this.props.navigation.getParam("visitedUserId")}
             />
           </View>
           <AnimationErrorBox

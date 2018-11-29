@@ -16,7 +16,7 @@ export default class SearchUserPage extends Component {
       error: "",
       loading: false,
       users: [],
-      userId: "",
+      loggedInUserID: "",
       backendIP: ""
     };
     this.onButtonPress = this.onButtonPress.bind(this);
@@ -33,8 +33,8 @@ export default class SearchUserPage extends Component {
 
   retrieveDetails = async () => {
     try {
-      const id = await AsyncStorage.getItem("login");
-      this.setState({ userId: id });
+      const loggedInUserID = await AsyncStorage.getItem("login");
+      this.setState({ loggedInUserID: loggedInUserID });
     } catch (error) {
       this.onFailure("Can't get Data. Please check internet connectivity.");
     }
@@ -42,7 +42,7 @@ export default class SearchUserPage extends Component {
 
   onButtonPress(term) {
     this.setState({ error: "", loading: true });
-    console.log("search: " + term + "userid: " + this.state.userId  )
+    console.log("search: " + term + "userid: " + this.state.loggedInUserID  )
     axios
       .get(
         "http://" +
@@ -50,7 +50,7 @@ export default class SearchUserPage extends Component {
           ":8000/api/searchuser/" +
           term +
           "/" +
-          this.state.userId
+          this.state.loggedInUserID
       )
       .then(response => {
         this.setState({ users: response.data });
@@ -77,7 +77,7 @@ export default class SearchUserPage extends Component {
         <UserList
           navigation={this.props.navigation}
           users={users}
-          userId={this.state.userId}
+          loggedInUserID={this.state.loggedInUserID}
         />
       );
     }

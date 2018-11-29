@@ -47,7 +47,7 @@ class FollowersPage extends Component {
 
   fetchData(id) {
     axios
-      .get("http://localhost:8000/api/listfollowers/" + id)
+      .get("http://localhost:8000/api/listfollowers/" + id + "/" + id)
       .then(response => this.setState({ users: response.data }))
       .then(this.checkSearchResp.bind(this));
   }
@@ -79,6 +79,7 @@ class FollowersPage extends Component {
       return (
         <FollowingList
           users={users}
+          otherUserId={this.state.userId}
           userId={this.state.userId}
           followingRequest={false}
           resetComponent={this.resetComponent.bind(this)}

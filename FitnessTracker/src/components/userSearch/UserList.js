@@ -15,7 +15,7 @@ class UserList extends Component {
 
   renderUser () {
     return this.props.users.map(user =>
-      <UserDetail navigation={this.props.navigation} key={user.id} user={user} userId={this.props.userId}/>
+      <UserDetail navigation={this.props.navigation} key={user.id} user={user} loggedInUserID={this.props.loggedInUserID}/>
     );
   }
 

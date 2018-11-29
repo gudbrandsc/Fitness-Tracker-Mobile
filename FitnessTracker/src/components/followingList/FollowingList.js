@@ -3,6 +3,9 @@ import {ScrollView, StyleSheet, View} from 'react-native';
 import FollowingDetail from './FollowingDetail'
 
 
+/** 
+ * Following list component, that are used to display a list of users.
+ */
 class FollowingList extends Component {
 
   constructor(props) {
@@ -12,18 +15,15 @@ class FollowingList extends Component {
     }
   }
 
-  resetDetail(){
-    this.props.resetComponent();
-  }
-
+  /** Render a user detail component for each user object */
   renderUser () {
     if(this.props.followingRequest){
       return this.props.users.map(user =>
-        <FollowingDetail key={user.FollowingId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.resetDetail.bind(this)}/>
+        <FollowingDetail key={user.FollowingId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.props.resetComponent}/>
       );
       } else {
         return this.props.users.map(user =>
-          <FollowingDetail key={user.FollowerId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.resetDetail.bind(this)}/>
+          <FollowingDetail key={user.FollowerId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.props.resetComponent}/>
       );
     }
   }

@@ -36,13 +36,15 @@ const RootStack = createMaterialTopTabNavigator(
     }
   }
 );
+
+
 class VisitProfileSubCategoriesRouter extends Component {
   constructor(props) {
     super(props);
   }
 
   render() {
-    return <RootStack screenProps={{ profileID: this.props.profileID }} />;
+    return <RootStack screenProps={{ visitedUserId: this.props.visitedUserId }} />;
   }
 }
 

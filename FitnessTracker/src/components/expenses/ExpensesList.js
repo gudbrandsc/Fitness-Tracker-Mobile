@@ -22,7 +22,6 @@ class ExpensesList extends Component {
     }
   }
 
-
   renderExpenses () {
     return this.props.expenses.map(expense =>
       <ExpenseDetail  key={expense.id} expense={expense} deleteExpense={this.props.deleteExpense}/>
