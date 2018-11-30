@@ -47,10 +47,8 @@ class WorkoutHistory extends Component {
     this.setState({ loading: true });
     axios
       .get("http://localhost:8000/api/newexercisehistory/" + id)
-      .then(response =>
-        this.setState({ history: response.data}))
+      .then(response => this.setState({ history: response.data }))
       .then(this.checkSearchResp.bind(this));
-
   }
 
   checkSearchResp() {
@@ -80,8 +78,8 @@ class WorkoutHistory extends Component {
 
   render() {
     return (
-      <View style={{ flex: 1, backgroundColor: "#f7f6ef" }}>
-        <Text style={{textAlign:'center'}}>{this.state.error}</Text>
+      <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
+        <Text style={{ textAlign: "center" }}>{this.state.error}</Text>
         <ScrollView>
           <View style={styles.container}>{this.showList()}</View>
         </ScrollView>

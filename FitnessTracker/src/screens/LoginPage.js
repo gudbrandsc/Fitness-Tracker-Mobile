@@ -10,22 +10,23 @@ import {
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
 
 /**
- * A class that handles Login functionality
- * @author Hassan Ch
+ * Script that allows the user to login, create a new account, or ask for forget password.
+ * When the user logs in, the page navigates to the HomePageRouter.
  */
 class LoginPage extends Component {
+  // built in navigationOptions variable for the react-navigation library
   static navigationOptions = {
     headerTitle: "Login to your account",
-    headerLeft: null
+    headerLeft: null // remove back button in the header
   };
 
   state = {
-    id: "",
+    id: "", // user ID
     email: "",
     password: "",
     userToken: "",
-    error: "",
-    loading: false,
+    error: "", // error message shown in the AnimationErrorBox Component
+    loading: false, // loading variable changes on API calls
     animationErrorHeight: "0.5%"
   };
 
@@ -43,12 +44,13 @@ class LoginPage extends Component {
   }
 
   /**
-   * A function that calls the Login API to login the user. If login is successful, save values to Isolated storage.
-   * Otherwise, show error message.
+   * A function that calls the Login API to login the user. If login is successful, call storeDataIsolatedStorage function.
+   * Otherwise, show error message by calling onLoginFail function.
    */
   handleLogin() {
     const { email, password } = this.state;
 
+    // hide the AnimationErrorBox
     this.setState({ error: "", loading: true, animationErrorHeight: "0.5%" });
 
     try {
@@ -93,6 +95,7 @@ class LoginPage extends Component {
 
   /**
    * A function that stores login, password, and token to the isolated storage.
+   * Then it calls the onLoginSuccess function.
    */
   storeDataIsolatedStorage = async () => {
     try {
@@ -111,6 +114,9 @@ class LoginPage extends Component {
     }
   };
 
+  /**
+   * A function that accepts an error string message and change the state to show the Error Animation Box Component.
+   */
   onLoginFail(err) {
     this.setState({
       error: err,
@@ -119,6 +125,9 @@ class LoginPage extends Component {
     });
   }
 
+  /**
+   * A function that resets all the variables in the state and navigates to the "HomePageRouter".
+   */
   onLoginSuccess() {
     this.setState({
       email: "",
@@ -130,6 +139,9 @@ class LoginPage extends Component {
     this.props.navigation.navigate("Home");
   }
 
+  /**
+   * A function that renders the Login button, if loading is true then show a spinner. Otherwise, show the button
+   */
   renderButton() {
     if (this.state.loading) {
       return <Spinner size="small" />;
@@ -146,14 +158,23 @@ class LoginPage extends Component {
     );
   }
 
+  /**
+   * A function called by the "Create Account" button to navigate to the "RegisterPage"
+   */
   onRegisterButtonPress() {
     this.props.navigation.navigate("Register");
   }
 
+  /**
+   * A function called by the "Forget Password" button to navigate to the "ForgetPasswordPage"
+   */
   onForgetPassButtonPress() {
     this.props.navigation.navigate("ForgetPass");
   }
 
+  /**
+   * A function called from the ErrorBoxAnimation Component to close the Error Animation
+   */
   onCloseAnimationBox() {
     this.setState({
       error: "",
@@ -161,6 +182,9 @@ class LoginPage extends Component {
     });
   }
 
+  /**
+   * Main built in render function that loads the whole page
+   */
   render() {
     return (
       <View style={{ flex: 1 }}>

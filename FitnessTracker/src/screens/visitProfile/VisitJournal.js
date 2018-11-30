@@ -22,7 +22,7 @@ class VisitJournal extends Component {
   };
 
   componentDidMount() {
-    if (this.props.screenProps.visitedUserId !== undefined){
+    if (this.props.screenProps.visitedUserId !== undefined) {
       try {
         const visitedUserId = this.props.screenProps.visitedUserId;
         this.setState({ visitedUserId });
@@ -174,7 +174,11 @@ class VisitJournal extends Component {
   }
 
   render() {
-    return <View style={{ flex: 1, backgroundColor: '#f7f6ef' }}>{this.renderWholePage()}</View>;
+    return (
+      <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
+        {this.renderWholePage()}
+      </View>
+    );
   }
   styles = {
     journalTextContainer: {

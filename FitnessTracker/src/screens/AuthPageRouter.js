@@ -5,6 +5,10 @@ import LoginPage from "./LoginPage";
 import ForgetPassword from "./ForgetPasswordPage";
 import HomePageRouter from "./HomePageRouter";
 
+/**
+ * This script is a stack navigation script that handles the navigation to different pages.
+ * It will initially navigate to "Login" Page
+ */
 const RootStack = createStackNavigator(
   {
     Login: { screen: LoginPage },

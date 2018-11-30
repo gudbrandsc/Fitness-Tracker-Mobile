@@ -9,6 +9,10 @@ import {
 } from "../components/common";
 import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this uses export default so can't be in {}
 
+/**
+ * Script that allows the user to reset his password in case s/he forgot it.
+ */
+
 class ForgetPassword extends Component {
   static navigationOptions = {
     headerTitle: "Forget Password"
@@ -19,11 +23,11 @@ class ForgetPassword extends Component {
     error: "",
     loading: false,
     animationErrorHeight: "0.5%",
-    successMsg: ""
+    successMsg: "" // shows the success message in the Text component when the password is reset
   };
 
   /**
-   * A function that validates all the inputs.
+   * A function that validates all the inputs. If all inputs are valid, call sendEmail function
    */
   validateInput() {
     this.setState({ successMsg: "" });
@@ -35,6 +39,11 @@ class ForgetPassword extends Component {
     } else this.sendEmail();
   }
 
+  /**
+   * A function that sends an API request to the backend to reset the password.
+   * On success, onSendingSuccess function is called and a success message will appear saying that Password was successfully reset...etc
+   * On failure, onSendingFailed function is called
+   */
   sendEmail() {
     try {
       this.setState({
@@ -83,16 +92,23 @@ class ForgetPassword extends Component {
     }
   }
 
+  /**
+   * A function that accepts an error string message and change the state to show the Error Animation Box Component
+   * and reset the email and successMsg.
+   */
   onSendingFailed(err) {
     this.setState({
       email: "",
       error: err,
       loading: false,
       animationErrorHeight: "auto",
-      successMsg: ""
+      successMsg: "" // reset
     });
   }
 
+  /**
+   * A function that resets the email and hides the AnimationErrorBox.
+   */
   onSendingSuccess() {
     this.setState({
       email: "",
@@ -103,7 +119,7 @@ class ForgetPassword extends Component {
   }
 
   /**
-   * A function called when pressing the Register button
+   * A function that renders the Send button, if loading is true then show a spinner. Otherwise, show the button
    */
   renderButton() {
     if (this.state.loading) {
@@ -114,12 +130,15 @@ class ForgetPassword extends Component {
   }
 
   /**
-   * A function called when pressing the close button in the animation error box
+   * A function called from the ErrorBoxAnimation Component to close the Error Animation
    */
   onCloseAnimationBox() {
     this.setState({ error: "", animationErrorHeight: "0.5%" });
   }
 
+  /**
+   * Main built in render function that loads the whole page
+   */
   render() {
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>

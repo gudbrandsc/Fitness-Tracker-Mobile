@@ -15,6 +15,10 @@ import FollowersPage from "./FollowersPage";
 import TopAuthPageRouter from "./TopAuthPageRouter";
 import Journal from "./Journal";
 
+/**
+ * This script is a stack navigation script that handles the navigation to different pages.
+ * It will initially navigate to "Profile" Page
+ */
 const ProfilePageStack = createStackNavigator(
   {
     mainProfile: { screen: ProfilePage },
@@ -56,6 +60,10 @@ ProfilePageStack.navigationOptions = ({ navigation }) => {
   return navigationOptions;
 };
 
+/**
+ * This script is a bottom Tab navigation script that handles a bottom tab style navigation to different pages.
+ * It will initially navigate to "Home" Page
+ */
 const RootStack = createBottomTabNavigator(
   {
     Home: {
@@ -110,7 +118,7 @@ const RootStack = createBottomTabNavigator(
 
 export default class HomePageRouter extends Component {
   static navigationOptions = {
-    header: null
+    header: null // removed the built in header of the navigation
   };
 
   render() {

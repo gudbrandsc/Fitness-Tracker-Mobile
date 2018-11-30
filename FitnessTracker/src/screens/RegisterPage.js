@@ -12,12 +12,20 @@ import AnimationErrorBox from "../components/common/AnimationErrorBox"; // this 
 import { Avatar } from "react-native-elements";
 import axios from "axios";
 
+/**
+ * This is the alert box shown when the user wants to add a picture
+ */
 const options = {
   title: "Profile Picture",
   takePhotoButtonTitle: "Take a photo",
   chooseFromLibraryButtonTitle: "Choose photo from library"
 };
 
+/**
+ * Script that allows the user to create a new account by entering First name,
+ * Last name, Email, Passoword, Picture (*optional), Weight, and Address.
+ * When the user successfully creates the account, the page goes back to the Login Page.
+ */
 class RegisterPage extends Component {
   static navigationOptions = {
     headerTitle: "Create Account"
@@ -36,18 +44,22 @@ class RegisterPage extends Component {
     password: "",
     error: "",
     loading: false,
+    // picture's url
     avatarSource:
       "https://res.cloudinary.com/fitnesstracker/image/upload/v1540766575/blank-profile-picture.png",
-    picName: "",
-    picData: null,
+    picName: "", // name of the picture picked from mobile
+    picData: null, // picture's data in bytes
     animationErrorHeight: "0.5%"
   };
 
+  /**
+   * A built in function for react-native-image-picker library that handles loading the picture from the mobile.
+   * If the picture was successfully loaded from the device, save the picture's url, data, and name to the state.
+   */
   selectImage = () => {
     ImagePicker.showImagePicker(options, response => {
-
       if (response.didCancel) {
-        //TODO fix this 
+        //TODO fix this
         console.log("User cancelled image picker");
       } else if (response.error) {
         console.log("Image Picker Error: ", response.error);
@@ -61,6 +73,10 @@ class RegisterPage extends Component {
     });
   };
 
+  /**
+   * A function that sends the picture loaded from the device to backend in a FormData format.
+   * On successful or failure, the function will call handleRegister function to continue user's registration.
+   */
   uploadImage() {
     var bodyFormData = new FormData();
     bodyFormData.append("data", this.state.picData);
@@ -85,7 +101,9 @@ class RegisterPage extends Component {
   }
 
   /**
-   * A function that validates all the inputs.
+   * A function that validates all the inputs. If all input are valid then check if the picData variable.
+   * If it is null, it means the user didn't load a new picture, so call handleRegister function. Otherwise
+   * call uploadImage to upload the image then register the user.
    */
   validateInput() {
     const regexName = /^(([A-Za-z]\s?-?){2,3})+$/;
@@ -149,7 +167,8 @@ class RegisterPage extends Component {
   }
 
   /**
-   * A function that sends a register request to the backend to store the data
+   * A function that sends a register request to the backend to store the data. On success, it calls onRegisterSuccess function.
+   * On failure, it calls onRegisterFail function.
    */
   handleRegister() {
     try {
@@ -201,10 +220,16 @@ class RegisterPage extends Component {
     }
   }
 
+  /**
+   * A function that accepts an error string message and change the state to show the Error Animation Box Component.
+   */
   onRegisterFail(err) {
     this.setState({ error: err, loading: false, animationErrorHeight: "auto" });
   }
 
+  /**
+   * A function that resets all the variables in the state and navigates to the "RegisterPage".
+   */
   onRegisterSuccess() {
     this.setState({
       fname: "",
@@ -224,7 +249,7 @@ class RegisterPage extends Component {
   }
 
   /**
-   * A function called when pressing the Register button
+   * A function that renders the Register button, if loading is true then show a spinner. Otherwise, show the button
    */
   renderButton() {
     if (this.state.loading) {
@@ -237,12 +262,15 @@ class RegisterPage extends Component {
   }
 
   /**
-   * A function called when pressing the close button in the animation error box
+   * A function called from the ErrorBoxAnimation Component to close the Error Animation
    */
   onCloseAnimationBox() {
     this.setState({ error: "", animationErrorHeight: "0.5%" });
   }
 
+  /**
+   * Main built in render function that loads the whole page
+   */
   render() {
     return (
       <View style={{ flex: 1, justifyContent: "center" }}>
