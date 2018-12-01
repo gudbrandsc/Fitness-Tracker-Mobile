@@ -19,10 +19,14 @@ class FollowingList extends Component {
   /** Render a user detail component for each user object */
   renderUser () {
     if(this.props.followingRequest){
+      console.log(this.props.followingRequest + "is")
+      console.log(this.props.userId + " is prop userid")
       return this.props.users.map(user =>
         <FollowingDetail key={user.FollowingId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.props.resetComponent} navigation={this.props.navigation}/>
       );
       } else {
+        console.log(this.props.userId + " is prop userid")
+
         return this.props.users.map(user =>
           <FollowingDetail key={user.FollowerId} followingRequest={this.props.followingRequest} user={user} userId={this.props.userId} resetDetail={this.props.resetComponent} navigation={this.props.navigation}/>
       );

@@ -80,7 +80,7 @@ class VisitFollowersPage extends Component {
       return <Spinner size={"small"} />;
     }
     if (users && users.length > 0) {
-      return <FollowingList users={users} loggedInUserID={this.state.loggedInUserID} followingRequest={false} resetComponent={this.resetComponent.bind(this)}/>;
+      return <FollowingList users={users} userId={this.state.loggedInUserID} followingRequest={false} resetComponent={this.resetComponent.bind(this)}/>;
     }
   }
 

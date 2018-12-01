@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
     color: "gray"
   },
   containerStyle: {
-    backgroundColor: "#f4f4f4",
+    backgroundColor: "#f7f6ef",
     flex: 1
   },
   touchViewStyle: {

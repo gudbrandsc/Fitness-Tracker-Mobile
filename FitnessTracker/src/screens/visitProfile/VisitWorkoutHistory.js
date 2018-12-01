@@ -59,11 +59,22 @@ class VisitWorkoutHistory extends Component {
       return <Spinner />;
     }
   }
-
+  
+  loadError(){
+    if(this.state.error !== ""){
+    return( 
+    <View style={styles.errorTextContainer}>
+      <Text style={{ fontSize: 20, fontWeight: "bold" }}>
+        {this.state.error}
+      </Text>
+    </View>    
+    );
+    }
+  }
   render() {
     return (
-      <View style={{ flex: 1, paddingTop: 1, backgroundColor: "#f4f4f4" }}>
-        <Text style={{ textAlign: "center" }}>{this.state.error}</Text>
+      <View style={{ flex: 1, paddingTop: 1, backgroundColor: "#f7f6ef" }}>
+        {this.loadError()}
         <ScrollView>
           <View style={styles.container}>{this.showList()}</View>
         </ScrollView>
@@ -79,5 +90,12 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: "column", // main axis
     justifyContent: "center" // main axis
-  }
+  },
+  errorTextContainer: {
+    marginTop: 25,
+    marginBottom: 15,
+    marginLeft: 10,
+    marginRight: 10,
+    height: "auto"
+  },
 });

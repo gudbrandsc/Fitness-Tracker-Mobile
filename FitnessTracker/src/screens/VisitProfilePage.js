@@ -43,7 +43,7 @@ class VisitProfilePage extends Component {
     loadFollowers: false,
     loadFollowing: false,
     imFollowing: false,
-    badgeList: []
+    badgeList: [],
   };
 
   componentDidMount() {
@@ -137,7 +137,7 @@ class VisitProfilePage extends Component {
             });
           }}
         >
-          <VisitFollowersButton visitedUserId={this.state.visitedUserId} />
+          <VisitFollowersButton visitedUserId={this.state.visitedUserId} imFollowing = {this.state.imFollowing} />
         </TouchableOpacity>
       );
     } else {
@@ -146,7 +146,8 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowingButton() {
-    if (this.state.loading === false && this.state.visitedUserId !== "") {
+    if (this.state.loading === false && this.state.visitedUserId !== ""  && this.state.loggedInUserID !== "") {
+      console.log("Render following page " +this.state.visitedUserId +" cur: " +  this.state.loggedInUserID)
       return (
         <TouchableOpacity
           onPress={() => {
@@ -160,6 +161,7 @@ class VisitProfilePage extends Component {
           <VisitFollowingButton
             visitedUserId={this.state.visitedUserId}
             loggedInUserID={this.state.loggedInUserID}
+            imFollowing = {this.state.imFollowing}
           />
         </TouchableOpacity>
       );
@@ -216,7 +218,7 @@ class VisitProfilePage extends Component {
         if (response.status === 200) {
           this.setState({
             imFollowing: true,
-            loading: false
+            loading: false,
           });
           navigation.state.params.updateFollow(true);
         } else {
@@ -237,8 +239,6 @@ class VisitProfilePage extends Component {
       this.state.loggedInUserID +
       "/" +
       this.state.visitedUserId;
-    console.log(requestUrl);
-
     axios.get(requestUrl).then(
       function(response) {
         if (response.status === 200) {
@@ -246,7 +246,6 @@ class VisitProfilePage extends Component {
             imFollowing: false,
             loading: false
           });
-
           navigation.state.params.updateFollow(false);
         } else {
           this.setState({

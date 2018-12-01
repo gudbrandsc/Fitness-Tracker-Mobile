@@ -33,7 +33,6 @@ class FollowingDetail extends Component {
 
   onFollowPress = () => {
     this.setState({loading:true})
-    console.log("Click follow")
     const requestUrl =
       "http://localhost:8000/api/createfollower/" +
       this.props.userId +
@@ -59,8 +58,6 @@ class FollowingDetail extends Component {
 
   onUnfollowPress = () => {
     this.setState({loading:true})
-    console.log("Click unfollow")
-
     const requestUrl =
       "http://localhost:8000/api/removefollower/" +
       this.props.userId +
@@ -88,6 +85,7 @@ class FollowingDetail extends Component {
   renderFollowingButton() {
 
     if(!this.state.loading){
+      console.log(parseInt(this.props.userId) + " = " + parseInt(this.state.otherUserId))
       if(parseInt(this.props.userId) !==  parseInt(this.state.otherUserId)){
         if (this.state.follows === "true") {
           return (

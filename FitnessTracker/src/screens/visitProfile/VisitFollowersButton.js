@@ -15,6 +15,13 @@ class VisitFollowingButton extends Component {
     this.retrieveData();
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.imFollowing !== this.props.imFollowing) {
+      this.retrieveData();
+    }
+  }
+
+
   retrieveData() {
     console.log("http://localhost:8000/api/getnooffollowers/" + this.props.visitedUserId)
     try {

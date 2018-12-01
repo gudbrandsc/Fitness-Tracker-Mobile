@@ -103,7 +103,10 @@ class SubCategory extends Component {
     componentDidUpdate(){
         if(this.state.start === false){
             if(this.props.categoryId === 8){
+                console.log(this.state.value1 + " and " + this.state.value2 + " and " + this.state.value3)
                 if(this.state.value1 !== "" || this.state.value2 !== ""){
+                    console.log(this.state.value1 + " and " + this.state.value2 + " Inside if")
+
                     this.props.subUpdate(this.state.id, this.state.value1, this.state.value2, "0")
                 }else {
                     this.props.subUpdate(this.state.id, this.state.value1, this.state.value2, "")
