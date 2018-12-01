@@ -10,7 +10,8 @@ class CategoryList extends Component {
     this.state = {
       inputValues: [],
       loading: false,
-      missingField: false
+      missingField: false,
+      error:""
     };
   }
 
@@ -66,34 +67,36 @@ class CategoryList extends Component {
 
   AddWorkout = () => {
     var allFieldsEntered = true;
-    console.log(this.state.inputValues)
 
-    for(var i in this.state.inputValues) {
-      if(this.state.inputValues[i].value1 === "" || this.state.inputValues[i].value2 === "" || this.state.inputValues[i].value3 === ""  ){
-        allFieldsEntered = false;
-      }
-    }
-    console.log(this.state.inputValues)
-
-
-    if(allFieldsEntered){
-    this.setState({ loading: true });
-    axios
-      .post("http://localhost:8000/api/newexercise", {
-        userid: this.props.userId,
-        workouts: this.state.inputValues
-      })
-      .then(response => {
-        if (response.status === 200) {
-          this.props.showAlert(true, "Workout added");
+    if(this.state.inputValues && this.state.inputValues > 0 ){
+      for(var i in this.state.inputValues) {
+        if(this.state.inputValues[i].value1 === "" || this.state.inputValues[i].value2 === "" || this.state.inputValues[i].value3 === ""  ){
+          allFieldsEntered = false;
         }
-      })
-      .catch(error => {
-        this.props.showAlert(false, error);
-      });
-    } else {
-      this.setState({ missingField: !this.state.missingField });
-      alert("Please enter value all inputs for you exercises ")
+      }
+
+
+      if(allFieldsEntered){
+      this.setState({ loading: true });
+      axios
+        .post("http://localhost:8000/api/newexercise", {
+          userid: this.props.userId,
+          workouts: this.state.inputValues
+        })
+        .then(response => {
+          if (response.status === 200) {
+            this.props.showAlert(true, "Workout added");
+          }
+        })
+        .catch(error => {
+          this.props.showAlert(false, error);
+        });
+      } else {
+        this.setState({ missingField: !this.state.missingField });
+        alert("Please enter value all inputs for you exercises ")
+      }
+    }else{
+      alert("Add atleast one exercise")
     }
   };
 
