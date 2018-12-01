@@ -7,12 +7,19 @@ import { Avatar } from "react-native-elements";
 import axios from "axios";
 import ImagePicker from "react-native-image-picker";
 
+/**
+ * This is the alert box shown when the user wants to add a picture used by the react-native-image-picker library
+ */
 const options = {
   title: "Add Journal Picture",
   takePhotoButtonTitle: "Take a photo",
   chooseFromLibraryButtonTitle: "Choose photo from library"
 };
 
+/**
+ * A script that allows the user to add a journal and to see all the journals added previously
+ * with the ability to update or delete any journal selected. The user can upload a picture with the journal if s/he wants.
+ */
 class Journal extends Component {
   static navigationOptions = {
     headerTitle: "Journal",
@@ -50,6 +57,11 @@ class Journal extends Component {
     this.retrieveDetails();
   }
 
+  /**
+   * A function that gets the user id from Async Storage and calls the API to get all the journals added
+   * previously by the user. On success, it adds saves the list of journals and create another dropdown list
+   * that contains part of the journal text with the date it was added.
+   */
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
@@ -75,9 +87,10 @@ class Journal extends Component {
               this.setState({ journalsAllData });
               var dropdownData = [["New Journal"]];
               for (var i = 0; i < journalsAllData.length; i++) {
+                // get part of the journal text
                 const journalHeader =
                   journalsAllData[i].Journal.substring(0, 25) + "...";
-                const journalDate = new Date(journalsAllData[i].createdAt);
+                const journalDate = new Date(journalsAllData[i].createdAt); // save the creation date of the journal
                 dropdownData[0].push(
                   journalHeader + " " + journalDate.toDateString()
                 );
@@ -102,6 +115,10 @@ class Journal extends Component {
     }
   };
 
+  /**
+   * A built in function for react-native-image-picker library that handles loading the picture from the mobile.
+   * If the picture was successfully loaded from the device, save the picture's url, data, and name to the state.
+   */
   selectImage = () => {
     ImagePicker.showImagePicker(options, response => {
       console.log("Response = ", response);
@@ -120,6 +137,11 @@ class Journal extends Component {
     });
   };
 
+  /**
+   * A function that accepts mode (Add, update, re-add) and first checks if the user typed anything and there is a text, then it
+   * checks if the picName is not empty which means that the user uploaded a picture from the device. So it sends the picture in a Form format
+   * to the backend to upload it then it calls the suitable function depending on the "mode" passed to it.
+   */
   uploadImage(mode) {
     this.setState({
       error: "",
@@ -154,10 +176,6 @@ class Journal extends Component {
         )
         .catch(
           function(error) {
-            this.setState({
-              avatarSource:
-                "https://res.cloudinary.com/fitnesstracker/image/upload/v1541611311/blankImg.jpg"
-            });
             this.onFailure("Couldn't upload the picture.");
           }.bind(this)
         );
@@ -168,6 +186,9 @@ class Journal extends Component {
     }
   }
 
+  /**
+   * A function that resets the source and picName to their default values
+   */
   deletePicture() {
     this.setState({
       avatarSource:
@@ -176,14 +197,26 @@ class Journal extends Component {
     });
   }
 
+  /**
+   * A function that accepts an error string message and change the state to show the Error Animation Box Component.
+   */
   onFailure(err) {
     this.setState({ error: err, loading: false, animationErrorHeight: "auto" });
   }
 
+  /**
+   * A function that resets the loading variable in the state and closes the Error Animation Box Component.
+   */
   onSuccess() {
     this.setState({ loading: false, error: "", animationErrorHeight: "0.5%" });
   }
 
+  /**
+   * A function called when an option in the drop down menu is selected. If the index is 0, it means the selected option
+   * is "Add Journal" so the components and variables will be reset and updated.
+   * Otherwise, the option is a previously added journal. So the function gets the text and the image of the joutnal from allJournals list
+   * and updates the variables to render it.
+   */
   updateJournalElements(index) {
     if (index === 0) {
       this.setState({
@@ -196,15 +229,31 @@ class Journal extends Component {
     } else {
       const allJournals = this.state.journalsAllData;
       const text = allJournals[index - 1].Journal;
-      this.setState({
-        journalPlaceholder: "",
-        journalText: text,
-        dropDownIndex: index,
-        avatarSource: allJournals[index - 1].imageurl
-      });
+      var avatarSource = allJournals[index - 1].imageurl;
+      if (avatarSource === null) {
+        this.deletePicture();
+        this.setState({
+          journalPlaceholder: "",
+          journalText: text,
+          dropDownIndex: index
+        });
+      } else {
+        this.setState({
+          journalPlaceholder: "",
+          journalText: text,
+          dropDownIndex: index,
+          avatarSource
+        });
+      }
     }
   }
 
+  /**
+   * A function that checks if the journal text is not empty and not "[Deleted]" because this keyword is only reserved for deleted
+   * journals that can be re-added again. Then it calls the api and pass all the required data to add the journal. On success,
+   * the journal is added to the dropdown data and to the journal list and updateJournalElements function is called in addition to OnSuccess
+   * function.
+   */
   addJournal() {
     try {
       const journalText = this.state.journalText.trim();
@@ -278,6 +327,11 @@ class Journal extends Component {
     }
   }
 
+  /**
+   * A function that checks if the journal text is not empty and not "[Deleted]" because this keyword is only reserved for deleted
+   * journals that can be re-added again. Then it calls the api and pass all the required data to "re-add" the journal after deleting it.
+   * On success, the journal is updated in the dropdown data and in the journal list again
+   */
   reAddJournal() {
     try {
       const journalText = this.state.journalText.trim();
@@ -318,9 +372,9 @@ class Journal extends Component {
                 const journalDate = new Date(res.data.journalEntry.createdAt);
                 const dropdownData = [...this.state.dropdownData];
                 dropdownData[0][index + 1] =
-                  journalHeader + " " + journalDate.toDateString();
+                  journalHeader + " " + journalDate.toDateString(); // update the re-added journal in the dropdown
                 const journalsAllData = this.state.journalsAllData;
-                journalsAllData[index] = res.data.journalEntry;
+                journalsAllData[index] = res.data.journalEntry; // update the re-added journal in the Journals List
                 this.setState({ dropdownData, journalsAllData });
                 console.log(journalsAllData);
                 this.onSuccess();
@@ -345,6 +399,12 @@ class Journal extends Component {
     }
   }
 
+  /**
+   * A function that checks if the journal text is not empty and not "[Deleted]" because this keyword is only reserved for deleted
+   * journals that can be re-added again.
+   * Then it calls the api and pass all the required data to update a selected journal.
+   * On success, the journal is updated in the dropdown data and in the journal list.
+   */
   updateJournal() {
     try {
       const journalText = this.state.journalText.trim();
@@ -414,6 +474,11 @@ class Journal extends Component {
     }
   }
 
+  /**
+   * A function that deletes a selected journal. On success it doesn't remove it from the Journals List just to give the user
+   * a second chance to add it again. But it updates its title in the dropdown to "[Deleted]" as an indicator that this journal is
+   * deleted.
+   */
   deleteJournal() {
     try {
       this.setState({
@@ -470,6 +535,14 @@ class Journal extends Component {
     }
   }
 
+  /**
+   * A function that renders the buttons for the Journals depending on the index selected from the drop down menu.
+   * If the index = 0, it means that "Add Journal" so show the "Add" Button.
+   * If the index is not 0 but the title of the selected journal is "[Deleted]" then show "Re-Add" button
+   * because the journal is deleted.
+   * Otherwise, show the "Delete" and "Update" buttons.
+   * All the buttons call uploadImage and pass the mode to it. To handle the case of a picture was selected with the journal.
+   */
   renderButton() {
     if (this.state.loading) {
       return <Spinner size="small" />;
@@ -518,7 +591,7 @@ class Journal extends Component {
               <Button
                 size={"large"}
                 type="secondary"
-                onPress={() => this.uploadImage(3)}
+                onPress={() => this.uploadImage(2)}
               >
                 Re-Add
               </Button>
@@ -531,20 +604,21 @@ class Journal extends Component {
           style={{
             flex: 1,
             flexDirection: "row",
-            alignSelf: "center"
+            alignSelf: "center",
+            marginLeft: 68
           }}
         >
           <View
             style={{
               height: 33,
-              width: "30%",
-              marginRight: 20
+              width: 110,
+              marginRight: 12
             }}
           >
             <Button
               size={"large"}
               type="success"
-              onPress={() => this.uploadImage(2)}
+              onPress={() => this.uploadImage(1)}
             >
               Update
             </Button>
@@ -552,7 +626,7 @@ class Journal extends Component {
           <View
             style={{
               height: 33,
-              width: "30%"
+              width: 140
             }}
           >
             <Button
@@ -575,6 +649,9 @@ class Journal extends Component {
     this.setState({ error: "", animationErrorHeight: "0.5%" });
   }
 
+  /**
+   * Main built in render function that loads the whole page
+   */
   render() {
     const styles = {
       inputStyle: {
@@ -642,12 +719,13 @@ class Journal extends Component {
               style={{
                 flex: 1,
                 flexDirection: "row",
-                alignItems: "center"
+                alignItems: "flex-start",
+                marginLeft: 10
               }}
             >
               <View
                 style={{
-                  width: 120,
+                  width: 110,
                   height: 50,
                   marginRight: 10,
                   marginLeft: 15,
@@ -659,16 +737,16 @@ class Journal extends Component {
                   type="success"
                   onPress={this.selectImage.bind(this)}
                 >
-                  Add Picture
+                  Add image
                 </Button>
               </View>
-              <View style={{ width: 150, height: 50, marginTop: "5%" }}>
+              <View style={{ width: 140, height: 50, marginTop: "5%" }}>
                 <Button
                   size={"large"}
                   type="secondary"
                   onPress={this.deletePicture.bind(this)}
                 >
-                  Remove Picture
+                  Remove image
                 </Button>
               </View>
             </View>

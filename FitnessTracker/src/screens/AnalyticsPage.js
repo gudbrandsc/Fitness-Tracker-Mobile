@@ -6,6 +6,10 @@ import ExpensesPiChart from "../components/Analysis/ExpensesPiChart";
 import DropdownMenu from "react-native-dropdown-menu";
 import axios from "axios";
 
+/**
+ * A script that gets different data from the backend for a workout or exercise chosen by the user from the dropdown menu.
+ * It applied some analysis to the retrieved data and shows the data in line charts and PI chart for the expenses.
+ */
 class AnalyticsPage extends Component {
   state = {
     allData: [],
@@ -25,63 +29,77 @@ class AnalyticsPage extends Component {
     this.retrieveDetails();
   }
 
+  /**
+   * A function that gets the user id from Async Storage and calls retrieveWeight function and also
+   * gets workout categories by sending an API request to the backend.
+   */
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
       this.setState({ userId: id });
-      this.retrieveWeight(id);
-      axios.get("http://localhost:8000/api/workoutcategories").then(
-        function(response) {
-          const allData = response.data;
-          const workout = [];
-          for (var i = 0; i < allData.length; i++) {
-            workout.push(allData[i].CategoryName);
-          }
-          workout.push("Expenses");
-          workout.push("Weight");
-          this.setState({
-            allData,
-            workoutDropDown: workout,
-            workoutID: 0,
-            exerciseId: 0
-          });
-          this.updateExercisesDropDown(0);
-        }.bind(this)
-      );
+      this.retrieveWeight(id, "");
+      axios
+        .get("http://localhost:8000/api/workoutcategories")
+        .then(
+          function(response) {
+            const allData = response.data;
+            const workout = [];
+            for (var i = 0; i < allData.length; i++) {
+              workout.push(allData[i].CategoryName);
+            }
+            workout.push("Expenses"); // add expenses to the workout list
+            workout.push("Weight"); // add weight to the workout list
+            this.setState({
+              allData,
+              workoutDropDown: workout,
+              workoutID: 0,
+              exerciseId: 0
+            });
+            this.updateExercisesDropDown(0);
+          }.bind(this)
+        )
+        .catch(function(error) {
+          alert("Couldn't get the data! Try Again.");
+        });
     } catch (error) {
-      alert(error);
-      // this.setState({
-      //   error: "Can't get Data. Please check internet connectivity."
-      // });
+      alert("Check internet connectivity.");
     }
   };
 
-  retrieveWeight(userId) {
+  /**
+   * A function that gets the user id and calls an API to retrieve a list of weights added by the user previously
+   * then it saves the last weight value in the currentWeight variable.
+   */
+  retrieveWeight(userId, workoutName) {
     try {
-      axios.get("http://localhost:8000/api/getweight/" + userId).then(
-        function(response) {
-          const data = response.data;
-          const weightList = [];
-          for (var i = 0; i < data.length; i++) {
-            weightList.push(data[i].Weight);
-          }
-          const currentWeight = weightList[weightList.length - 1];
-          this.setState({ weightList, currentWeight });
-        }.bind(this)
-      );
+      axios
+        .get("http://localhost:8000/api/getweight/" + userId)
+        .then(
+          function(response) {
+            const data = response.data;
+            const weightList = [];
+            for (var i = 0; i < data.length; i++) {
+              weightList.push(data[i].Weight);
+            }
+            const currentWeight = weightList[weightList.length - 1];
+            this.setState({ weightList, currentWeight, workoutName });
+          }.bind(this)
+        )
+        .catch(function(error) {
+          alert("Couldn't get the data! Try Again.");
+        });
     } catch (error) {
-      alert(error);
-      // this.setState({
-      //   error: "Can't get Data. Please check internet connectivity."
-      // });
+      alert("Check internet connectivity.");
     }
   }
 
+  /**
+   * A function that calls an API to get the data (Sets, Reps, and weight) for a specific exercise by its ID
+   * then calls fillStatistics function and pass to it the data received.
+   */
   getExerciseStatistics(exercisesID) {
     try {
       const userId = this.state.userId;
-      //axios.get(" http://localhost:8000/api/exerciseanalysis/36/" + exercisesID)
-      //axios.get("http://localhost:8000/api/exerciseanalysis/12/" + exercisesID)
       axios
         .get(
           "http://localhost:8000/api/exerciseanalysis/" +
@@ -89,36 +107,48 @@ class AnalyticsPage extends Component {
             "/" +
             exercisesID
         )
-
         .then(
           function(response) {
             this.fillStatistics(response.data);
           }.bind(this)
-        );
+        )
+        .catch(function(error) {
+          alert("Couldn't get the data! Try Again.");
+        });
     } catch (error) {
-      alert(error);
-      // this.setState({
-      //   error: "Can't get Data. Please check internet connectivity."
-      // });
+      alert("Check internet connectivity.");
     }
   }
 
+  /**
+   * A function that calls an API to get all the expenses added previously by the user.
+   * Then calls fillStatistics function and pass to it the data received.
+   */
   retrieveExpenses() {
     try {
       const userId = this.state.userId;
-      axios.get("http://localhost:8000/api/getexpense/" + userId).then(
-        function(response) {
-          this.fillStatistics(response.data.Expenses_Details);
-        }.bind(this)
-      );
+      axios
+        .get("http://localhost:8000/api/getexpense/" + userId)
+        .then(
+          function(response) {
+            this.fillStatistics(response.data.Expenses_Details);
+          }.bind(this)
+        )
+        .catch(function(error) {
+          alert("Couldn't get the data! Try Again.");
+        });
     } catch (error) {
-      alert(error);
-      // this.setState({
-      //   error: "Can't get Data. Please check internet connectivity."
-      // });
+      alert("Check internet connectivity.");
     }
   }
 
+  /**
+   * A function that checks the type of the workout selected and fills the statistic data list with specific data.
+   * For expenses, only add the ExpenseType and Amount Spent
+   * For Exercises, only add Sets, Reps, and Weight
+   * For Cardio, only add Sets, Reps, and Calories burned (after calculating it using a specific formula)
+   * For Weight, pass the weight list as it is to the Statistics list.
+   */
   fillStatistics(data) {
     const workoutName = this.state.dropdownData[0][this.state.workoutID];
     if (workoutName === "Expenses") {
@@ -145,6 +175,7 @@ class AnalyticsPage extends Component {
       } else {
         for (var i = 0; i < data.length; i++) {
           if (workoutName === "Cardio") {
+            // calculate the calories burned using the below formula
             const calorie = Math.round(
               0.0175 *
                 10 *
@@ -162,11 +193,19 @@ class AnalyticsPage extends Component {
     }
   }
 
+  /**
+   * A function called by the dropdown library whenever an item is selected from the menu.
+   * It passes the selection (column index) and row (item's index)
+   * If the selection equals to 0, it means that an item in the workouts menu is selected so call updateExercisesDropDown function and pass
+   * the index of the item selected to it
+   * If the selection equals to 1, it means an exercise is selected. so call getExerciseStatistics function
+   */
   onDropDownSelectChange(selection, row) {
     if (selection === 1) {
       const workoutTable = this.state.allData[this.state.workoutID]
         .Workout_tables;
       row -= 1;
+      // it means an item is selected, otherwise the exercises menu is empty
       if (workoutTable.length > 0 && row >= 0) {
         const exerciseId = workoutTable[row].id;
         this.getExerciseStatistics(exerciseId);
@@ -177,6 +216,12 @@ class AnalyticsPage extends Component {
     }
   }
 
+  /**
+   * A function that gets the workout ID then gets the workout name from the dropdown list data and checks the workout name.
+   * If the workout name is Expenses, then call retrieveExpenses function.
+   * else If the workout name is Weight, then update the workout name in the state to refresh the render function
+   * otherwise, it means a workout is chosen so get all the exercises for the selected workout and update the exercises' drop down menu
+   */
   updateExercisesDropDown(workoutID) {
     const exercises = [];
     const workoutName = this.state.dropdownData[0][workoutID];
@@ -189,7 +234,7 @@ class AnalyticsPage extends Component {
     if (workoutName === "Expenses") {
       this.retrieveExpenses();
     } else if (workoutName === "Weight") {
-      this.setState({ workoutName });
+      this.retrieveWeight(this.state.userId, "Weight");
     } else {
       exercises.push("Exercises");
       const workoutTable = this.state.allData[workoutID].Workout_tables;
@@ -204,8 +249,13 @@ class AnalyticsPage extends Component {
     }
   }
 
+  /**
+   * A function that renders the data into Line chart (PI chart for expenses)
+   * and analyzes it depending on the chosen workout and exercise.
+   */
   renderCharts() {
     const workoutName = this.state.workoutName;
+    // no workout selected
     if (workoutName === "")
       return (
         <View
@@ -232,6 +282,7 @@ class AnalyticsPage extends Component {
         maxVal = data[i][0];
         avgCount = 0;
         avgVal = 0;
+        // get min max and avg
         for (var j = 0; j < data[i].length; j++) {
           if (maxVal < data[i][j]) maxVal = data[i][j];
           if (minVal > data[i][j]) minVal = data[i][j];
@@ -240,7 +291,7 @@ class AnalyticsPage extends Component {
         avgVal = Math.round(avgCount / data[i].length);
         var title = "";
         if (i === 0) {
-          // Progress analysis
+          // Analyse the the calories data
           var length = data[i].length;
           if (length >= 2) {
             if (data[i][length - 1] > data[i][length - 2]) {
@@ -279,15 +330,16 @@ class AnalyticsPage extends Component {
             const jsx = {
               id: i,
               title,
-              min: minVal + "m",
-              max: maxVal + "m",
-              avg: avgVal + "m",
+              min: minVal + " miles",
+              max: maxVal + " miles",
+              avg: avgVal + " miles",
               stats: data[i]
             };
             jsxList.push(jsx);
           }
         }
       }
+      // Render the data in Analysis Component (Line Chart)
       return (
         <React.Fragment>
           <View style={styles.progressContainer}>
@@ -308,26 +360,50 @@ class AnalyticsPage extends Component {
         </React.Fragment>
       );
     } else if (workoutName === "Expenses") {
+      // Expenses are loaded into a PI chart
       const data = this.state.statisticsData;
       const PiData = [];
+      const colors = [
+        "rgba(100,50,170,1)",
+        "rgba(70,230,150,1)",
+        "rgba(40,90,190,1)",
+        "rgba(190,40,160,1)",
+        "rgba(210,210,0,1)",
+        "rgba(255,160,0,1)",
+        "rgba(255,0,0,1)",
+        "rgba(0,180,0,1)",
+        "rgba(255,130,220,1)",
+        "rgba(110,110,110,1)"
+      ];
+      // iterate through the expenses list and generate a random color for each expense and push it to the PI Data list
       for (var i = 0; i < data.length; i++) {
-        var red = 0;
-        while (red === 0) red = Math.floor(Math.random() * 255);
-        var green = 0;
-        while (green === 0) green = Math.floor(Math.random() * 255);
-        var blue = 0;
-        while (blue === 0) blue = Math.floor(Math.random() * 255);
-        const colorCustom = "rgba(" + red + ", " + green + "," + blue + ",1)"; // generate random colors
+        var color = "";
+        var repeat = true;
+        // this loop is to make sure that the colors are not repeated
+        while (repeat) {
+          color = colors[Math.floor(Math.random() * 9)];
+          repeat = false;
+          if (PiData.length === 0) break;
+          else {
+            for (var j = 0; j < PiData.length; j++) {
+              if (color === PiData[j].color) {
+                repeat = true;
+                break;
+              }
+            }
+          }
+        }
         const subPi = {
           name: data[i].type,
           amount: data[i].amount,
-          color: colorCustom,
+          color: color,
           legendFontColor: "#7F7F7F",
           legendFontSize: 15
         };
         PiData.push(subPi);
       }
       if (PiData.length > 0) {
+        // Render the data in Expenses PIChart Component
         return (
           <View
             style={{
@@ -360,6 +436,7 @@ class AnalyticsPage extends Component {
       var maxVal = data[0];
       var avgVal = null;
       var progress = "";
+      // Get the weight difference to show progress between the first weight and the current weight
       const weightDiff = this.state.currentWeight - originalWeight;
       if (weightDiff < 0) progress = "You lost " + Math.abs(weightDiff) + "lbs";
       else if (weightDiff > 0) progress = "You gained " + weightDiff + "lbs";
@@ -368,6 +445,7 @@ class AnalyticsPage extends Component {
         if (minVal > data[i]) minVal = data[i];
         if (maxVal < data[i]) maxVal = data[i];
       }
+      // Render the data in Analysis Component (Line Chart)
       return (
         <React.Fragment>
           <View style={styles.weightprogressContainer}>
@@ -406,7 +484,7 @@ class AnalyticsPage extends Component {
         avgVal = Math.round(avgCount / data[i].length);
         var title = "";
         if (i === 0) {
-          // Progress analysis
+          // Analyze the weight lifted to know if the muscle building or toning
           var length = data[i].length;
           if (length >= 2) {
             if (data[i][length - 1] > data[i][length - 2]) {
@@ -433,7 +511,7 @@ class AnalyticsPage extends Component {
           else {
             title = "Reps Chart";
             var length = data[i].length;
-            // Progress analysis
+            // Analyze Reps to see if the muscle building or toning is going into the right way or it is done wrong
             if (length >= 2) {
               if (data[i][length - 1] > data[i][length - 2]) {
                 if (weightProgress === "Muscle building")
@@ -468,6 +546,7 @@ class AnalyticsPage extends Component {
           jsxList.push(jsx);
         }
       }
+      // Render the data in Analysis Component (Line Chart)
       return (
         <React.Fragment>
           <View style={styles.progressContainer}>
@@ -491,6 +570,9 @@ class AnalyticsPage extends Component {
     return;
   }
 
+  /**
+   * Main built in render function that loads the whole page
+   */
   render() {
     styles = {
       progressContainer: {

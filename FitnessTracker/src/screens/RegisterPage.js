@@ -13,7 +13,7 @@ import { Avatar } from "react-native-elements";
 import axios from "axios";
 
 /**
- * This is the alert box shown when the user wants to add a picture
+ * This is the alert box shown when the user wants to add a picture used by the react-native-image-picker library
  */
 const options = {
   title: "Profile Picture",
@@ -95,9 +95,11 @@ class RegisterPage extends Component {
           this.handleRegister();
         }.bind(this)
       )
-      .catch(function(response) {
-        this.handleRegister();
-      });
+      .catch(
+        function(error) {
+          this.handleRegister();
+        }.bind(this)
+      );
   }
 
   /**

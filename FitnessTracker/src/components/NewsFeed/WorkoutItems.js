@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { Text, View, Image, Dimensions } from "react-native";
 import { Avatar } from "react-native-elements";
 
+/**
+ * A component called by WorkoutNewsFeed Page.
+ * It renders the data sent from WorkoutNewsFeed.
+ */
 export default class WorkoutItems extends Component {
   constructor(props) {
     super(props);

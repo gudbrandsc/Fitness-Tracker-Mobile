@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { Text, View, Image, Dimensions } from "react-native";
 import { Avatar } from "react-native-elements";
 
+/**
+ * A component called by JournalNewsFeed Page.
+ * It renders the data sent from JournalNewsFeed.
+ */
 export default class JournalItems extends Component {
   constructor(props) {
     super(props);

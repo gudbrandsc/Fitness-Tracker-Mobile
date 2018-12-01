@@ -18,12 +18,19 @@ import {
 import { Avatar } from "react-native-elements";
 import axios from "axios";
 
+/**
+ * This is the alert box shown when the user wants to add a picture used by the react-native-image-picker library
+ */
 const options = {
   title: "Profile Picture",
   takePhotoButtonTitle: "Take a photo",
   chooseFromLibraryButtonTitle: "Choose photo from library"
 };
 
+/**
+ * Script that allows the user all his details like First name, Last name, Email, Passoword, Picture, Weight, and Address.
+ * Also the user can update his details and Logout.
+ */
 class ProfileDetails extends Component {
   state = {
     fullName: "",
@@ -65,6 +72,10 @@ class ProfileDetails extends Component {
     this.retrieveWeight();
   }
 
+  /**
+   * A function that gets the ID and password from the Async Storage and calls an API to get a list of weights of the user
+   * and get the current weight (last element in the weight list), then calls retrieveDetails and pass the current weight to it.
+   */
   retrieveWeight = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
@@ -88,6 +99,10 @@ class ProfileDetails extends Component {
     }
   };
 
+  /**
+   * A function that calls an API to get all the user's details. On success, it updates the variables in the state including the
+   * weight variable passed to it too.
+   */
   retrieveDetails(weight) {
     const id = this.state.id;
     fetch("http://localhost:8000/api/user_details/" + id, {
@@ -134,6 +149,10 @@ class ProfileDetails extends Component {
       );
   }
 
+  /**
+   * A built in function for react-native-image-picker library that handles loading the picture from the mobile.
+   * If the picture was successfully loaded from the device, save the picture's url, data, and name to the state.
+   */
   selectImage = () => {
     ImagePicker.showImagePicker(options, response => {
       console.log("Response = ", response);
@@ -152,6 +171,10 @@ class ProfileDetails extends Component {
     });
   };
 
+  /**
+   * A function that sends the picture loaded from the device to backend in a FormData format.
+   * On successful or failure, the function will call handleUpdate function to update the user's details.
+   */
   uploadImage() {
     var bodyFormData = new FormData();
     bodyFormData.append("data", this.state.picData);
@@ -179,7 +202,9 @@ class ProfileDetails extends Component {
   }
 
   /**
-   * A function that validates all the inputs.
+   * A function that validates all the inputs. If all input are valid then check if the picData variable.
+   * If it is null, it means the user didn't load a new picture, so call handleUpdate function. Otherwise
+   * call uploadImage to upload the image then update user's details.
    */
   validateInput() {
     const regexName = /^(([A-Za-z]\s?-?){2,3})+$/;
@@ -243,7 +268,8 @@ class ProfileDetails extends Component {
   }
 
   /**
-   * A function that sends a Update request to the backend to store the data
+   * A function that calls an API and pass to it all required data to update user's details. On success, it updates the variables
+   * in the state, then calls storeDataIsolatedStorage and updateWeight functions.
    */
   handleUpdate() {
     try {
@@ -281,8 +307,9 @@ class ProfileDetails extends Component {
               this.setState({ id, fullName });
               this.storeDataIsolatedStorage();
               this.updateWeight(id);
+              // this will update the name and picture by calling the updateInfo function in the ProfilePage script
               const { params } = this.props.navigation.state;
-              params.updateInfo(fullName, this.state.avatarSource); // this will update the name and call the updateInfo in the ProfilePage class
+              params.updateInfo(fullName, this.state.avatarSource);
             } else {
               this.onFailure("Update failed.");
               console.log("Account update Failed");
@@ -300,6 +327,9 @@ class ProfileDetails extends Component {
     }
   }
 
+  /**
+   * A function that calls an API to append the weight of the user to his/her weight table.
+   */
   updateWeight(id) {
     try {
       fetch("http://localhost:8000/api/updateweight", {
@@ -343,6 +373,7 @@ class ProfileDetails extends Component {
 
   /**
    * A function that stores login, password, and token to the isolated storage.
+   * Then it calls the onLoginSuccess function.
    */
   storeDataIsolatedStorage = async () => {
     try {
@@ -358,14 +389,24 @@ class ProfileDetails extends Component {
     }
   };
 
+  /**
+   * A function that accepts an error string message and change the state to show the Error Animation Box Component.
+   */
   onFailure(err) {
     this.setState({ error: err, loading: false, animationErrorHeight: "auto" });
   }
 
+  /**
+   * A function that resets the loading variable and hides the Error Animation Box Component.
+   */
   onSuccess() {
     this.setState({ loading: false, error: "", animationErrorHeight: "0.5%" });
   }
 
+  /**
+   * A function called by the "Logout" button. It deletes all the data stored in the Async Storage,
+   * then navigates to the "TopAuthPageRouter"
+   */
   logout = async () => {
     try {
       await AsyncStorage.removeItem("Usertoken").then(() => {
@@ -381,7 +422,7 @@ class ProfileDetails extends Component {
   };
 
   /**
-   * A function called when pressing the Update button
+   * A function that renders the Update button, if loading is true then show a spinner. Otherwise, show the button
    */
   renderButton() {
     if (this.state.loading) {
@@ -400,12 +441,15 @@ class ProfileDetails extends Component {
   }
 
   /**
-   * A function called when pressing the close button in the animation error box
+   * A function called from the ErrorBoxAnimation Component to close the Error Animation
    */
   onCloseAnimationBox() {
     this.setState({ error: "", animationErrorHeight: "0.5%" });
   }
 
+  /**
+   * Main built in render function that loads the whole page
+   */
   render() {
     return (
       <ScrollView>

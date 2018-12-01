@@ -3,8 +3,13 @@ import { Text, View, Dimensions } from "react-native";
 import { LineChart } from "react-native-chart-kit";
 import LinearGradient from "react-native-linear-gradient";
 
+/**
+ * A component called by Analytics Page. It uses a Line Chart component from react-native-chart-kit library
+ * to show the retrieved data in a line chart.
+ */
 class AnalysisChart extends Component {
   renderAvg() {
+    // Avg is sent null when selecting Weight, so there is no average weight for the user
     if (this.props.avg !== null) {
       return (
         <View style={{ flexDirection: "row" }}>
@@ -63,20 +68,6 @@ class AnalysisChart extends Component {
       }
     };
     return (
-      /* labels: [
-        "Jan",
-        "Feb",
-        "Mar",
-        "Apr",
-        "May",
-        "Jun",
-        "Jul",
-        "Aug",
-        "Sep",
-        "Oct",
-        "Nov",
-        "Dec"
-      ]*/
       <View style={styles.container}>
         <Text style={styles.title}>{this.props.title}</Text>
         <LineChart

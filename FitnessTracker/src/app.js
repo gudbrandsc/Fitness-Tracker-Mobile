@@ -3,7 +3,8 @@ import {
   AsyncStorage,
   View,
   ActivityIndicator,
-  ImageBackground
+  ImageBackground,
+  Dimensions
 } from "react-native";
 import AuthPageRouter from "./screens/AuthPageRouter";
 import HomePageRouter from "./screens/HomePageRouter";
@@ -56,8 +57,7 @@ class App extends Component {
     const styles = {
       spinnerStyle: {
         flex: 1,
-        alignItems: "center",
-        marginTop: "110%"
+        marginTop: Dimensions.get("window").height * 0.6
       }
     };
     return (

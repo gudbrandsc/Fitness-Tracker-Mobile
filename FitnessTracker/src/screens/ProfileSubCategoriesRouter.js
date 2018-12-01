@@ -5,6 +5,10 @@ import WorkoutHistory from "./WorkoutHistory";
 import MapSearchPage from "./MapSearchPage";
 import ExpensesPage from "./ExpensesPage";
 
+/**
+ * This script is a Material Top Tab navigation script that handles a Top tab style navigation to different pages.
+ * It will initially show to "Workout History" Page
+ */
 export default createMaterialTopTabNavigator(
   {
     "Workout History": {

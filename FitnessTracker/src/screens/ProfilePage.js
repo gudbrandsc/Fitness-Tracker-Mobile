@@ -9,14 +9,19 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  FlatList,
-  Dimensions
+  FlatList
 } from "react-native";
 import { Button, Spinner, Header } from "../components/common";
 import FollowersButton from "../components/profilePage/FollowersButton";
 import FollowingButton from "../components/profilePage/FollowingButton";
 import { Avatar } from "react-native-elements";
 
+/**
+ * A script that shows the user's name, picture, number of follower, number of people following him/her, badges earned,  workout
+ * history, and expenses.
+ * The page allows the user to check all the people s/he is following, the people following her/him, and all the profile details too.
+ * Also, it allows the user to add expenses and search for gyms on the map too
+ */
 class ProfilePage extends Component {
   static navigationOptions = {
     header: <Header headerText={"Profile Page"} />
@@ -34,14 +39,18 @@ class ProfilePage extends Component {
     resetComp: "false",
     flatListData: [0],
     refreshing: false,
-    followingIdentifier: 0,
-    followerIdentifier: 0
+    followingIdentifier: 0, // this is an identifier passed to the followingButton page to retrieve the number of following again
+    followerIdentifier: 0 // this is an identifier passed to the followerButton page to retrieve the number of followers again
   };
 
   componentDidMount() {
     this.retrieveDetails();
   }
 
+  /**
+   * A function that gets the user's ID from Async Storage and calls an API to get user's details.
+   * On success, it updates the user's name and picture and calls retrieveBadges function.
+   */
   retrieveDetails = async () => {
     try {
       const id = await AsyncStorage.getItem("login");
@@ -64,6 +73,7 @@ class ProfilePage extends Component {
             if (res.status === 200) {
               const name = res.data.FirstName + " " + res.data.LastName;
               const flatListData = [1];
+              // updating flatListData to allow the FlatList component to rerender, otherwise the data will be updated but the view will stay the same
               this.setState({
                 avatarSource: res.data.ImageUrl,
                 name,
@@ -88,12 +98,17 @@ class ProfilePage extends Component {
     }
   };
 
+  /**
+   * A function called by the FlatList. WHen scrolling down the refresh icon appears and this function is called.
+   * It refreshes the profile page by updating the identifiers and calling retrieveDetails function.
+   */
   handleRefresh = () => {
     this.setState(
       {
         refreshing: true
       },
       () => {
+        // increment the identifiers so that the Following/FollowerButton pages will calls the functions to retrieve the data again.
         const followerIdentifier = this.state.followerIdentifier + 1;
         const followingIdentifier = this.state.followingIdentifier + 1;
         this.setState({ followerIdentifier, followingIdentifier });
@@ -102,6 +117,9 @@ class ProfilePage extends Component {
     );
   };
 
+  /**
+   * A function that calls an API to get all the badges earned by the user and adds them to the badgeList on success.
+   */
   retrieveBadges() {
     try {
       const id = this.state.userid;
@@ -123,6 +141,7 @@ class ProfilePage extends Component {
             if (res.status === 200) {
               const badgeList = res.data;
               const flatListData = [2];
+              // updating flatListData to allow the FlatList component to rerender, otherwise the data will be updated but the view will stay the same
               this.setState({ badgeList, flatListData });
             } else {
               this.onFailure("Could not retrieve badges for this user.");
@@ -139,6 +158,9 @@ class ProfilePage extends Component {
     }
   }
 
+  /**
+   * A function that accepts an error string message and change the state to show the Error Animation Box Component.
+   */
   onFailure(err) {
     this.setState({
       error: err,
@@ -148,6 +170,9 @@ class ProfilePage extends Component {
     });
   }
 
+  /**
+   * A function that resets the loading and refreshing in the state and closes the Error Animation Box Component.
+   */
   onSuccess() {
     console.log("Success");
     this.setState({
@@ -158,24 +183,34 @@ class ProfilePage extends Component {
     });
   }
 
+  /**
+   * A function that is passed in the navigation props to the ProfileDetails Page and called from there when the user updates
+   * his/her details. So the name and the picture would change too if the user changed them from the Profile Details page.
+   */
   updateInfo(name, picUrl) {
     this.setState({ name });
     this.setState({ avatarSource: picUrl });
   }
 
   /**
-   * A function called when pressing the close button in the animation error box
+   * A function called from the ErrorBoxAnimation Component to close the Error Animation
    */
   onCloseAnimationBox() {
     this.setState({ error: "", animationErrorHeight: "0.5%" });
   }
 
+  /**
+   * A function called when a badge is pressed to show it's title and information.
+   */
   showBadgeInfo(title, info) {
     Alert.alert(title + " Badge", info, [
       { text: "OK", onPress: () => console.log("OK Pressed") }
     ]);
   }
 
+  /**
+   * A function that iterates through the badges list and renders them.
+   */
   renderBadges() {
     if (this.state.badgeList.length > 0) {
       return (
@@ -197,6 +232,9 @@ class ProfilePage extends Component {
     }
   }
 
+  /**
+   * A function that renders the Follower Button component
+   */
   renderFollowersButton() {
     if (this.state.loading === false && this.state.userid !== "") {
       return (
@@ -217,6 +255,9 @@ class ProfilePage extends Component {
     }
   }
 
+  /**
+   * A function that renders the Following Button component
+   */
   renderFollowingButton() {
     if (this.state.loading === false && this.state.userid !== "") {
       return (
@@ -238,25 +279,29 @@ class ProfilePage extends Component {
     }
   }
 
+  /**
+   * Main built in render function that loads the whole page. It renders the upper part of the profile page inside a FlatList component
+   * to allow refresh. The second part of the page is a Top Tab navigation Component (ProfileSubCategoriesRouter) that includes
+   * Workout history, Map Search, and Expenses.
+   */
   render() {
     return (
-      <FlatList
-        data={this.state.flatListData}
-        renderItem={({ item }) => (
-          <View
-            style={{
-              flex: 1,
-              backgroundColor: "#f4f4f4",
-              width: Dimensions.get("window").width,
-              height: Dimensions.get("window").height - 150
-            }}
-          >
-            <View style={{ marginTop: 20 }}>
+      <View
+        style={{
+          flex: 1,
+          backgroundColor: "#f4f4f4"
+        }}
+      >
+        <View style={{ marginTop: 10 }}>
+          <FlatList
+            data={this.state.flatListData}
+            renderItem={({ item }) => (
               <View
                 style={{
                   flexDirection: "column",
                   width: "100%",
-                  height: "auto"
+                  height: "37%",
+                  marginTop: 10
                 }}
               >
                 <View style={{ flexDirection: "row", width: 100 }}>
@@ -274,10 +319,10 @@ class ProfilePage extends Component {
                       height: "auto",
                       width: "auto",
                       justifyContent: "center",
-                      marginLeft: 40
+                      marginLeft: 25
                     }}
                   >
-                    <View style={{ flex: 0.8, marginRight: 10 }}>
+                    <View style={{ flexDirection: "column" }}>
                       <View
                         style={{
                           flex: 1,
@@ -285,10 +330,10 @@ class ProfilePage extends Component {
                           justifyContent: "space-between"
                         }}
                       >
-                        <View style={{ width: "100%" }}>
+                        <View style={{ width: 110 }}>
                           {this.renderFollowingButton()}
                         </View>
-                        <View style={{ width: "100%", marginLeft: 15 }}>
+                        <View style={{ width: 110, marginRight: 10 }}>
                           {this.renderFollowersButton()}
                         </View>
                       </View>
@@ -300,9 +345,7 @@ class ProfilePage extends Component {
                           justifyContent: "space-between"
                         }}
                       >
-                        <View
-                          style={{ height: 32, marginTop: 15, width: "100%" }}
-                        >
+                        <View style={{ height: 32, marginTop: 15, width: 120 }}>
                           <Button
                             size={"large"}
                             type={"secondary"}
@@ -318,7 +361,7 @@ class ProfilePage extends Component {
                         <View
                           style={{
                             height: 32,
-                            width: "100%",
+                            width: 130,
                             marginTop: 15,
                             marginLeft: 15
                           }}
@@ -351,34 +394,34 @@ class ProfilePage extends Component {
                   </Text>
                   <ScrollView
                     horizontal={true}
-                    style={{ marginTop: 8, marginBottom: 8 }}
+                    style={{ marginTop: 8, marginBottom: 8, height: 50 }}
                   >
                     {this.renderBadges()}
                   </ScrollView>
                 </View>
               </View>
-                <View
-                  style={{
-                    flexDirection: "column",
-                    width: "100%",
-                    height: "66%"
-                  }}
-                >
-                  <ProfileSubCategoriesRouter />
-                </View>
-              <AnimationErrorBox
-                errorMsg={this.state.error}
-                viewHeight={this.state.animationErrorHeight}
-                onPress={this.onCloseAnimationBox.bind(this)}
-              />
-            </View>
+            )}
+            scrollEnabled={false}
+            keyExtractor={item => "1"}
+            onRefresh={this.handleRefresh}
+            refreshing={this.state.refreshing}
+          />
+          <View
+            style={{
+              flexDirection: "column",
+              width: "100%",
+              height: "63%"
+            }}
+          >
+            <ProfileSubCategoriesRouter />
           </View>
-        )}
-        scrollEnabled={false}
-        keyExtractor={item => "1"}
-        onRefresh={this.handleRefresh}
-        refreshing={this.state.refreshing}
-      />
+          <AnimationErrorBox
+            errorMsg={this.state.error}
+            viewHeight={this.state.animationErrorHeight}
+            onPress={this.onCloseAnimationBox.bind(this)}
+          />
+        </View>
+      </View>
     );
   }
 }

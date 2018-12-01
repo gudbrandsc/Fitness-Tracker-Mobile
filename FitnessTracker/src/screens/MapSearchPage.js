@@ -3,7 +3,11 @@ import { StyleSheet, TextInput, Text, View, Image } from "react-native";
 import { Button, Spinner } from "../components/common";
 import MapView from "react-native-maps";
 import { Marker } from "react-native-maps";
+import axios from "axios";
 
+/**
+ * A script that allows the user to search for gyms on the map based on specific preferences and to see details about the gyms.
+ */
 class MapSearchPage extends Component {
   state = {
     region: {
@@ -26,10 +30,12 @@ class MapSearchPage extends Component {
     markerSelectedId: 0
   };
 
+  /**
+   * A Built in function that gets the current geolocation of the device and updates the variables in the state
+   */
   componentDidMount() {
     navigator.geolocation.getCurrentPosition(
       position => {
-        //console.log(position.coords.latitude + " and " + position.coords.longitude);
         const region = {
           latitude: position.coords.latitude,
           longitude: position.coords.longitude,
@@ -51,131 +57,140 @@ class MapSearchPage extends Component {
     );
   }
 
+  /**
+   * A function that is called when the user presses "Enter on keyboard". It checks if the search text is not empty
+   * then calls an API to googlemaps to get all the places near by 8000 meters to the device's current location.
+   * Then it parses the response to extract the data needed and adds them to marker's list.
+   */
   startSearch() {
     console.log("Start searching");
     try {
       const searchValue = this.state.searchValue.trim();
-      fetch(
-        "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" +
-          searchValue +
-          "&location=" +
-          this.state.latitude +
-          "," +
-          this.state.longitude +
-          "&radius=8000&key=AIzaSyA92o1PC2GUo5f-_--4yhIaQjjo8XhnnU4",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
-        }
-      )
-        .then(response =>
-          response.json().then(data => ({
-            data: data,
-            status: response.status
-          }))
-        )
-        .then(
-          res => {
-            console.log(res.data);
-            const markers = [];
-            for (var i = 0; i < res.data.results.length; i++) {
-              const id = i + 1;
-              const latitude = res.data.results[i].geometry.location.lat;
-              const longitude = res.data.results[i].geometry.location.lng;
-              const title = res.data.results[i].name;
-              const openingHours = res.data.results[i].opening_hours;
-              const opened = false;
-              if (openingHours)
-                opened = res.data.results[i].opening_hours.open_now;
-              let openedNow = "Opened";
-              if (!opened) openedNow = "Closed";
-              const rating = res.data.results[i].rating;
-              const description =
-                "Rating: " + rating + " / 5 - " + openedNow + " now.";
-              const address = res.data.results[i].formatted_address;
-              const photos = res.data.results[i].photos;
-              var photoReference = "";
-              if (photos)
-                photoReference = res.data.results[i].photos[0].photo_reference;
-              const types = res.data.results[i].types;
-              var typesString = "";
-              for (var j = 0; j < types.length; j++) {
-                typesString += types[j];
-                if (j < types.length - 1) typesString += ", ";
-              }
-              typesString = typesString.replace(new RegExp("_", "g"), " ");
-              const marker = {
-                id: id,
-                latitude: latitude,
-                longitude: longitude,
-                title: title,
-                description: description,
-                icon: require("../components/UIdesign/gymMarker1.png"),
-                address: address,
-                photoReference: photoReference,
-                openedNow: openedNow,
-                rating: rating + " / 5",
-                typesString: typesString
-              };
-              markers.push(marker);
+      if (searchValue.length > 0) {
+        fetch(
+          "https://maps.googleapis.com/maps/api/place/textsearch/json?query=" +
+            searchValue +
+            "&location=" +
+            this.state.latitude +
+            "," +
+            this.state.longitude +
+            "&radius=8000&key=AIzaSyA92o1PC2GUo5f-_--4yhIaQjjo8XhnnU4",
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json"
             }
-            const refresh = this.state.refresh + 1;
-            this.setState({ markers, refresh });
-            //console.log(markers);
-          },
-          error => {
-            console.log(error);
-            alert("Couldn't load data on the map.");
           }
-        );
+        )
+          .then(response =>
+            response.json().then(data => ({
+              data: data,
+              status: response.status
+            }))
+          )
+          .then(
+            res => {
+              console.log(res.data);
+              const markers = [];
+              for (var i = 0; i < res.data.results.length; i++) {
+                const id = i + 1;
+                const latitude = res.data.results[i].geometry.location.lat;
+                const longitude = res.data.results[i].geometry.location.lng;
+                const title = res.data.results[i].name;
+                const openingHours = res.data.results[i].opening_hours;
+                const opened = false;
+                if (openingHours)
+                  opened = res.data.results[i].opening_hours.open_now;
+                let openedNow = "Opened";
+                if (!opened) openedNow = "Closed";
+                const rating = res.data.results[i].rating;
+                const description =
+                  "Rating: " + rating + " / 5 - " + openedNow + " now.";
+                const address = res.data.results[i].formatted_address;
+                const photos = res.data.results[i].photos;
+                var photoReference = "";
+                if (photos)
+                  photoReference =
+                    res.data.results[i].photos[0].photo_reference;
+                const types = res.data.results[i].types;
+                var typesString = "";
+                for (var j = 0; j < types.length; j++) {
+                  typesString += types[j];
+                  if (j < types.length - 1) typesString += ", ";
+                }
+                typesString = typesString.replace(new RegExp("_", "g"), " ");
+                const marker = {
+                  id: id,
+                  latitude: latitude,
+                  longitude: longitude,
+                  title: title,
+                  description: description,
+                  icon: require("../components/UIdesign/gymMarker1.png"),
+                  address: address,
+                  photoReference: photoReference,
+                  openedNow: openedNow,
+                  rating: rating + " / 5",
+                  typesString: typesString
+                };
+                markers.push(marker);
+              }
+              const refresh = this.state.refresh + 1;
+              this.setState({ markers, refresh });
+              //console.log(markers);
+            },
+            error => {
+              console.log(error);
+              alert("Couldn't load data on the map.");
+            }
+          );
+      }
     } catch (error) {
       console.log(error);
       alert("Check Internet Connectivity");
     }
   }
 
+  /**
+   * A function that accepts the photo refernce and calls a google api to get the actual picture from that reference.
+   * Then saves it in markerDetailsImage on success.
+   */
   getMarkerPicture(photo_reference) {
     try {
-      //const photo_reference =
-      //  "CnRtAAAATLZNl354RwP_9UKbQ_5Psy40texXePv4oAlgP4qNEkdIrkyse7rPXYGd9D_Uj1rVsQdWT4oRz4QrYAJNpFX7rzqqMlZw2h2E2y5IKMUZ7ouD_SlcHxYq1yL4KbKUv3qtWgTK0A6QbGh87GB3sscrHRIQiG2RrmU_jF4tENr9wGS_YxoUSSDrYjWmrNfeEHSGSc3FyhNLlBU";
-      fetch(
-        "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference=" +
-          photo_reference +
-          "&key=AIzaSyA92o1PC2GUo5f-_--4yhIaQjjo8XhnnU4",
-        {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
-          }
-        }
-      ).then(
-        response => {
-          //console.log(response);
-          var img =
-            "https://res.cloudinary.com/fitnesstracker/image/upload/v1541359522/noimg.jpg";
-          if (response.status == 200) {
-            img = response.url;
-          }
-          this.setState({
-            loadingMarkerDetails: false,
-            markerDetailsImage: img
-          });
-        },
-        error => {
-          console.log(error);
-          this.onFailure("Couldn't load the image.");
-        }
-      );
+      axios
+        .get(
+          "https://maps.googleapis.com/maps/api/place/photo?maxwidth=400&maxheight=400&photoreference=" +
+            photo_reference +
+            "&key=AIzaSyA92o1PC2GUo5f-_--4yhIaQjjo8XhnnU4"
+        )
+        .then(
+          function(response) {
+            console.log(response);
+            var img =
+              "https://res.cloudinary.com/fitnesstracker/image/upload/v1541359522/noimg.jpg";
+            if (response.status == 200) {
+              img = response.request.responseURL;
+            }
+            this.setState({
+              loadingMarkerDetails: false,
+              markerDetailsImage: img
+            });
+          }.bind(this)
+        )
+        .catch(
+          function(error) {
+            this.onFailure("Can't load the image.");
+          }.bind(this)
+        );
     } catch (error) {
-      console.log(error);
-      this.onFailure("Check internet connectivity..");
+      this.onFailure("Can't load the image.");
     }
   }
 
+  /**
+   * A function that accepts an error message and alerts it to the user then resets the loadingMarkerDetails and
+   * markerDetailsImage.
+   */
   onFailure(err) {
     alert(err);
     this.setState({
@@ -184,9 +199,15 @@ class MapSearchPage extends Component {
         "https://res.cloudinary.com/fitnesstracker/image/upload/v1541359522/noimg.jpg"
     });
   }
+
+  /**
+   * A function called when pressing on a marker, it gets the details of the selected marker by its ID from the markers list
+   * and set them then getMarkerPicture function is called.
+   * Then it shows the Marker View box by setting the opacity to 1 and View Press to auto which enables triggering the press on the view
+   * of the marker details box.
+   */
   openDetailsView(id) {
     const photo_reference = this.state.markers[id - 1].photoReference;
-    //console.log("id is " + (id - 1) + " and reference is " + photo_reference);
     this.setState({
       markerDetailsViewOpacity: 1,
       markerDetailsViewPress: "auto",
@@ -195,6 +216,12 @@ class MapSearchPage extends Component {
     });
     this.getMarkerPicture(photo_reference);
   }
+
+  /**
+   * A function called when the close button is pressed in the marker view box. It resets the marker's details
+   * and close the view by setting the opacity to 0 and ViewPress to none which disable triggering the press on the view of the marker
+   * details box.
+   */
   closeMarkerDetails() {
     this.setState({
       markerDetailsViewOpacity: 0,
@@ -206,6 +233,9 @@ class MapSearchPage extends Component {
     });
   }
 
+  /**
+   * A function that iterates through the marker's list and renders the details to the Marker built in component for react-native-map.
+   */
   renderMarkers() {
     if (this.state.refresh > 0) {
       return (
@@ -228,6 +258,10 @@ class MapSearchPage extends Component {
     }
   }
 
+  /**
+   * A function that renders the Marker Details View Box, it is always rendered but when the user presses on a marker its opacity
+   * changes to 1 to appear and the ViewPress gets enabled. When the user presses the close button, this component gets hidden again
+   */
   renderMarkerDetails() {
     if (this.state.loadingMarkerDetails == false) {
       return (
@@ -235,7 +269,7 @@ class MapSearchPage extends Component {
           <View
             style={{
               width: "100%",
-              height: "45%"
+              height: "40%"
             }}
           >
             <Image
@@ -281,12 +315,11 @@ class MapSearchPage extends Component {
               style={{
                 width: 90,
                 height: 30,
-                marginLeft: "75%",
-                marginBottom: 2
+                marginLeft: "75%"
               }}
             >
               <Button
-                size={"large"}
+                size={"medium"}
                 type={"danger"}
                 onPress={this.closeMarkerDetails.bind(this)}
               >
@@ -302,6 +335,9 @@ class MapSearchPage extends Component {
     return;
   }
 
+  /**
+   * Main Built in render function that renders the whole Page.
+   */
   render() {
     const styles = StyleSheet.create({
       container: { ...StyleSheet.absoluteFillObject },
@@ -312,7 +348,7 @@ class MapSearchPage extends Component {
         width: "100%",
         paddingRight: 10,
         paddingLeft: 10,
-        paddingTop: 10,
+        paddingTop: 6,
         backgroundColor: "rgba(255,255,255,0.7)"
       },
       searchBorder: {
@@ -333,8 +369,11 @@ class MapSearchPage extends Component {
       markerDetailsContainer: {
         flex: 1,
         flexDirection: "column",
-        margin: 10,
-        marginBottom: 5,
+        marginTop: 10,
+        marginLeft: 10,
+        marginRight: 10,
+        marginBottom: 15,
+        height: "auto",
         backgroundColor: "white",
         position: "absolute",
         top: 0,

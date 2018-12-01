@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { Text, View, Dimensions } from "react-native";
 import { PieChart } from "react-native-chart-kit";
 
+/**
+ * A component called by Analytics Page. It uses a Pie Chart component from react-native-chart-kit library
+ * to show the retrieved data in a Pie chart.
+ */
 class ExpensesPiChart extends Component {
   render() {
     styles = {
