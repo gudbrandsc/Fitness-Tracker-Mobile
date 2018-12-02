@@ -31,7 +31,6 @@ class CategoryDetail extends Component {
 
 
   subUpdate = (id, value1, value2, value3) => {
-    console.log("cat detail: " + value1 + " and " + value2 + " and " + value3)
     this.props.onUpdate(id, value1, value2, value3)
   };
 
