@@ -18,7 +18,6 @@ class CategoryList extends Component {
   /*Method used by child components to add input data to state list*/
 
   onUpdate = (id, value1, value2, value3) => {
-    console.log(value1+ "VAL: " + value2+ " VAL " +value3)
     const newelement = {
       id: id,
       value1: value1,
@@ -67,8 +66,9 @@ class CategoryList extends Component {
 
   AddWorkout = () => {
     var allFieldsEntered = true;
-
-    if(this.state.inputValues && this.state.inputValues > 0 ){
+    console.log("submit")
+    console.log(this.state.inputValues.length)
+    if(this.state.inputValues && this.state.inputValues.length > 0 ){
       for(var i in this.state.inputValues) {
         if(this.state.inputValues[i].value1 === "" || this.state.inputValues[i].value2 === "" || this.state.inputValues[i].value3 === ""  ){
           allFieldsEntered = false;
