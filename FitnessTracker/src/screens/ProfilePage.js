@@ -300,11 +300,17 @@ class ProfilePage extends Component {
                 style={{
                   flexDirection: "column",
                   width: "100%",
-                  height: "37%",
+                  height: "auto",
                   marginTop: 10
                 }}
               >
-                <View style={{ flexDirection: "row", width: 100 }}>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    width: "95%",
+                    justifyContent: "space-between"
+                  }}
+                >
                   <View style={styles.profileImgContainer}>
                     <Avatar
                       large
@@ -318,8 +324,7 @@ class ProfilePage extends Component {
                     style={{
                       height: "auto",
                       width: "auto",
-                      justifyContent: "center",
-                      marginLeft: 25
+                      justifyContent: "center"
                     }}
                   >
                     <View style={{ flexDirection: "column" }}>
@@ -386,7 +391,7 @@ class ProfilePage extends Component {
                     width: "auto",
                     flexDirection: "column",
                     marginLeft: 20,
-                    marginTop: 20
+                    marginTop: 15
                   }}
                 >
                   <Text style={{ fontSize: 20, fontWeight: "bold" }}>
@@ -394,7 +399,11 @@ class ProfilePage extends Component {
                   </Text>
                   <ScrollView
                     horizontal={true}
-                    style={{ marginTop: 8, marginBottom: 8, height: 50 }}
+                    style={{
+                      marginTop: 8,
+                      marginBottom: 10,
+                      height: 50
+                    }}
                   >
                     {this.renderBadges()}
                   </ScrollView>
@@ -410,7 +419,7 @@ class ProfilePage extends Component {
             style={{
               flexDirection: "column",
               width: "100%",
-              height: "63%"
+              height: "62%"
             }}
           >
             <ProfileSubCategoriesRouter />
