@@ -228,7 +228,9 @@ class VisitProfilePage extends Component {
           });
         }
       }.bind(this)
-    );
+    ).catch(error => {
+      console.log(error)
+    });
   };
 
   onUnfollowPress = () => {
@@ -254,7 +256,9 @@ class VisitProfilePage extends Component {
           });
         }
       }.bind(this)
-    );
+    ).catch(error => {
+      console.log(error)
+    });
   };
 
   retrieveBadges() {

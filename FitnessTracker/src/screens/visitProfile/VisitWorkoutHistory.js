@@ -34,7 +34,10 @@ class VisitWorkoutHistory extends Component {
     axios
       .get("http://localhost:8000/api/newexercisehistory/" + visitedUserId)
       .then(response => this.setState({ history: response.data }))
-      .then(this.checkSearchResp.bind(this));
+      .then(this.checkSearchResp.bind(this))
+      .catch(error => {
+        console.log(error)
+    });
   }
 
   checkSearchResp() {
@@ -59,7 +62,7 @@ class VisitWorkoutHistory extends Component {
       return <Spinner />;
     }
   }
-  
+
   loadError(){
     if(this.state.error !== ""){
     return( 

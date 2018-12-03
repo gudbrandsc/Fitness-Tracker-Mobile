@@ -42,7 +42,10 @@ export default class AddWorkoutPage extends Component {
     axios
       .get("http://" + setIP + ":8000/api/workoutcategories")
       .then(response => this.setState({ workouts: response.data }))
-      .then(this.checkSearchResp.bind(this));
+      .then(this.checkSearchResp.bind(this))
+      .catch(error => {
+        console.log(error)
+      });
   }
 
   checkSearchResp() {

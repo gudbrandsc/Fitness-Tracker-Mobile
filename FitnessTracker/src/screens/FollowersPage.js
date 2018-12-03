@@ -49,7 +49,10 @@ class FollowersPage extends Component {
     axios
       .get("http://localhost:8000/api/listfollowers/" + id + "/" + id)
       .then(response => this.setState({ users: response.data }))
-      .then(this.checkSearchResp.bind(this));
+      .then(this.checkSearchResp.bind(this))
+      .catch(error => {
+        console.log(error)
+    });
   }
 
   checkSearchResp() {

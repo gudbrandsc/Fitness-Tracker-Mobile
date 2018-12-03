@@ -16,6 +16,8 @@ class VisitFollowingButton extends Component {
     this.retrieveData();
   }
 
+
+
   retrieveData() {
     try {
       this.setState({ loading: true });

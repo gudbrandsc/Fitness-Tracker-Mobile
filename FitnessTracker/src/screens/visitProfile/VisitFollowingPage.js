@@ -58,7 +58,10 @@ class VisitFollowingPage extends Component {
     axios
       .get("http://localhost:8000/api/listfollows/" + loggedInUserID + "/" + visitedUserId)
       .then(response => this.setState({ users: response.data }))
-      .then(this.checkSearchResp.bind(this));
+      .then(this.checkSearchResp.bind(this))
+      .catch(error => {
+        console.log(error)
+    });
   }
 
   /** Check the respons to see if the user has any followers */

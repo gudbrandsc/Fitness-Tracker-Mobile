@@ -53,7 +53,9 @@ class FollowingDetail extends Component {
           });
         }
       }.bind(this)
-    );
+    ).catch(error => {
+      console.log(error)
+    });
   };
 
   onUnfollowPress = () => {
@@ -79,7 +81,9 @@ class FollowingDetail extends Component {
           });
         }
       }.bind(this)
-    );
+    ).catch(error => {
+      console.log(error)
+    });
   };
 
   renderFollowingButton() {

@@ -55,7 +55,10 @@ export default class SearchUserPage extends Component {
       .then(response => {
         this.setState({ users: response.data });
       })
-      .then(this.checkSearchResp.bind(this));
+      .then(this.checkSearchResp.bind(this))
+      .catch(error => {
+        console.log(error)
+    });
   }
   checkSearchResp() {
     if (this.state.users && this.state.users.length > 0) {

@@ -48,7 +48,10 @@ class WorkoutHistory extends Component {
     axios
       .get("http://localhost:8000/api/newexercisehistory/" + id)
       .then(response => this.setState({ history: response.data }))
-      .then(this.checkSearchResp.bind(this));
+      .then(this.checkSearchResp.bind(this))
+      .catch(error => {
+        console.log(error)
+    });
   }
 
   checkSearchResp() {

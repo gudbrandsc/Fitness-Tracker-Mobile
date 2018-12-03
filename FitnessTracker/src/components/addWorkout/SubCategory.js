@@ -82,7 +82,7 @@ class SubCategory extends Component {
 
         if(this.props.categoryId === 8 ){
             this.setState({
-                valueLable1: 'Total Min',
+                valueLable1: 'Minutes',
                 valueLable2: 'Total Miles',
                 placeholder1: 'Enter Min...',
                 placeholder2: 'Enter Miles...',

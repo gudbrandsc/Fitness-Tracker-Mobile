@@ -25,7 +25,9 @@ class ExpenseDetail extends Component {
           });
         }
       }.bind(this)
-    );
+    ).catch(error => {
+      console.log(error)
+    });
   };
 
  
