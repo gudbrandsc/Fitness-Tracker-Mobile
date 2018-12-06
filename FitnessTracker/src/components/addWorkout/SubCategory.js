@@ -1,9 +1,11 @@
 import React, { Component } from "react";
-import {  StyleSheet, TouchableOpacity, View, Text } from "react-native";
+import { StyleSheet, TouchableOpacity, View, Text } from "react-native";
 import { NumericInput } from "./NumericInput";
 import { Icon } from 'react-native-elements'
 
-
+/**
+ * Component that renders a spesific exercise type, and allows the user to enter their exercise result. 
+ */
 class SubCategory extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +20,6 @@ class SubCategory extends Component {
             placeholder1: '',
             placeholder2: '',
             placeholder3: '',
-
             missingField1: false,
             missingField2: false,
             missingField3: false,
@@ -26,10 +27,11 @@ class SubCategory extends Component {
             active: false
         };
     }
-
+    // Method that is used if a user tries to submit a workout session where there 
+    // is a missing field in one exercise. If the current excercise has a missing field 
+    // then highlight it.
     componentWillReceiveProps(nextProps) {
         if(this.props.missingField !== nextProps.missingField){
-            console.log(this.state.value1 + " and " + this.state.value2 + " and " + this.state.value3)
             if((this.state.value1 === "") && (this.state.value2 !== "" || this.state.value3 !== "")){
                 this.setState({missingField1: true})
             }
@@ -41,19 +43,16 @@ class SubCategory extends Component {
             if((this.state.value3 === "") && (this.state.value2 !== "" || this.state.value1 !== "")){
                 this.setState({missingField3: true})
             }
-
             this.forceUpdate();
         }
     } 
     
+    // If a sub category is re-opened then it should have the value previusly added. 
     componentDidMount(){
         const id = this.state.id;
         var exist = this.props.inputValues.find(function(element) {
             return element.id === id ;
         });
-        console.log(this.props.inputValues)
-        console.log("exist: " + exist)
-
 
         if(exist !== undefined && this.props.categoryId !== 8){
             this.setState({
@@ -62,9 +61,7 @@ class SubCategory extends Component {
                 value3: exist.value3,
                 start: false,      
                 active: true         
-        })
-
-
+            })
         }else if(exist !== undefined && this.props.categoryId === 8 && (exist.value1 !== "" || exist.value2 !== "")){
             this.setState({
                 value1: exist.value1,
@@ -72,14 +69,13 @@ class SubCategory extends Component {
                 value3: exist.value3,
                 start: false,      
                 active: true         
-        })
-
+            })
         } else {
             this.setState({
                 start: false
             })
         }
-
+        // Set placeholders and label for the exercise
         if(this.props.categoryId === 8 ){
             this.setState({
                 valueLable1: 'Minutes',
@@ -100,6 +96,7 @@ class SubCategory extends Component {
         }
     }
     
+    // Method called to the categorylist when a user starts to add data about the spesific exercise
     componentDidUpdate(){
         if(this.state.start === false){
             if(this.props.categoryId === 8){
@@ -114,6 +111,7 @@ class SubCategory extends Component {
         }
     }
 
+    //Verify that the value for the first inputfield entered is numeric 
     handleValue1Change = (text) => {
         if (/^\d+$/.test(text) || text === '') {
             this.setState({ 
@@ -124,6 +122,7 @@ class SubCategory extends Component {
         }
     }
 
+    //Verify that the value for the second inputfield entered is numeric 
     handleValue2Change = (text) => {
         if (/^\d+$/.test(text) || text === '') {
             this.setState({ 
@@ -134,6 +133,7 @@ class SubCategory extends Component {
         }
     }
 
+    //Verify that the value for the third inputfield entered is numeric 
     handleValue3Change = (text) => {
         if (/^\d+$/.test(text) || text === '') {
             this.setState({ 
@@ -144,10 +144,9 @@ class SubCategory extends Component {
         }
     }
     
-    
+    // Render the first input field
     renderInput1(){
         if(this.state.active === true){
-
             return (
                 <View>
                     <Text style={styles.labelStyle}>{this.state.valueLable1}</Text>
@@ -164,6 +163,7 @@ class SubCategory extends Component {
         }
     }
 
+    // Render the second input field
     renderInput2(){
         if(this.state.active === true){
             return (
@@ -182,6 +182,8 @@ class SubCategory extends Component {
         }
     }
 
+    // Render the third input field
+    // If the category type is of type cardio then don't render 
     renderInput3(){
         if(this.props.categoryId !== 8 ){
             if(this.state.active === true){
@@ -201,6 +203,8 @@ class SubCategory extends Component {
             }
         }
     }
+
+    // Show or hide icon.
     getIcon(){
         if(this.state.active === true){
             return 'remove-circle-outline';
@@ -209,33 +213,30 @@ class SubCategory extends Component {
     }
 
     render() {
-            return (
-                <View style={{paddingTop: 10, padding: 10}}>
-                    <View style={styles.container}>                        
-                        <View style={styles.cardStyle}>
-                            <View style={styles.topCardWrapperStyle}>
-                                <View style={styles.WorkoutNameStyle}>
-                                    <Text style={styles.WorkoutNameTextStyle}>{this.props.type.WorkoutName}</Text>
-                                </View>
-
-                                <View style={styles.plusSignStyle}>
-                                    <TouchableOpacity onPress={() => this.setState({ active: !this.state.active })}>
-                                        <Icon name={this.getIcon()} color='#00e7b1'/>
-                                    </TouchableOpacity>
-                                </View>
+        return (
+            <View style={{paddingTop: 10, padding: 10}}>
+                <View style={styles.container}>                        
+                    <View style={styles.cardStyle}>
+                        <View style={styles.topCardWrapperStyle}>
+                            <View style={styles.WorkoutNameStyle}>
+                                <Text style={styles.WorkoutNameTextStyle}>{this.props.type.WorkoutName}</Text>
+                            </View>
+                            <View style={styles.plusSignStyle}>
+                                <TouchableOpacity onPress={() => this.setState({ active: !this.state.active })}>
+                                    <Icon name={this.getIcon()} color='#00e7b1'/>
+                                </TouchableOpacity>
                             </View>
                         </View>
-                        <View style={[styles.inputFieldsWrapper, this.state.active ? styles.cardExpandStyle : styles.cardCollapseStyle]}>
-                            {this.renderInput1()}
-                            {this.renderInput2()}
-                            {this.renderInput3()}
-
-                        </View>
+                    </View>
+                    <View style={[styles.inputFieldsWrapper, this.state.active ? styles.cardExpandStyle : styles.cardCollapseStyle]}>
+                        {this.renderInput1()}
+                        {this.renderInput2()}
+                        {this.renderInput3()}
                     </View>
                 </View>
-            );
-        }
-    
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -262,34 +263,34 @@ const styles = StyleSheet.create({
     topCardWrapperStyle: {
         flexDirection:'row',
         justifyContent:'center'
-      },
-      WorkoutNameStyle: {
+    },
+    WorkoutNameStyle: {
         justifyContent: 'flex-start',
         flex:1,
         paddingLeft: 10
-      },
-      plusSignStyle: {
+    },
+    plusSignStyle: {
         justifyContent: "flex-end", // main axis
         paddingRight: 10,
         flex: 0
 
-      },
-      inputFieldsWrapper: {
+    },
+    inputFieldsWrapper: {
         margin: 10,
         flex:1,
         flexDirection: "row",
         justifyContent: 'space-between',
     
-      },
-      cardExpandStyle: {
+    },
+    cardExpandStyle: {
         paddingTop: 20,
         borderTopWidth: 1,
         borderColor: '#ddd',
-      },
-      cardCollapseStyle: {
+    },
+    cardCollapseStyle: {
         paddingTop: 0,
         borderTopWidth: 0,
-      },
+    },
     inputField: {
         borderRadius: 4,
         borderWidth: 1,
@@ -298,7 +299,6 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'stretch',
         width: 90
-
     },
     missingFieldColor: {
         borderColor: 'red',
@@ -316,8 +316,5 @@ const styles = StyleSheet.create({
         fontFamily:'arial', 
     },
 });
-
-
-
 
 export default SubCategory;

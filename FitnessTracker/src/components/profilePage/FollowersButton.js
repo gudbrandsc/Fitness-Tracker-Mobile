@@ -2,6 +2,10 @@ import React, { Component } from "react";
 import { Text, View } from "react-native";
 import { Spinner } from "../common";
 
+/**
+ * Component that renders a navigation button for the profile page. 
+ * It displays the number of people the current user is following as the button body
+ */
 class FollowingButton extends Component {
   constructor(props) {
     super(props);
@@ -11,16 +15,19 @@ class FollowingButton extends Component {
     };
   }
 
+  //Get number of users the current user is followers
   componentDidMount() {
     this.retrieveData();
   }
 
+  // If the user follows or unfollows a user, then update number of followers.  
   componentDidUpdate(prevProps) {
     if (prevProps.identifier !== this.props.identifier) {
       this.retrieveData();
     }
   }
 
+  // Get number of followers
   retrieveData() {
     try {
       this.setState({ loading: true });
@@ -47,7 +54,6 @@ class FollowingButton extends Component {
           this.setState({ loading: false });
         });
     } catch (error) {
-      console.log("error");
       this.setState({ loading: false });
     }
   }

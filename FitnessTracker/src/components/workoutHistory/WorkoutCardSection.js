@@ -1,6 +1,5 @@
-import React, {Component} from 'react';
-import {TouchableOpacity, StyleSheet,  Text, View, FlatList} from 'react-native';
-import { Icon } from 'react-native-elements'
+import React, { Component } from 'react';
+import { StyleSheet, View } from 'react-native';
 import ExerciseItem from './ExerciseItem'
 
 class WorkoutCardSection extends Component {
@@ -10,15 +9,6 @@ class WorkoutCardSection extends Component {
       error: '',
     }
   }
-
-  getIcon(){
-    if(this.state.active === true){
-        return 'remove-circle-outline';
-    }
-    return  'add-circle-outline' ;
-  }
-
-  
 
   render() {
     return (

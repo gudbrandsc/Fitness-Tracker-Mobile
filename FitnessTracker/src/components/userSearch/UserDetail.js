@@ -1,9 +1,14 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View,TouchableOpacity } from "react-native";
-import { Button, Spinner } from "../common";
+import { Button } from "../common";
 import { Avatar } from "react-native-elements";
 import axios from "axios";
 
+/**
+ * Component that displays the information about a user, 
+ * given trough props. 
+ * It also renders a following button that allows the current user to either follow or unfollow.
+ */
 class UserDetail extends Component {
   constructor(props) {
     super(props);

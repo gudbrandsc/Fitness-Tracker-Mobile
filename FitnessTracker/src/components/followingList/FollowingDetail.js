@@ -4,6 +4,9 @@ import { Button, Spinner } from "../common";
 import { Avatar } from "react-native-elements";
 import axios from "axios";
 
+/**
+ * Component that displays a spesific user.
+ */
 class FollowingDetail extends Component {
   constructor(props) {
     super(props);
@@ -17,10 +20,13 @@ class FollowingDetail extends Component {
     };
   }
 
+  // If the following state is changed then make sure the profile page 
+  // rerender the following count. 
   componentDidUpdate(){
     this.props.resetDetail();
   }
 
+  // Set initial values 
   componentDidMount(){
     this.setState({loading:true})
     var otherID = this.props.user.FollowerId;
@@ -31,6 +37,8 @@ class FollowingDetail extends Component {
 
   }
 
+  // Function used to follow the displayed user 
+  // function also calls function to reset following count in profile page 
   onFollowPress = () => {
     this.setState({loading:true})
     const requestUrl =
@@ -58,6 +66,8 @@ class FollowingDetail extends Component {
     });
   };
 
+  // Function used to unfollow the displayed user 
+  // function also calls function to reset following count in profile page 
   onUnfollowPress = () => {
     this.setState({loading:true})
     const requestUrl =
@@ -73,7 +83,6 @@ class FollowingDetail extends Component {
             loading: false
           });
           this.props.resetDetail();
-
         } else {
           this.setState({
             loading: false,
@@ -86,8 +95,9 @@ class FollowingDetail extends Component {
     });
   };
 
+  // Function that renders a follow/unfollow button based on the following state of 
+  // the logged in user. 
   renderFollowingButton() {
-
     if(!this.state.loading){
       console.log(parseInt(this.props.userId) + " = " + parseInt(this.state.otherUserId))
       if(parseInt(this.props.userId) !==  parseInt(this.state.otherUserId)){

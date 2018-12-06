@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import {ScrollView, StyleSheet, View} from 'react-native';
 import ExpenseDetail from './ExpenseDetail'
-import { Button } from 'react-native-elements';
 
-
+/**
+ * Component that displays a list of expenses. 
+ */
 class ExpensesList extends Component {
 
   constructor(props) {
@@ -15,13 +16,14 @@ class ExpensesList extends Component {
     }
   }
 
-
+  // If a expense is deleted then rerender the entier list. 
   componentWillReceiveProps(nextProps) {
     if (this.props.reset !== nextProps.reset) {
       this.forceUpdate();
     }
   }
 
+  //Render a list of all expenses. 
   renderExpenses () {
     return this.props.expenses.map(expense =>
       <ExpenseDetail  key={expense.id} expense={expense} deleteExpense={this.props.deleteExpense}/>

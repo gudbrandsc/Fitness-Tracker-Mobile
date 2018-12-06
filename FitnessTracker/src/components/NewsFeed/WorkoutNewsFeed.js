@@ -7,8 +7,6 @@ import {
   Dimensions,
   FlatList
 } from "react-native";
-import { List } from "react-native-elements";
-import { Spinner } from "../common";
 import WorkoutCard from "../workoutHistory/WorkoutCard";
 import axios from "axios";
 

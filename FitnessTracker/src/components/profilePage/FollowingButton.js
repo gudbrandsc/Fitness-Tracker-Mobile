@@ -1,8 +1,12 @@
 import React, { Component } from "react";
-import { Text, View, TouchableOpacity } from "react-native";
+import { Text, View } from "react-native";
 import { Spinner } from "../common";
 import axios from "axios";
 
+/**
+ * Component that renders a button that shows how many people the current user is following. 
+ * It also has an onClick function that navigates the user to the followingPage 
+ */
 class FollowingButton extends Component {
   constructor(props) {
     super(props);
@@ -16,6 +20,7 @@ class FollowingButton extends Component {
     this.retrieveData();
   }
 
+  //If the user started to follow or unfollow an other user then update the following users count. 
   componentDidUpdate(prevProps) {
     if (prevProps.identifier !== this.props.identifier) {
       this.retrieveData();

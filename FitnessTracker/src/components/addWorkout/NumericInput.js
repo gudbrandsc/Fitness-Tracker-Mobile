@@ -1,6 +1,9 @@
 import React from "react";
 import { TextInput } from "react-native";
 
+/**
+ * Component that generets a numeric input. 
+ */
 const NumericInput = ({
     value,
     onChangeText,

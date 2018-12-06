@@ -1,7 +1,10 @@
 import React, { Component } from "react";
-import { Text, View, Image,  StyleSheet } from "react-native";
+import { Text, View, StyleSheet } from "react-native";
 import { Avatar } from "react-native-elements";
 
+/**
+ * Component that displays a specific workout exercise.
+ */
 export default class ExerciseItem extends Component {
   constructor(props) {
     super(props);
@@ -11,6 +14,7 @@ export default class ExerciseItem extends Component {
     };
   }
 
+  // Render information about the exercise. 
   renderWorkoutDetails() {
     if (this.props.cardio === "true") {
       return (

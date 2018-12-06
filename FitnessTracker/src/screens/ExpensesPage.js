@@ -9,7 +9,6 @@ import {
   StyleSheet
 } from "react-native";
 import { Button, Spinner } from "../components/common";
-import DropdownMenu from "react-native-dropdown-menu";
 import ExpensesList from "../components/expenses/ExpensesList";
 import { Icon } from "react-native-elements";
 

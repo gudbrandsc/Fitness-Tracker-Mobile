@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {ScrollView, StyleSheet, View} from 'react-native';
+import { ScrollView, StyleSheet, View } from 'react-native';
 import UserDetail from './UserDetail'
-import { Button } from 'react-native-elements';
 
-
+/**
+ * Component that displays displays a scrollview of all the users that matches the search term. 
+ * Each user are displayed as a userDetail component. 
+ */
 class UserList extends Component {
 
   constructor(props) {
@@ -13,6 +15,7 @@ class UserList extends Component {
     }
   }
 
+  //Return a list of users 
   renderUser () {
     return this.props.users.map(user =>
       <UserDetail navigation={this.props.navigation} key={user.id} user={user} loggedInUserID={this.props.loggedInUserID}/>
