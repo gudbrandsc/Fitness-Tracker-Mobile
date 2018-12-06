@@ -9,7 +9,8 @@ import {
   TouchableOpacity,
   Image,
   Alert,
-  FlatList
+  FlatList,
+  Dimensions
 } from "react-native";
 import { Button, Spinner, Header } from "../components/common";
 import FollowersButton from "../components/profilePage/FollowersButton";
@@ -292,7 +293,13 @@ class ProfilePage extends Component {
           backgroundColor: "#f4f4f4"
         }}
       >
-        <View style={{ marginTop: 10 }}>
+        <View
+          style={{
+            marginTop: 5,
+            justifyContent: "space-between",
+            flexDirection: "column"
+          }}
+        >
           <FlatList
             data={this.state.flatListData}
             renderItem={({ item }) => (
@@ -300,7 +307,7 @@ class ProfilePage extends Component {
                 style={{
                   flexDirection: "column",
                   width: "100%",
-                  height: "auto",
+                  height: 200,
                   marginTop: 10
                 }}
               >
@@ -322,12 +329,18 @@ class ProfilePage extends Component {
                   </View>
                   <View
                     style={{
-                      height: "auto",
+                      height: 88,
                       width: "auto",
                       justifyContent: "center"
                     }}
                   >
-                    <View style={{ flexDirection: "column" }}>
+                    <View
+                      style={{
+                        flex: 1,
+                        flexDirection: "column",
+                        justifyContent: "space-evenly"
+                      }}
+                    >
                       <View
                         style={{
                           flex: 1,
@@ -387,11 +400,11 @@ class ProfilePage extends Component {
                 </View>
                 <View
                   style={{
-                    height: "auto",
+                    height: 100,
                     width: "auto",
                     flexDirection: "column",
                     marginLeft: 20,
-                    marginTop: 15
+                    marginTop: 10
                   }}
                 >
                   <Text style={{ fontSize: 20, fontWeight: "bold" }}>
@@ -401,7 +414,7 @@ class ProfilePage extends Component {
                     horizontal={true}
                     style={{
                       marginTop: 8,
-                      marginBottom: 10,
+                      marginBottom: 8,
                       height: 50
                     }}
                   >
@@ -419,7 +432,7 @@ class ProfilePage extends Component {
             style={{
               flexDirection: "column",
               width: "100%",
-              height: "62%"
+              height: "63.8%"
             }}
           >
             <ProfileSubCategoriesRouter />

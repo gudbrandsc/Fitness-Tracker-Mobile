@@ -43,7 +43,7 @@ class VisitProfilePage extends Component {
     loadFollowers: false,
     loadFollowing: false,
     imFollowing: false,
-    badgeList: [],
+    badgeList: []
   };
 
   componentDidMount() {
@@ -51,7 +51,9 @@ class VisitProfilePage extends Component {
     const follows = navigation.getParam("follows", "false");
     const visitedUserId = navigation.getParam("visitedUserId");
     const loggedInUserID = navigation.getParam("loggedInUserID");
-    console.log("Visit profile ids: " + visitedUserId + " and loggedin: " + loggedInUserID )
+    console.log(
+      "Visit profile ids: " + visitedUserId + " and loggedin: " + loggedInUserID
+    );
 
     this.setState({
       imFollowing: follows,
@@ -137,7 +139,10 @@ class VisitProfilePage extends Component {
             });
           }}
         >
-          <VisitFollowersButton visitedUserId={this.state.visitedUserId} imFollowing = {this.state.imFollowing} />
+          <VisitFollowersButton
+            visitedUserId={this.state.visitedUserId}
+            imFollowing={this.state.imFollowing}
+          />
         </TouchableOpacity>
       );
     } else {
@@ -146,8 +151,17 @@ class VisitProfilePage extends Component {
   }
 
   renderFollowingButton() {
-    if (this.state.loading === false && this.state.visitedUserId !== ""  && this.state.loggedInUserID !== "") {
-      console.log("Render following page " +this.state.visitedUserId +" cur: " +  this.state.loggedInUserID)
+    if (
+      this.state.loading === false &&
+      this.state.visitedUserId !== "" &&
+      this.state.loggedInUserID !== ""
+    ) {
+      console.log(
+        "Render following page " +
+          this.state.visitedUserId +
+          " cur: " +
+          this.state.loggedInUserID
+      );
       return (
         <TouchableOpacity
           onPress={() => {
@@ -161,7 +175,7 @@ class VisitProfilePage extends Component {
           <VisitFollowingButton
             visitedUserId={this.state.visitedUserId}
             loggedInUserID={this.state.loggedInUserID}
-            imFollowing = {this.state.imFollowing}
+            imFollowing={this.state.imFollowing}
           />
         </TouchableOpacity>
       );
@@ -213,24 +227,27 @@ class VisitProfilePage extends Component {
       "/" +
       this.state.visitedUserId;
     console.log(requestUrl);
-    axios.get(requestUrl).then(
-      function(response) {
-        if (response.status === 200) {
-          this.setState({
-            imFollowing: true,
-            loading: false,
-          });
-          navigation.state.params.updateFollow(true);
-        } else {
-          this.setState({
-            loading: false,
-            error: "Unable to unfollow.."
-          });
-        }
-      }.bind(this)
-    ).catch(error => {
-      console.log(error)
-    });
+    axios
+      .get(requestUrl)
+      .then(
+        function(response) {
+          if (response.status === 200) {
+            this.setState({
+              imFollowing: true,
+              loading: false
+            });
+            navigation.state.params.updateFollow(true);
+          } else {
+            this.setState({
+              loading: false,
+              error: "Unable to unfollow.."
+            });
+          }
+        }.bind(this)
+      )
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   onUnfollowPress = () => {
@@ -241,36 +258,42 @@ class VisitProfilePage extends Component {
       this.state.loggedInUserID +
       "/" +
       this.state.visitedUserId;
-    axios.get(requestUrl).then(
-      function(response) {
-        if (response.status === 200) {
-          this.setState({
-            imFollowing: false,
-            loading: false
-          });
-          navigation.state.params.updateFollow(false);
-        } else {
-          this.setState({
-            loading: false,
-            error: "Unable to unfollow.."
-          });
-        }
-      }.bind(this)
-    ).catch(error => {
-      console.log(error)
-    });
+    axios
+      .get(requestUrl)
+      .then(
+        function(response) {
+          if (response.status === 200) {
+            this.setState({
+              imFollowing: false,
+              loading: false
+            });
+            navigation.state.params.updateFollow(false);
+          } else {
+            this.setState({
+              loading: false,
+              error: "Unable to unfollow.."
+            });
+          }
+        }.bind(this)
+      )
+      .catch(error => {
+        console.log(error);
+      });
   };
 
   retrieveBadges() {
     if (!this.state.loading) {
       try {
-        fetch("http://localhost:8000/api/getbadges/" + this.state.visitedUserId, {
-          method: "GET",
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "application/json"
+        fetch(
+          "http://localhost:8000/api/getbadges/" + this.state.visitedUserId,
+          {
+            method: "GET",
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "application/json"
+            }
           }
-        })
+        )
           .then(response =>
             response.json().then(data => ({
               data: data,
@@ -336,7 +359,13 @@ class VisitProfilePage extends Component {
               height: "35%"
             }}
           >
-            <View style={{ flexDirection: "row", width: 100 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                width: "98%",
+                justifyContent: "space-between"
+              }}
+            >
               <View style={styles.profileImgContainer}>
                 <Avatar
                   large
@@ -348,13 +377,19 @@ class VisitProfilePage extends Component {
               </View>
               <View
                 style={{
-                  height: "auto",
-                  width: "auto",
-                  justifyContent: "center",
-                  marginLeft: 40
+                  flex: 1,
+                  height: 75,
+                  width: 250,
+                  alignItems: "center"
                 }}
               >
-                <View style={{ flex: 0.8, marginRight: 10 }}>
+                <View
+                  style={{
+                    height: "auto",
+                    width: "auto",
+                    justifyContent: "center"
+                  }}
+                >
                   <View
                     style={{
                       flex: 1,
@@ -362,18 +397,20 @@ class VisitProfilePage extends Component {
                       justifyContent: "space-between"
                     }}
                   >
-                    <View style={{ width: "100%" }}>
+                    <View style={{ width: 110 }}>
                       {this.renderFollowingButton()}
                     </View>
-                    <View style={{ width: "100%", marginLeft: 15 }}>
+                    <View style={{ width: 110, marginRight: 10 }}>
                       {this.renderFollowersButton()}
                     </View>
                   </View>
-                </View>
 
-                <View style={{ flex: 1, flexDirection: "row", marginTop: 15 }}>
-                  <View style={{ width: "190%", paddingTop: 10 }}>
-                    {this.renderFollowUnfollowButton()}
+                  <View
+                    style={{ flex: 1, flexDirection: "row", marginTop: 15 }}
+                  >
+                    <View style={{ width: 250, paddingTop: 10 }}>
+                      {this.renderFollowUnfollowButton()}
+                    </View>
                   </View>
                 </View>
               </View>

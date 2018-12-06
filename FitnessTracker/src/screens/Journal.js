@@ -600,42 +600,49 @@ class Journal extends Component {
         );
       }
       return (
-        <View
-          style={{
-            flex: 1,
-            flexDirection: "row",
-            alignSelf: "center",
-            marginLeft: 68
-          }}
-        >
+        <View style={this.styles.JournalButtonsContainer}>
           <View
             style={{
-              height: 33,
-              width: 110,
-              marginRight: 12
+              justifyContent: "center",
+              height: 75,
+              width: 75
             }}
-          >
-            <Button
-              size={"large"}
-              type="success"
-              onPress={() => this.uploadImage(1)}
-            >
-              Update
-            </Button>
-          </View>
+          />
           <View
             style={{
-              height: 33,
-              width: 140
+              flexDirection: "row",
+              justifyContent: "space-between",
+              alignItems: "flex-start"
             }}
           >
-            <Button
-              size={"large"}
-              type="danger"
-              onPress={this.deleteJournal.bind(this)}
+            <View
+              style={{
+                height: 33,
+                width: 110
+              }}
             >
-              Delete
-            </Button>
+              <Button
+                size={"large"}
+                type="success"
+                onPress={() => this.uploadImage(1)}
+              >
+                Update
+              </Button>
+            </View>
+            <View
+              style={{
+                height: 33,
+                width: 140
+              }}
+            >
+              <Button
+                size={"large"}
+                type="danger"
+                onPress={this.deleteJournal.bind(this)}
+              >
+                Delete
+              </Button>
+            </View>
           </View>
         </View>
       );
@@ -653,35 +660,6 @@ class Journal extends Component {
    * Main built in render function that loads the whole page
    */
   render() {
-    const styles = {
-      inputStyle: {
-        color: "#000",
-        paddingRight: 5,
-        paddingLeft: 5,
-        fontSize: 18,
-        borderColor: "gray",
-        borderWidth: 0.5,
-        height: "100%",
-        textAlignVertical: "top",
-        backgroundColor: "white"
-      },
-      journalInputContainer: {
-        marginTop: 15,
-        marginBottom: 5,
-        marginLeft: 6,
-        marginRight: 6,
-        height: "60%"
-      },
-      ImageContainer: {
-        height: "15%",
-        width: "100%",
-        marginTop: 5,
-        marginBottom: 20,
-        marginLeft: "2%",
-        marginRight: 6,
-        flexDirection: "row"
-      }
-    };
     return (
       <View style={{ flex: 1, backgroundColor: "#f4f4f4" }}>
         <DropdownMenu
@@ -696,18 +674,18 @@ class Journal extends Component {
           }}
           data={this.state.dropdownData}
         >
-          <View style={styles.journalInputContainer}>
+          <View style={this.styles.journalInputContainer}>
             <TextInput
               placeholder={this.state.journalPlaceholder}
-              style={styles.inputStyle}
+              style={this.styles.inputStyle}
               editable={true}
               value={this.state.journalText}
               onChangeText={journalText => this.setState({ journalText })}
               multiline={true}
             />
           </View>
-          <View style={styles.ImageContainer}>
-            <View>
+          <View style={this.styles.ImageContainer}>
+            <View style={{ justifyContent: "center" }}>
               <Avatar
                 large
                 source={{
@@ -717,18 +695,15 @@ class Journal extends Component {
             </View>
             <View
               style={{
-                flex: 1,
                 flexDirection: "row",
-                alignItems: "flex-start",
-                marginLeft: 10
+                justifyContent: "space-between",
+                alignItems: "center"
               }}
             >
               <View
                 style={{
                   width: 110,
                   height: 50,
-                  marginRight: 10,
-                  marginLeft: 15,
                   marginTop: "5%"
                 }}
               >
@@ -761,6 +736,45 @@ class Journal extends Component {
       </View>
     );
   }
+
+  styles = {
+    inputStyle: {
+      color: "#000",
+      paddingRight: 5,
+      paddingLeft: 5,
+      fontSize: 18,
+      borderColor: "gray",
+      borderWidth: 0.5,
+      height: "100%",
+      textAlignVertical: "top",
+      backgroundColor: "white"
+    },
+    journalInputContainer: {
+      marginTop: 15,
+      marginBottom: 5,
+      marginLeft: 6,
+      marginRight: 6,
+      height: "60%"
+    },
+    ImageContainer: {
+      height: "15%",
+      width: "95%",
+      marginTop: 5,
+      marginBottom: 10,
+      marginLeft: 6,
+      marginRight: 6,
+      flexDirection: "row",
+      justifyContent: "space-between"
+    },
+    JournalButtonsContainer: {
+      height: "auto",
+      width: "95%",
+      marginLeft: 6,
+      marginRight: 6,
+      flexDirection: "row",
+      justifyContent: "space-between"
+    }
+  };
 }
 
 export default Journal;

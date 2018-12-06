@@ -315,7 +315,7 @@ class MapSearchPage extends Component {
               style={{
                 width: 90,
                 height: 30,
-                marginLeft: "75%"
+                marginLeft: "70%"
               }}
             >
               <Button
@@ -387,7 +387,7 @@ class MapSearchPage extends Component {
     });
 
     return (
-      <React.Fragment>
+      <View style={{ flex: 1 }}>
         <View style={styles.container}>
           <MapView style={styles.map} region={this.state.region}>
             <Marker
@@ -427,7 +427,7 @@ class MapSearchPage extends Component {
         >
           {this.renderMarkerDetails()}
         </View>
-      </React.Fragment>
+      </View>
     );
   }
 }
