@@ -1,4 +1,4 @@
-# fitness-tracker-api
+# Fitness Tracker
 
 ### Fitness Tracker Draft Specification 
 For a full overview of the project please read: 
